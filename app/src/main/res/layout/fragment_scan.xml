@@ -1,0 +1,18 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.sunstar.cloudseeds.ui.ScanFragment">
+
+    <TextView
+        android:id="@+id/id_tv_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="轻触打开扫一扫"
+        android:padding="20dp"
+        android:textSize="@dimen/classic_text_size_primary"
+        android:layout_gravity="center"
+        />
+
+</FrameLayout>

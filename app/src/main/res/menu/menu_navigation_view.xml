@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/id_navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="首页" />
+
+    <item
+        android:id="@+id/id_navigation_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="搜索" />
+    <item
+        android:id="@+id/id_navigation_scan"
+        android:icon="@drawable/ic_fullscreen_black_24dp"
+        android:title="扫描" />
+
+    <item
+        android:id="@+id/id_navigation_usercenter"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="用户中心" />
+</menu>

@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- Base application theme. -->
+ <!--   <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        &lt;!&ndash; Customize your theme here. &ndash;&gt;
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>-->
+    <style name="ClassicThemeHasPreferenceCompatTheme" parent="ClassicTheme.Transparent">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+    <style name="ClassicTextInputLayout" >
+        <item name="hintEnabled">false</item>
+        <item name="passwordToggleEnabled">true</item>
+    </style>
+    <style name="ClassicTextInputEditText" >
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+    </style>
+</resources>
