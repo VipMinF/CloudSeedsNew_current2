@@ -54,19 +54,12 @@ public class GuidePagerAdapter extends PagerAdapter {
 
         if (position == mGuideBeanList.size() - 1) {
             //最后一页
-
-            //
             id_btn_jump_in.setVisibility(View.VISIBLE);
-
         } else {
             //
-
-            //
             id_btn_jump_in.setVisibility(View.GONE);
-
-
         }
-       // GlideHelper.displayImageNoPlaceholder(id_tv_image, mGuideBeanList.get(position).getImagepath());
+        // GlideHelper.displayImageNoPlaceholder(id_tv_image, mGuideBeanList.get(position).getImagepath());
         ImageLoaderFactory.getManager().displayImageHasNoPlaceholder(id_tv_image, mGuideBeanList.get(position).getImagepath());
         //
         container.addView(view);

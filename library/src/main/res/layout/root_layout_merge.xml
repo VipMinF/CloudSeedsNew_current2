@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge style="@style/MatchMatch">
+    <include layout="@layout/layout_viewstub_content"/>
+    <include layout="@layout/layout_viewstub_title"/>
+</merge>

@@ -8,9 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>-->
-    <style name="ClassicThemeHasPreferenceCompatTheme" parent="ClassicTheme.Transparent">
+    <style name="ClassicThemeHasPreferenceCompatTheme" parent="ClassicTheme">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
+    <style name="ClassicThemeSplashFullscreen" parent="ClassicTheme.Transparent.Splash">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="ClassicTextInputLayout" >
         <item name="hintEnabled">false</item>
         <item name="passwordToggleEnabled">true</item>

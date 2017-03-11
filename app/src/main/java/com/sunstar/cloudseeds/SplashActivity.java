@@ -38,6 +38,10 @@ public class SplashActivity extends ClassicActivity {
         return false;
     }
 
+    @Override
+    protected boolean configStatusBarColorEnable() {
+        return false;
+    }
 
     /**
      * 延迟x毫秒进入

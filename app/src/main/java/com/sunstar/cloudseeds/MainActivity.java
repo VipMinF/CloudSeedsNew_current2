@@ -3,6 +3,8 @@ package com.sunstar.cloudseeds;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
 import com.classichu.classichu.basic.tool.SizeTool;
@@ -14,6 +16,10 @@ import com.sunstar.cloudseeds.ui.UserCenterFragment;
 
 public class MainActivity extends ClassicActivity{
 
+    private  Fragment mMainFragment;
+    private  Fragment mSearchFragment;
+    private  Fragment mScanFragment;
+    private  Fragment mUserCenterFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +34,18 @@ public class MainActivity extends ClassicActivity{
     protected void initView() {
         initAppBar();
         initNavigationView();
+
+        initFragmentList();
+        //
         showMainFragment();
+    }
+
+    private void initFragmentList() {
+        mMainFragment=MainFragment.newInstance("","");
+        mSearchFragment=SearchFragment.newInstance("","");
+        mScanFragment=ScanFragment.newInstance("","");
+        mUserCenterFragment=UserCenterFragment.newInstance("","");
+
     }
 
     private void initNavigationView() {
@@ -54,32 +71,53 @@ public class MainActivity extends ClassicActivity{
             }
         });
     }
-    private void showUserCenterFragment() {
-      getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.id_frame_layout_content, UserCenterFragment.newInstance("",""))
-                .commitAllowingStateLoss();
-    }
+
+
+
+    private Fragment mCurrentFragment=new Fragment();
+    /**
+     * 控制 fragment 来回切换  的显示或隐藏
+     * @param fragment
+     * @param containerViewId
+     */
+    private void showFragment(Fragment fragment,int containerViewId) {
+   if (mCurrentFragment!=fragment) {
+           FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            //
+           transaction.hide(mCurrentFragment);
+           if (!fragment.isAdded()) {
+                transaction.add(containerViewId, fragment).show(fragment).commitAllowingStateLoss();
+            } else {
+                transaction.show(fragment).commitAllowingStateLoss();
+            }
+       mCurrentFragment = fragment;
+ }
+}
 
     private void showMainFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.id_frame_layout_content, MainFragment.newInstance("",""))
-                .commitAllowingStateLoss();
+        if (mMainFragment==null){
+            mMainFragment=MainFragment.newInstance("","");
+        }
+        showFragment(mMainFragment,R.id.id_frame_layout_content);
     }
     private void showSearchFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.id_frame_layout_content, SearchFragment.newInstance("",""))
-                .commitAllowingStateLoss();
+        if (mSearchFragment==null){
+            mSearchFragment=SearchFragment.newInstance("","");
+        }
+        showFragment(mSearchFragment,R.id.id_frame_layout_content);
     }
     private void showScanFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.id_frame_layout_content, ScanFragment.newInstance("",""))
-                .commitAllowingStateLoss();
+        if (mScanFragment==null){
+            mScanFragment=ScanFragment.newInstance("","");
+        }
+        showFragment(mScanFragment,R.id.id_frame_layout_content);
     }
-
+    private void showUserCenterFragment() {
+        if (mUserCenterFragment==null){
+            mUserCenterFragment=UserCenterFragment.newInstance("","");
+        }
+        showFragment(mUserCenterFragment,R.id.id_frame_layout_content);
+    }
     @Override
     protected void initListener() {
 

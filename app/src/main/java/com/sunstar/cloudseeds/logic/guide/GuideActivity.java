@@ -55,6 +55,11 @@ public class GuideActivity extends ClassicActivity {
         return false;
     }
 
+    @Override
+    protected boolean configStatusBarColorEnable() {
+        return false;
+    }
+
     private  GuidePagerAdapter mGuidePagerAdapter;
     private List<GuideBean> mGuideBeanList = new ArrayList<>();
     private void initGuide() {
@@ -62,7 +67,9 @@ public class GuideActivity extends ClassicActivity {
         id_tv_jump_over.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               goToMain();
+                setHasOpenedGuide();
+                //
+                goToMain();
             }
         });
         ViewPager viewPager = findById(R.id.id_view_pager);
@@ -70,8 +77,7 @@ public class GuideActivity extends ClassicActivity {
         mGuidePagerAdapter.setOnGuideClickListener(new GuidePagerAdapter.OnGuideClickListener() {
             @Override
             public void onJumpInClick(View v) {
-               //
-                SharedPreferencesTool.put(mContext, FinalData.SP_HAS_OPENED_GUIDE, true);
+                setHasOpenedGuide();
                 //
                 goToMain();
               /*  if (UserLoginHelper.hasUserLoginInfo()){
@@ -86,6 +92,11 @@ public class GuideActivity extends ClassicActivity {
         viewPager.setPageTransformer(true, new DepthPageTransformer());
     }
 
+    private void setHasOpenedGuide() {
+        //
+        SharedPreferencesTool.put(mContext, FinalData.SP_HAS_OPENED_GUIDE, true);
+    }
+
     private void goToLogin() {
      /*   //startAty(UserLoginActivity.class);
         UserLoginActivity.startMe(mContext, UserLoginActivity.class, createBundleExtraStr1(CommFinalData.BUNDLE_EXTRA_VALUE_HIDE_BACK_BTN));
@@ -94,6 +105,7 @@ public class GuideActivity extends ClassicActivity {
     }
 
     private void goToMain() {
+
         startAty(MainActivity.class);
         finish();
     }
