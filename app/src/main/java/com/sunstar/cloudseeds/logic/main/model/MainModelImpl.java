@@ -35,7 +35,7 @@ public class MainModelImpl implements MainContract.Model<List<TaiZhangBean.ListB
 
             @Override
             public void OnSuccessOnUI(BasicBean<TaiZhangBean> basicBean) {
-                List<TaiZhangBean.ListBean> lbL=new ArrayList<TaiZhangBean.ListBean>();
+                List<TaiZhangBean.ListBean> lbL=new ArrayList<>();
                 for (int i = 0; i < pageSize; i++) {
                     TaiZhangBean.ListBean lb=new TaiZhangBean.ListBean();
                     lb.setName("测试数据"+i+"===页码"+pageNum+"===每页显示"+pageSize);

@@ -6,7 +6,7 @@ import java.util.List;
  * Created by louisgeek on 2017/3/13.
  */
 
-public class YZTZBean {
+public class YZTZListBean {
 
         /**
          * show_code : 1

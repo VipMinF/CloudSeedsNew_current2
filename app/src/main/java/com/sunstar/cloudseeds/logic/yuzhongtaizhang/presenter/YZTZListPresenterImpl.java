@@ -6,9 +6,9 @@ import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicPresenter;
 import com.sunstar.cloudseeds.data.UrlDatas;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZBean;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZContract;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.model.YZTZModelImpl;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZListBean;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZListContract;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.model.YZTZListModelImpl;
 
 import java.util.List;
 
@@ -17,20 +17,20 @@ import java.util.List;
  * Created by louisgeek on 2017/03/13
  */
 
-public class YZTZPresenterImpl extends ClassicPresenter<YZTZContract.View, YZTZContract.Model>
-        implements YZTZContract.Presenter {
+public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.View, YZTZListContract.Model>
+        implements YZTZListContract.Presenter {
 
 
-    public YZTZPresenterImpl(YZTZContract.View view) {
-        super(view, new YZTZModelImpl());
+    public YZTZListPresenterImpl(YZTZListContract.View view) {
+        super(view, new YZTZListModelImpl());
     }
 
     @Override
     public void gainCountData(int pageCount) {
             mView.showProgress();
-            mModel.loadData(UrlDatas.YU_ZHONG_TAI_ZHANG_LIST,ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT,pageCount, "", new BasicCallBack<List<YZTZBean.ListBean>>() {
+            mModel.loadData(UrlDatas.YU_ZHONG_TAI_ZHANG_LIST,ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT,pageCount, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
                 @Override
-                public void onSuccess(List<YZTZBean.ListBean> data) {
+                public void onSuccess(List<YZTZListBean.ListBean> data) {
                     mView.hideProgress();
                     mView.setupData(data);
                 }
@@ -45,9 +45,9 @@ public class YZTZPresenterImpl extends ClassicPresenter<YZTZContract.View, YZTZC
 
     @Override
     public void gainMoreData(int pageNum) {
-        mModel.loadData(UrlDatas.YU_ZHONG_TAI_ZHANG_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<YZTZBean.ListBean>>() {
+        mModel.loadData(UrlDatas.YU_ZHONG_TAI_ZHANG_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
-            public void onSuccess(final List<YZTZBean.ListBean> data) {
+            public void onSuccess(final List<YZTZListBean.ListBean> data) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

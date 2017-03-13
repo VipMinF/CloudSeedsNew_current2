@@ -27,6 +27,8 @@ public class ScanQrcodeActivity extends ClassicActivity {
     @Override
     protected void initView() {
 
+        setAppBarTitle("扫一扫");
+
         mQRCodeView = (ZBarView) findViewById(R.id.id_zbarview);
         mQRCodeView.setDelegate(new QRCodeView.Delegate() {
             @Override
@@ -53,6 +55,11 @@ public class ScanQrcodeActivity extends ClassicActivity {
     @Override
     protected void initListener() {
 
+    }
+
+    @Override
+    protected AppBarStyle configAppBarStyle() {
+        return AppBarStyle.ClassicTitleBar;
     }
 
     @Override
