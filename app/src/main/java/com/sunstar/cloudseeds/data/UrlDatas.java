@@ -9,4 +9,7 @@ public class UrlDatas {
             BASE_URL="https://git.oschina.net/louisgeek/Demo/raw/master/";
     public  static  final String
             TAI_ZHANG_LIST=String.format("%s%s",BASE_URL,"api/project/primary/list.json");
+
+    public  static  final String
+            YU_ZHONG_TAI_ZHANG_LIST=String.format("%s%s",BASE_URL,"api/project/secondary/list.json");
 }

@@ -1,4 +1,4 @@
-package com.sunstar.cloudseeds.ui;
+package com.sunstar.cloudseeds.logic.yuzhongtaizhang;
 
 
 import android.os.Bundle;
@@ -11,24 +11,24 @@ import com.classichu.adapter.widget.ClassicEmptyView;
 import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.logic.main.adapter.MainAdapter;
-import com.sunstar.cloudseeds.logic.main.bean.TaiZhangBean;
-import com.sunstar.cloudseeds.logic.main.contract.MainContract;
-import com.sunstar.cloudseeds.logic.main.presenter.MainPresenterImpl;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.YZTZActivity;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.adapter.YZTZAdapter;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZBean;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZContract;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZPresenterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MainFragment#newInstance} factory method to
+ * Use the {@link YZTZFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
-        implements MainContract.View<List<TaiZhangBean.ListBean>> {
-    public MainFragment() {
+public class YZTZFragment extends ClassicMvpFragment<YZTZPresenterImpl> implements YZTZContract.View<List<YZTZBean.ListBean>>{
+
+
+
+    public YZTZFragment() {
         // Required empty public constructor
     }
 
@@ -38,11 +38,11 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
+     * @return A new instance of fragment YZTZFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
+    public static YZTZFragment newInstance(String param1, String param2) {
+        YZTZFragment fragment = new YZTZFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,19 +59,47 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
         }
     }
 
+
     @Override
     protected int setupLayoutResId() {
-        return R.layout.fragment_main;
+        return R.layout.fragment_yztz;
     }
 
     @Override
     protected void initView(View view) {
-       toRefreshData();
+        toRefreshData();
     }
 
     @Override
     protected void initListener() {
 
+    }
+
+    @Override
+    protected YZTZPresenterImpl setupPresenter() {
+        return new YZTZPresenterImpl(this);
+    }
+
+    @Override
+    protected int configSwipeRefreshLayoutResId() {
+        return R.id.id_swipe_refresh_layout;
+    }
+
+    @Override
+    protected int configRecyclerViewResId() {
+        return R.id.id_recycler_view;
+    }
+
+    @Override
+    protected void toLoadMoreData() {
+        super.toLoadMoreData();
+        mPresenter.gainMoreData(mClassicRVHeaderFooterAdapter.getNextPageNum());
+    }
+
+    @Override
+    protected void toRefreshData() {
+        super.toRefreshData();
+        mPresenter.gainCountData(mClassicRVHeaderFooterAdapter.getNowPageCount());
     }
 
     @Override
@@ -81,28 +109,25 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
 
     @Override
     public void hideProgress() {
-        hideSwipeRefreshLayout();
+         hideSwipeRefreshLayout();
     }
 
     @Override
-    public void showMessage(String msg) {
-        ToastTool.showShortCenter(msg);
+    public void showMessage(String s) {
+        ToastTool.showShortCenter(s);
     }
 
     @Override
-    public void setupData(List<TaiZhangBean.ListBean> beanList) {
-        mClassicRVHeaderFooterAdapter.refreshDataList(beanList);
+    public void setupData(List<YZTZBean.ListBean> yztzBeanList) {
+        mClassicRVHeaderFooterAdapter.refreshDataList(yztzBeanList);
         //
         mRecyclerView.setVisibility(View.VISIBLE);//返回数据后 显示
-
-
-
     }
 
     @Override
-    public void setupMoreData(List<TaiZhangBean.ListBean> beanList) {
-        mClassicRVHeaderFooterAdapter.addDataListAtEnd(beanList);
-        if (beanList.size() == 0) {
+    public void setupMoreData(List<YZTZBean.ListBean> yztzBeanList) {
+        mClassicRVHeaderFooterAdapter.addDataListAtEnd(yztzBeanList);
+        if (yztzBeanList.size() == 0) {
             //所有数据加载完毕
             mClassicRVHeaderFooterAdapter.showFooterViewLoadComplete();
         } else {
@@ -114,9 +139,9 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
 
     @Override
     protected ClassicRVHeaderFooterAdapter configClassicRVHeaderFooterAdapter() {
-        List<TaiZhangBean.ListBean> listBeanList = new ArrayList<>();
+        List<YZTZBean.ListBean> listBeanList = new ArrayList<>();
         ClassicRVHeaderFooterAdapter classicRVHeaderFooterAdapter
-                = new MainAdapter(mContext,listBeanList, R.layout.item_list_tai_zhang);
+                = new YZTZAdapter(mContext,listBeanList, R.layout.item_list_yu_zhong_tai_zhang);
         ClassicEmptyView classicEmptyView = new ClassicEmptyView(getContext());
         classicEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         classicRVHeaderFooterAdapter.setEmptyView(classicEmptyView);
@@ -124,40 +149,11 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
             @Override
             public void onItemClick(View itemView, int position) {
                 super.onItemClick(itemView, position);
-               // ToastTool.showShortCenter("sda" + position);
-                startAty(YZTZActivity.class);
+                ToastTool.showShortCenter("sda" + position);
             }
         });
         mRecyclerView.setVisibility(View.GONE);//初始化 不显示
         return classicRVHeaderFooterAdapter;
     }
 
-    @Override
-    protected MainPresenterImpl setupPresenter() {
-        return new MainPresenterImpl(this);
-    }
-
-
-    @Override
-    protected int configRecyclerViewResId() {
-        return R.id.id_recycler_view;
-    }
-
-    @Override
-    protected int configSwipeRefreshLayoutResId() {
-        return R.id.id_swipe_refresh_layout;
-    }
-
-    @Override
-    protected void toRefreshData() {
-        super.toRefreshData();
-        mPresenter.gainCountData(mClassicRVHeaderFooterAdapter.getNowPageCount());
-
-    }
-
-    @Override
-    protected void toLoadMoreData() {
-        super.toLoadMoreData();
-        mPresenter.gainMoreData(mClassicRVHeaderFooterAdapter.getNextPageNum());
-    }
 }

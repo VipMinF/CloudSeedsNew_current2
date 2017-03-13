@@ -26,9 +26,9 @@ public class MainPresenterImpl extends ClassicPresenter<MainContract.View,MainCo
     @Override
     public void gainCountData(int pageCount) {
             mView.showProgress();
-            mModel.loadData(UrlDatas.TAI_ZHANG_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<TaiZhangBean>>() {
+            mModel.loadData(UrlDatas.TAI_ZHANG_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<TaiZhangBean.ListBean>>() {
                 @Override
-                public void onSuccess(List<TaiZhangBean> data) {
+                public void onSuccess(List<TaiZhangBean.ListBean> data) {
                         mView.hideProgress();
                         mView.setupData(data);
                 }
@@ -43,9 +43,9 @@ public class MainPresenterImpl extends ClassicPresenter<MainContract.View,MainCo
 
     @Override
     public void gainMoreData(int pageNum) {
-        mModel.loadData(UrlDatas.TAI_ZHANG_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<TaiZhangBean>>() {
+        mModel.loadData(UrlDatas.TAI_ZHANG_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<TaiZhangBean.ListBean>>() {
             @Override
-            public void onSuccess(final List<TaiZhangBean> data) {
+            public void onSuccess(final List<TaiZhangBean.ListBean> data) {
               new Handler().postDelayed(new Runnable() {
                   @Override
                   public void run() {

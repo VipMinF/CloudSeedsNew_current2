@@ -27,7 +27,7 @@
         android:theme="@style/ClassicTheme.Transparent">
         <activity
             android:name=".MainActivity"
-            android:theme="@style/ClassicThemeHasPreferenceCompatTheme"></activity>
+            android:theme="@style/ClassicThemeHasPreferenceCompatTheme" />
         <activity
             android:name=".logic.scan.ScanQrcodeActivity"
             android:theme="@style/ClassicTheme" />
@@ -41,9 +41,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".logic.guide.GuideActivity"
-            android:theme="@style/ClassicTheme.Fullscreen"
-            ></activity>
+        <activity
+            android:name=".logic.guide.GuideActivity"
+            android:theme="@style/ClassicTheme.Fullscreen" />
+        <activity android:name=".logic.yuzhongtaizhang.YZTZActivity"></activity>
     </application>
 
 </manifest>

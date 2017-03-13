@@ -15,11 +15,11 @@ import java.util.List;
 * Created by louisgeek on 2017/03/10
 */
 
-public class MainModelImpl implements MainContract.Model<List<TaiZhangBean>>{
+public class MainModelImpl implements MainContract.Model<List<TaiZhangBean.ListBean>>{
 
 
     @Override
-    public void loadData(String url, final int pageNum, final int pageSize, String queryKey, final BasicCallBack<List<TaiZhangBean>> baseCallBack) {
+    public void loadData(String url, final int pageNum, final int pageSize, String queryKey, final BasicCallBack<List<TaiZhangBean.ListBean>> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
         paramsMap.put("userid","21");
         paramsMap.put("pagenum",String.valueOf(pageNum));
@@ -34,27 +34,27 @@ public class MainModelImpl implements MainContract.Model<List<TaiZhangBean>>{
             }
 
             @Override
-            public void OnSuccessOnUI(BasicBean<TaiZhangBean> baseBean) {
+            public void OnSuccessOnUI(BasicBean<TaiZhangBean> basicBean) {
                 List<TaiZhangBean.ListBean> lbL=new ArrayList<TaiZhangBean.ListBean>();
                 for (int i = 0; i < pageSize; i++) {
                     TaiZhangBean.ListBean lb=new TaiZhangBean.ListBean();
                     lb.setName("测试数据"+i+"===页码"+pageNum+"===每页显示"+pageSize);
                     lbL.add(lb);
                 }
-                baseBean.getInfo().get(0).setList(lbL);
+               // basicBean.getInfo().get(0).setList(lbL);
                 if (pageNum>3){
-                    baseBean.getInfo().get(0).getList().clear();
+                    lbL.clear();
                 }
-                if ("1".equals(baseBean.getCode())){
-                    baseCallBack.onSuccess(baseBean.getInfo());
+                if ("1".equals(basicBean.getCode())){
+                    basicCallBack.onSuccess(lbL);
                 }else{
-                    baseCallBack.onError(baseBean.getMessage());
+                    basicCallBack.onError(basicBean.getMessage());
                 }
             }
 
             @Override
             public void OnError(String errorMsg) {
-                baseCallBack.onError(errorMsg);
+                basicCallBack.onError(errorMsg);
             }
         });
 
