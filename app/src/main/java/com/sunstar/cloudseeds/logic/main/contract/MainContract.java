@@ -1,6 +1,6 @@
 package com.sunstar.cloudseeds.logic.main.contract;
 
-import com.classichu.classichu.classic.BasicContract;
+import com.classichu.classichu.basic.BasicContract;
 
 /**
  * Created by louisgeek on 2017/3/10.

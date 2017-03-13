@@ -1,7 +1,8 @@
 package com.sunstar.cloudseeds.logic.main.model;
+
+import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
-import com.classichu.classichu.classic.BasicCallBack;
 import com.sunstar.cloudseeds.data.BasicBean;
 import com.sunstar.cloudseeds.logic.main.bean.TaiZhangBean;
 import com.sunstar.cloudseeds.logic.main.contract.MainContract;
@@ -18,7 +19,7 @@ public class MainModelImpl implements MainContract.Model<List<TaiZhangBean>>{
 
 
     @Override
-    public void loadDataBase(String url, final int pageNum, final int pageSize, String queryKey, final BasicCallBack<List<TaiZhangBean>> baseCallBack) {
+    public void loadData(String url, final int pageNum, final int pageSize, String queryKey, final BasicCallBack<List<TaiZhangBean>> baseCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
         paramsMap.put("userid","21");
         paramsMap.put("pagenum",String.valueOf(pageNum));

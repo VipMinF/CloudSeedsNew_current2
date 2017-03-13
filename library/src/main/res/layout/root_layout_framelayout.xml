@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout style="@style/MatchMatch.Vertical">
-    <!--layout_viewstub_title must after layout_viewstub_content
-    否则layout_viewstub_title不能点击
-    -->
-    <include layout="@layout/layout_viewstub_content"/>
-    <include layout="@layout/layout_viewstub_title"/>
-</FrameLayout>

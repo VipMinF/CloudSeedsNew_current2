@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.classichu.titlebar.widget.ClassicTitleBar
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/id_classic_titlebar"
-style="@style/ClassicTitleBar"
-/>
