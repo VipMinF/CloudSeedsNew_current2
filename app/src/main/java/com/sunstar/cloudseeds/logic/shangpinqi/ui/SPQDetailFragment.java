@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.classic.ClassicFragment;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.data.AtyGoToWhere;
+import com.sunstar.cloudseeds.logic.shangpinqi.SPQActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +63,13 @@ public class SPQDetailFragment extends ClassicFragment {
 
     @Override
     protected void initListener() {
-
+        //
+        setOnNotFastClickListener(findById(R.id.id_btn_show_add), new OnNotFastClickListener() {
+            @Override
+            protected void onNotFastClick(View view) {
+                startAty(SPQActivity.class,createBundleExtraInt1(AtyGoToWhere.ADD));
+            }
+        });
     }
 
 }

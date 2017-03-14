@@ -3,7 +3,6 @@ package com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
@@ -61,23 +60,19 @@ implements YZTZDetailContract.View<YZTZDetailBean>{
         return R.layout.fragment_yztz_detail;
     }
     TextView id_tv_item_title_jzsj;
-    Button id_btn_show_add;
+
     @Override
     protected void initView(View view) {
         id_tv_item_title_jzsj= findById(R.id.id_tv_item_title_jzsj);
-
-
-        id_btn_show_add= findById(R.id.id_btn_show_add);
 
         toRefreshData();
     }
 
     @Override
     protected void initListener() {
-        id_btn_show_add.setOnClickListener(new OnNotFastClickListener() {
+        setOnNotFastClickListener(findById(R.id.id_btn_show_add), new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
-               //### ToastTool.showShortCenter("调查记录");
                 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.ADD));
             }
         });

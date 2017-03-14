@@ -6,7 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.classichu.classichu.classic.ClassicFragment;
+import com.classichu.dropselectview.bean.ClassfiyBean;
+import com.classichu.dropselectview.widget.ClassicSelectView;
 import com.sunstar.cloudseeds.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,7 +68,15 @@ public class SPQAddFragment extends ClassicFragment {
 
     @Override
     protected void initView(View view) {
-
+       ClassicSelectView id_classic_select_view_zx= findById(R.id.id_classic_select_view_zx);
+        List<ClassfiyBean> classfiyBeanList=new ArrayList<>();
+        for (int i = 0; i <5 ; i++) {
+            ClassfiyBean classfiyBean=new ClassfiyBean();
+            classfiyBean.setName("dsa"+i);
+            classfiyBean.setID(i);
+            classfiyBeanList.add(classfiyBean);
+        }
+        id_classic_select_view_zx.setupClassfiyBeanList(classfiyBeanList);
     }
 
     @Override
