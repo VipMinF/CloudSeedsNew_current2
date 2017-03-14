@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:title="用户">
+    <!--<PreferenceCategory android:title="用户">-->
         <!--<Preference
             android:key="preference_user"
             android:title="我的用户"
@@ -10,9 +10,8 @@
             android:title="密码修改"
             android:layout="@layout/layout_custom_preference"
             />
-    </PreferenceCategory>
-    <PreferenceCategory  android:title="常规"
-        >
+    <!--</PreferenceCategory>-->
+    <!--<PreferenceCategory  android:title="常规">-->
       <!--  <CheckBoxPreference
             android:key="checkbox_preference_nopic"
             android:summary="移动网络下不加载图片"
@@ -23,12 +22,12 @@
             android:title="清除缓存"
             android:layout="@layout/layout_custom_preference"
             />
-        <Preference
-            android:layout="@layout/layout_custom_preference"
-            android:key="preference_update"
-            android:title="检查更新"
-            android:summary="版本:2.6.0(744)"
-            />
+        <!--<Preference-->
+            <!--android:layout="@layout/layout_custom_preference"-->
+            <!--android:key="preference_update"-->
+            <!--android:title="检查更新"-->
+            <!--android:summary="版本:2.6.0(744)"-->
+            <!--/>-->
 
         <!--   <EditTextPreference
                android:dialogTitle="请输入你最喜欢的种族"
@@ -43,8 +42,8 @@
                android:key="list_preferenc"
                android:summary="一个使用了列表对话框的例子"
                android:title="请选择一项" />-->
-    </PreferenceCategory>
-    <PreferenceCategory android:title="其他">
+    <!--</PreferenceCategory>-->
+    <!--<PreferenceCategory android:title="其他">-->
      <!--   <Preference
             android:key="preference_feedback"
             android:title="意见反馈"
@@ -54,7 +53,7 @@
             android:title="关于云种"
             android:layout="@layout/layout_custom_preference"
             />
-    </PreferenceCategory>
+    <!--</PreferenceCategory>-->
     <!--   <PreferenceCategory android:title="Launch preferences" >
            &lt;!&ndash; This PreferenceScreen tag serves as a screen break (similar to page break in word processing). Like for other preference types, we assign a key here so it is able to save and restore its instance state. &ndash;&gt;
            <PreferenceScreen

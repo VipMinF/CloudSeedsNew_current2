@@ -10,7 +10,8 @@ import com.classichu.classichu.basic.tool.AppTool;
 import com.classichu.dialogview.manager.DialogManager;
 import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.logic.changepd.ChangePasswordActivity;
+import com.sunstar.cloudseeds.logic.usercenter.ChangePasswordActivity;
+import com.sunstar.cloudseeds.logic.usercenter.AboutActivity;
 
 /**
  * Created by louisgeek on 2017/3/8.
@@ -29,12 +30,12 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
         //###CheckBoxPreference checkbox_preference_nopic = (CheckBoxPreference) findPreference("checkbox_preference_nopic");
 
         Preference preference_clear = findPreference("preference_clear");
-        Preference preference_update = findPreference("preference_update");
+        //Preference preference_update = findPreference("preference_update");
 
         String versionFormat = getResources().getString(R.string.classic_version_format);
         String versionStr = String.format(versionFormat,
                 AppTool.getVersionName(getActivity()), AppTool.getVersionCode(getActivity()));
-        preference_update.setSummary(versionStr);
+        //preference_update.setSummary(versionStr);
 
         //#####!!!  Preference preference_feedback = findPreference("preference_feedback");
         Preference preference_about = findPreference("preference_about");
@@ -46,7 +47,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
         //####  checkbox_preference_nopic.setOnPreferenceChangeListener(this);
 
         preference_clear.setOnPreferenceClickListener(this);
-        preference_update.setOnPreferenceClickListener(this);
+        //preference_update.setOnPreferenceClickListener(this);
 
 
         //#####!!!   preference_feedback.setOnPreferenceClickListener(this);
@@ -102,6 +103,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
                         public void onBtnClickOk(DialogInterface dialogInterface) {
                             super.onBtnClickOk(dialogInterface);
 
+
                         }
                     });
                     break;
@@ -115,7 +117,10 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
                     break;*/
                 case "preference_about":
                     // Toast.makeText(getActivity(), "preference_about", Toast.LENGTH_SHORT).show();
-                    //###   startActivity(new Intent(getActivity(), QrCodeActivity.class));
+                    startActivity(new Intent(getActivity(), AboutActivity.class));
+
+
+
                     break;
             }
             return true;
