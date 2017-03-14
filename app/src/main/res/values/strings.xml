@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CloudSeedsNew</string>
+    <string name="app_name">云种</string>
     <!--classic_app-->
     <string name="classic_app_ok">好</string>
     <string name="classic_app_confirm">确定</string>
