@@ -1,4 +1,4 @@
-package com.sunstar.cloudseeds.logic.yuzhongxuanzhu.contract;
+package com.sunstar.cloudseeds.logic.xuanzhu.contract;
 
 import com.classichu.classichu.basic.BasicContract;
 

@@ -1,4 +1,4 @@
-package com.sunstar.cloudseeds.logic.yuzhongxuanzhu;
+package com.sunstar.cloudseeds.logic.xuanzhu;
 
 import com.classichu.classichu.classic.ClassicActivity;
 import com.sunstar.cloudseeds.R;
@@ -17,9 +17,9 @@ public class XuanZhuActivity extends ClassicActivity {
 
     @Override
     protected void initView() {
-        setAppBarTitle("育种选株");
+        setAppBarTitle("选株列表");
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.id_frame_layout_content, XuanZhuFragment.newInstance("",""))
+                .replace(R.id.id_frame_layout_content, XuanZhuListFragment.newInstance("",""))
                 .commitAllowingStateLoss();
     }
 

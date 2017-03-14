@@ -44,8 +44,15 @@
         <activity
             android:name=".logic.guide.GuideActivity"
             android:theme="@style/ClassicTheme.Fullscreen" />
-        <activity android:name=".logic.yuzhongtaizhang.YZTZActivity" />
-        <activity android:name=".logic.yuzhongxuanzhu.XuanZhuActivity"></activity>
+        <activity
+            android:name=".logic.yuzhongtaizhang.YZTZActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".logic.xuanzhu.XuanZhuActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            />
+        <activity android:name=".logic.shangpinqi.SPQActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            ></activity>
     </application>
 
 </manifest>

@@ -1,8 +1,15 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context="com.sunstar.cloudseeds.logic.yuzhongxuanzhu.XuanZhuFragment">
+    tools:context="com.sunstar.cloudseeds.logic.xuanzhu.XuanZhuListFragment">
+
+    <SearchView
+        android:id="@+id/id_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/id_swipe_refresh_layout"
@@ -16,4 +23,4 @@
             android:padding="10dp" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</FrameLayout>
+</LinearLayout>

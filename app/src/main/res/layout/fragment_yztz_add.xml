@@ -1,25 +1,34 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZDetailFragment">
+    tools:context="com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZAddFragment">
 
-    <ScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout
+
+
+                <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
 
             <TableLayout
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:stretchColumns="1"
                 >
 
                 <TableRow>
@@ -44,27 +53,6 @@
                         android:textSize="14dp" />
                 </TableRow>
 
-                <TableRow>
-
-                    <TextView
-                        style="@style/ClassicTextPrimary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:lines="1"
-                        android:padding="10dp"
-                        android:text="播种时间:"
-                        android:textSize="14dp" />
-
-
-                    <TextView
-                        style="@style/ClassicTextPrimary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:lines="1"
-                        android:padding="10dp"
-                        android:text="xxxxx"
-                        android:textSize="14dp" />
-                </TableRow>
 
                 <TableRow>
 
@@ -89,59 +77,46 @@
                 </TableRow>
             </TableLayout>
 
-            <Button
-                android:id="@+id/id_btn_show_add"
-                style="@style/ClassicButtonRound"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_marginRight="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="调查记录" />
-        </RelativeLayout>
+
+        </LinearLayout>
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:stretchColumns="1">
 
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <TextView
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
                     android:background="@drawable/shape_form_frame_right_bottom"
                     android:lines="1"
                     android:padding="10dp"
-                    android:text="浸种时间:"
+                    android:text="播种时间:"
                     android:textSize="14dp" />
 
-
-                <TextView
-                    android:id="@+id/id_tv_item_title_jzsj"
-                    style="@style/ClassicTextPrimary"
+                <com.classichu.dateselectview.widget.DateSelectView
+                    android:id="@+id/dateSelectView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape_form_frame_bottom"
+                    android:background="@drawable/selector_classic_form_bottom_item_bg"
                     android:lines="1"
                     android:padding="10dp"
                     android:text="xxxxx"
                     android:textSize="14dp" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <TextView
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
                     android:background="@drawable/shape_form_frame_right_bottom"
                     android:lines="1"
                     android:padding="10dp"
@@ -149,77 +124,48 @@
                     android:textSize="14dp" />
 
 
-                <TextView
-                    style="@style/ClassicTextPrimary"
+                <com.classichu.dateselectview.widget.DateSelectView
+                    android:id="@+id/dateSelectView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape_form_frame_bottom"
                     android:lines="1"
+                    android:background="@drawable/selector_classic_form_bottom_item_bg"
                     android:padding="10dp"
                     android:text="xxxxx"
                     android:textSize="14dp" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <TextView
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:lines="1"
                     android:background="@drawable/shape_form_frame_right_bottom"
-                    android:lines="1"
-                    android:padding="10dp"
-                    android:text="芽率:"
-                    android:textSize="14dp" />
-
-
-                <TextView
-                    style="@style/ClassicTextPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shape_form_frame_bottom"
-                    android:lines="1"
-                    android:padding="10dp"
-                    android:text="xxxxx"
-                    android:textSize="14dp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    style="@style/ClassicTextPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shape_form_frame_right_bottom"
-                    android:lines="1"
                     android:padding="10dp"
                     android:text="移栽时间:"
                     android:textSize="14dp" />
 
 
-                <TextView
-                    style="@style/ClassicTextPrimary"
+                <com.classichu.dateselectview.widget.DateSelectView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape_form_frame_bottom"
                     android:lines="1"
                     android:padding="10dp"
+                    android:background="@drawable/selector_classic_form_bottom_item_bg"
                     android:text="xxxxx"
                     android:textSize="14dp" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <TextView
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
                     android:background="@drawable/shape_form_frame_right_bottom"
                     android:lines="1"
                     android:padding="10dp"
@@ -227,25 +173,47 @@
                     android:textSize="14dp" />
 
 
+                <com.classichu.dateselectview.widget.DateSelectView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:padding="10dp"
+                    android:background="@drawable/selector_classic_form_bottom_item_bg"
+                    android:text="xxxxx"
+                    android:textSize="14dp" />
+            </TableRow>
+
+            <TableRow>
+
                 <TextView
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shape_form_frame_bottom"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_form_frame_right_bottom"
                     android:lines="1"
+                    android:padding="10dp"
+                    android:text="开花时间:"
+                    android:textSize="14dp" />
+
+
+                <com.classichu.dateselectview.widget.DateSelectView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:background="@drawable/selector_classic_form_bottom_item_bg"
                     android:padding="10dp"
                     android:text="xxxxx"
                     android:textSize="14dp" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <TextView
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
                     android:background="@drawable/shape_form_frame_right_bottom"
                     android:lines="1"
                     android:padding="10dp"
@@ -253,19 +221,33 @@
                     android:textSize="14dp" />
 
 
-                <TextView
-                    style="@style/ClassicTextPrimary"
+                <com.classichu.lineseditview.LinesEditView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape_form_frame_bottom"
-                    android:lines="1"
-                    android:padding="10dp"
-                    android:text="xxxxx"
-                    android:textSize="14dp" />
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    app:classic_contentHeight="80dp"
+                    app:classic_hintText="请输入备注"
+                    />
             </TableRow>
 
         </TableLayout>
 
     </LinearLayout>
+
+
+
     </ScrollView>
-</android.support.v4.widget.SwipeRefreshLayout>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ClassicButton"
+        android:background="@drawable/selector_classic_btn_item_bg"
+        android:text="保存"
+        android:layout_gravity="bottom"
+        />
+</FrameLayout>

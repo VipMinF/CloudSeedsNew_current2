@@ -63,6 +63,26 @@ public class YZTZListAdapter extends ClassicRVHeaderFooterAdapter<YZTZListBean.L
                     }
             }
         });
+
+        Button id_btn_item_show_xuan_zhu= classicRVHeaderFooterViewHolder.findBindView(R.id.id_btn_item_show_xuan_zhu);
+        id_btn_item_show_xuan_zhu.setOnClickListener(new OnNotFastClickListener() {
+            @Override
+            protected void onNotFastClick(View view) {
+                if (onItemOperationListener!=null){
+                    onItemOperationListener.onItemShowXuanZhu(pos);
+                }
+            }
+        });
+
+        Button id_btn_item_show_qrcode= classicRVHeaderFooterViewHolder.findBindView(R.id.id_btn_item_show_qrcode);
+        id_btn_item_show_qrcode.setOnClickListener(new OnNotFastClickListener() {
+            @Override
+            protected void onNotFastClick(View view) {
+                if (onItemOperationListener!=null){
+                    onItemOperationListener.onItemShowQrcode(pos);
+                }
+            }
+        });
     }
 
     private  OnItemOperationListener onItemOperationListener;

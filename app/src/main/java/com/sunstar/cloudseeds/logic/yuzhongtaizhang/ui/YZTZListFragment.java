@@ -1,4 +1,4 @@
-package com.sunstar.cloudseeds.logic.yuzhongtaizhang;
+package com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui;
 
 
 import android.os.Bundle;
@@ -13,11 +13,12 @@ import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
+import com.sunstar.cloudseeds.logic.xuanzhu.XuanZhuActivity;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.YZTZActivity;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.adapter.YZTZListAdapter;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZListBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZListContract;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZListPresenterImpl;
-import com.sunstar.cloudseeds.logic.yuzhongxuanzhu.XuanZhuActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +146,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     protected ClassicRVHeaderFooterAdapter configClassicRVHeaderFooterAdapter() {
         List<YZTZListBean.ListBean> listBeanList = new ArrayList<>();
         YZTZListAdapter adapter
-                = new YZTZListAdapter(mContext,listBeanList, R.layout.item_list_yu_zhong_tai_zhang);
+                = new YZTZListAdapter(mContext,listBeanList, R.layout.item_list_yztz);
         ClassicEmptyView classicEmptyView = new ClassicEmptyView(getContext());
         classicEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         adapter.setEmptyView(classicEmptyView);
@@ -168,7 +169,9 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             @Override
             public void onItemShowXuanZhu(int position) {
                 super.onItemShowXuanZhu(position);
-                ToastTool.showShortCenter("选株"+position);
+                //##ToastTool.showShortCenter("选株"+position);
+                //
+                startAty(XuanZhuActivity.class);
             }
 
             @Override

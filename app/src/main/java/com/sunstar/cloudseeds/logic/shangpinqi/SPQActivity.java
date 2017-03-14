@@ -1,56 +1,51 @@
-package com.sunstar.cloudseeds.logic.yuzhongtaizhang;
+package com.sunstar.cloudseeds.logic.shangpinqi;
 
 import com.classichu.classichu.classic.ClassicActivity;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZAddFragment;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZDetailFragment;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZListFragment;
+import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQDetailFragment;
+import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment;
 
-public class YZTZActivity extends ClassicActivity {
-
-
+public class SPQActivity extends ClassicActivity {
 
     @Override
     protected int setupLayoutResId() {
-        return R.layout.activity_yztz;
-    }
-
-    @Override
-    protected AppBarStyle configAppBarStyle() {
-        return AppBarStyle.ClassicTitleBar;
+        return R.layout.activity_spq;
     }
 
     @Override
     protected void initView() {
-
-
         int goToWhere=getBundleExtraInt1();
         switch (goToWhere){
             case AtyGoToWhere.LIST:
-                setAppBarTitle("育种台账计划");
+         /*       setAppBarTitle("育种台账计划");
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.id_frame_layout_content, YZTZListFragment.newInstance("",""))
-                        .commitAllowingStateLoss();
+                        .commitAllowingStateLoss();*/
                 break;
             case AtyGoToWhere.DETAIL:
-                setAppBarTitle("族群调查");
+                setAppBarTitle("商品期调查");
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.id_frame_layout_content, YZTZDetailFragment.newInstance("",""))
+                        .replace(R.id.id_frame_layout_content, SPQDetailFragment.newInstance("",""))
                         .commitAllowingStateLoss();
                 break;
             case AtyGoToWhere.ADD:
-                setAppBarTitle("族群调查记录");
+                setAppBarTitle("商品期调查记录");
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.id_frame_layout_content, YZTZAddFragment.newInstance("",""))
+                        .replace(R.id.id_frame_layout_content, SPQAddFragment.newInstance("",""))
                         .commitAllowingStateLoss();
                 break;
         }
-
     }
 
     @Override
     protected void initListener() {
 
+    }
+
+
+    @Override
+    protected AppBarStyle configAppBarStyle() {
+        return AppBarStyle.ClassicTitleBar;
     }
 }

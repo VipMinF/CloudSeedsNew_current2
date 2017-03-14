@@ -1,4 +1,4 @@
-package com.sunstar.cloudseeds.logic.yuzhongxuanzhu.bean;
+package com.sunstar.cloudseeds.logic.xuanzhu.bean;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import java.util.List;
  * Created by louisgeek on 2017/3/13.
  */
 
-public class XuanZhuBean {
+public class XuanZhuListBean {
 
 
         /**

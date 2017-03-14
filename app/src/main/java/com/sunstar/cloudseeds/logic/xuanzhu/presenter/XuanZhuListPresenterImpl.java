@@ -1,4 +1,4 @@
-package com.sunstar.cloudseeds.logic.yuzhongxuanzhu.presenter;
+package com.sunstar.cloudseeds.logic.xuanzhu.presenter;
 
 import android.os.Handler;
 
@@ -6,9 +6,9 @@ import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicPresenter;
 import com.sunstar.cloudseeds.data.UrlDatas;
-import com.sunstar.cloudseeds.logic.yuzhongxuanzhu.bean.XuanZhuBean;
-import com.sunstar.cloudseeds.logic.yuzhongxuanzhu.contract.XuanZhuListContract;
-import com.sunstar.cloudseeds.logic.yuzhongxuanzhu.model.XuanZhuListModelImpl;
+import com.sunstar.cloudseeds.logic.xuanzhu.bean.XuanZhuListBean;
+import com.sunstar.cloudseeds.logic.xuanzhu.contract.XuanZhuListContract;
+import com.sunstar.cloudseeds.logic.xuanzhu.model.XuanZhuListModelImpl;
 
 import java.util.List;
 
@@ -26,9 +26,9 @@ public class XuanZhuListPresenterImpl extends ClassicPresenter<XuanZhuListContra
     @Override
     public void gainCountData(int pageCount) {
         mView.showProgress();
-        mModel.loadData(UrlDatas.YU_ZHONG_XUAN_ZHU_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<XuanZhuBean.ListBean>>() {
+        mModel.loadData(UrlDatas.YU_ZHONG_XUAN_ZHU_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
             @Override
-            public void onSuccess(List<XuanZhuBean.ListBean> data) {
+            public void onSuccess(List<XuanZhuListBean.ListBean> data) {
                 mView.hideProgress();
                 mView.setupData(data);
             }
@@ -43,9 +43,9 @@ public class XuanZhuListPresenterImpl extends ClassicPresenter<XuanZhuListContra
 
     @Override
     public void gainMoreData(int pageNum) {
-        mModel.loadData(UrlDatas.YU_ZHONG_XUAN_ZHU_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<XuanZhuBean.ListBean>>() {
+        mModel.loadData(UrlDatas.YU_ZHONG_XUAN_ZHU_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
             @Override
-            public void onSuccess(final List<XuanZhuBean.ListBean> data) {
+            public void onSuccess(final List<XuanZhuListBean.ListBean> data) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

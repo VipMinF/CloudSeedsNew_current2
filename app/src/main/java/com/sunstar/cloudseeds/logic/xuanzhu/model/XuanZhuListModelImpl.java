@@ -1,11 +1,11 @@
-package com.sunstar.cloudseeds.logic.yuzhongxuanzhu.model;
+package com.sunstar.cloudseeds.logic.xuanzhu.model;
 
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.data.BasicBean;
-import com.sunstar.cloudseeds.logic.yuzhongxuanzhu.bean.XuanZhuBean;
-import com.sunstar.cloudseeds.logic.yuzhongxuanzhu.contract.XuanZhuListContract;
+import com.sunstar.cloudseeds.logic.xuanzhu.bean.XuanZhuListBean;
+import com.sunstar.cloudseeds.logic.xuanzhu.contract.XuanZhuListContract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,29 +15,29 @@ import java.util.List;
  * Created by louisgeek on 2017/3/13.
  */
 
-public  class XuanZhuListModelImpl implements XuanZhuListContract.Model<List<XuanZhuBean.ListBean>>{
+public  class XuanZhuListModelImpl implements XuanZhuListContract.Model<List<XuanZhuListBean.ListBean>>{
 
     @Override
     public void loadData(String url, final int pageNum, final int pageSize, String s1,
-                         final BasicCallBack<List<XuanZhuBean.ListBean>> basicCallBack) {
+                         final BasicCallBack<List<XuanZhuListBean.ListBean>> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
         paramsMap.put("userid","21");
         paramsMap.put("pagenum",String.valueOf(pageNum));
         paramsMap.put("pagesize",String.valueOf(pageSize));
         paramsMap.put("search_keyword","");
         HttpRequestManagerFactory.getRequestManager().getUrlBackStr(url,null,
-                new GsonHttpRequestCallback<BasicBean<XuanZhuBean>>() {
+                new GsonHttpRequestCallback<BasicBean<XuanZhuListBean>>() {
                     @Override
-                    public BasicBean<XuanZhuBean> OnSuccess(String result) {
-                        BasicBean<XuanZhuBean> BB= BasicBean.fromJson(result,XuanZhuBean.class);
+                    public BasicBean<XuanZhuListBean> OnSuccess(String result) {
+                        BasicBean<XuanZhuListBean> BB= BasicBean.fromJson(result,XuanZhuListBean.class);
                         return BB;
                     }
 
                     @Override
-                    public void OnSuccessOnUI(BasicBean<XuanZhuBean> basicBean) {
-                        List<XuanZhuBean.ListBean> lbL=new ArrayList<>();
+                    public void OnSuccessOnUI(BasicBean<XuanZhuListBean> basicBean) {
+                        List<XuanZhuListBean.ListBean> lbL=new ArrayList<>();
                         for (int i = 0; i < pageSize; i++) {
-                            XuanZhuBean.ListBean lb=new XuanZhuBean.ListBean();
+                            XuanZhuListBean.ListBean lb=new XuanZhuListBean.ListBean();
                             lb.setName("xuan zhu测试数据"+i+"===页码"+pageNum+"===每页显示"+pageSize);
                             lb.setSelected_code("212"+i);
                             lbL.add(lb);

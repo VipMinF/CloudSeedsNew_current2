@@ -1,13 +1,17 @@
-package com.sunstar.cloudseeds.logic.yuzhongtaizhang;
+package com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.data.AtyGoToWhere;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.YZTZActivity;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZDetailContract;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZDetailPresenterImpl;
@@ -56,17 +60,27 @@ implements YZTZDetailContract.View<YZTZDetailBean>{
     protected int setupLayoutResId() {
         return R.layout.fragment_yztz_detail;
     }
-    TextView jzsj;
+    TextView id_tv_item_title_jzsj;
+    Button id_btn_show_add;
     @Override
     protected void initView(View view) {
-       jzsj= findById(R.id.id_tv_item_title_jzsj);
+        id_tv_item_title_jzsj= findById(R.id.id_tv_item_title_jzsj);
+
+
+        id_btn_show_add= findById(R.id.id_btn_show_add);
 
         toRefreshData();
     }
 
     @Override
     protected void initListener() {
-
+        id_btn_show_add.setOnClickListener(new OnNotFastClickListener() {
+            @Override
+            protected void onNotFastClick(View view) {
+               //### ToastTool.showShortCenter("调查记录");
+                startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.ADD));
+            }
+        });
     }
 
     @Override
@@ -98,7 +112,7 @@ implements YZTZDetailContract.View<YZTZDetailBean>{
 
     @Override
     public void setupData(YZTZDetailBean yztzDetailBean) {
-        jzsj.setText(yztzDetailBean.getSoaking_time());
+        id_tv_item_title_jzsj.setText(yztzDetailBean.getSoaking_time());
     }
 
     @Override
