@@ -50,6 +50,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:lines="1"
+                                android:textColor="@color/textColorSecondary"
                                 android:padding="10dp"
                                 android:text="xxxxx"
                                 android:textSize="14dp" />
@@ -71,6 +72,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:lines="1"
+                                android:textColor="@color/textColorSecondary"
                                 android:padding="10dp"
                                 android:text="123"
                                 android:textSize="14dp" />
@@ -93,6 +95,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:lines="1"
+                                android:textColor="@color/textColorSecondary"
                                 android:padding="10dp"
                                 android:text="xxxxx"
                                 android:textSize="14dp" />
@@ -128,6 +131,7 @@
                             android:background="@drawable/selector_classic_form_bottom_item_bg"
                             android:lines="1"
                             android:padding="10dp"
+                            android:textColor="@color/textColorSecondary"
                             android:text="xxxxx"
                             android:textSize="14dp" />
                     </TableRow>
@@ -152,6 +156,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:text="请选择"
+                            android:lines="1"
                             android:background="@drawable/selector_classic_form_bottom_item_bg"
                             android:padding="10dp"
                             android:textColor="@color/textColorSecondary" />
@@ -176,6 +181,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:text="请选择"
+                            android:lines="1"
                             android:padding="10dp"
                             android:background="@drawable/selector_classic_form_bottom_item_bg"
                             android:textColor="@color/textColorSecondary" />
@@ -200,6 +206,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:text="请选择"
+                            android:lines="1"
                             android:padding="10dp"
                             android:background="@drawable/selector_classic_form_bottom_item_bg"
 
@@ -225,6 +232,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:text="请选择"
+                            android:lines="1"
                             android:padding="10dp"
                             android:background="@drawable/selector_classic_form_bottom_item_bg"
 
@@ -250,6 +258,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:text="请选择"
+                            android:lines="1"
                             android:padding="10dp"
                             android:background="@drawable/selector_classic_form_bottom_item_bg"
                             android:textColor="@color/textColorSecondary" />
@@ -272,8 +281,8 @@
                         <com.classichu.lineseditview.LinesEditView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            xmlns:app="http://schemas.android.com/apk/res-auto"
                             app:classic_contentHeight="80dp"
+                            android:background="@drawable/selector_classic_form_bottom_item_bg"
                             app:classic_hintText="请输入备注"
                             />
                     </TableRow>

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZAddFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -48,6 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
+                        android:textColor="@color/textColorSecondary"
                         android:padding="10dp"
                         android:text="xxxxx"
                         android:textSize="14dp" />
@@ -72,6 +74,7 @@
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:padding="10dp"
+                        android:textColor="@color/textColorSecondary"
                         android:text="xxxxx"
                         android:textSize="14dp" />
                 </TableRow>
@@ -106,6 +109,7 @@
                     android:background="@drawable/selector_classic_form_bottom_item_bg"
                     android:lines="1"
                     android:padding="10dp"
+                    android:textColor="@color/textColorSecondary"
                     android:text="xxxxx"
                     android:textSize="14dp" />
             </TableRow>
@@ -128,8 +132,9 @@
                     android:id="@+id/dateSelectView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:lines="1"
                     android:background="@drawable/selector_classic_form_bottom_item_bg"
+                    android:lines="1"
+                    android:textColor="@color/textColorSecondary"
                     android:padding="10dp"
                     android:text="xxxxx"
                     android:textSize="14dp" />
@@ -154,6 +159,7 @@
                     android:layout_height="wrap_content"
                     android:lines="1"
                     android:padding="10dp"
+                    android:textColor="@color/textColorSecondary"
                     android:background="@drawable/selector_classic_form_bottom_item_bg"
                     android:text="xxxxx"
                     android:textSize="14dp" />
@@ -177,6 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="1"
+                    android:textColor="@color/textColorSecondary"
                     android:padding="10dp"
                     android:background="@drawable/selector_classic_form_bottom_item_bg"
                     android:text="xxxxx"
@@ -201,6 +208,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="1"
+                    android:textColor="@color/textColorSecondary"
                     android:background="@drawable/selector_classic_form_bottom_item_bg"
                     android:padding="10dp"
                     android:text="xxxxx"
@@ -224,8 +232,8 @@
                 <com.classichu.lineseditview.LinesEditView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     app:classic_contentHeight="80dp"
+                    android:background="@drawable/selector_classic_form_bottom_item_bg"
                     app:classic_hintText="请输入备注"
                     />
             </TableRow>
