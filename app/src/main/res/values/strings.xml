@@ -11,4 +11,15 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--关于页面  -->
+    <string name="lable_name_about">关于</string>
+    <string name="versionName">2.0</string>
+    <string name="jianchaxinbanben">检查新版本</string>
+    <string name="tel">客服电话：</string>
+    <string name="phonenumber">0571-86713550</string>
+    <string name="banquan">版权所有©云种</string>
+    <string name="title_activity_setup">SetupActivity</string>
+
+
 </resources>

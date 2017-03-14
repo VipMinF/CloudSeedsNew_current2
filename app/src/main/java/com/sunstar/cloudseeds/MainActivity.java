@@ -45,7 +45,6 @@ public class MainActivity extends ClassicActivity{
         mSearchFragment=SearchFragment.newInstance("","");
         mScanFragment=ScanFragment.newInstance("","");
         mUserCenterFragment=UserCenterFragment.newInstance("","");
-
     }
 
     private void initNavigationView() {

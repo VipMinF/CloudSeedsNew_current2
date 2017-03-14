@@ -31,7 +31,7 @@
         <activity
             android:name=".logic.scan.ScanQrcodeActivity"
             android:theme="@style/ClassicTheme" />
-        <activity android:name=".logic.changepd.ChangePasswordActivity" />
+        <activity android:name=".logic.usercenter.ChangePasswordActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/ClassicThemeSplashFullscreen">
