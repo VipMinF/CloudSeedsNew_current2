@@ -12,6 +12,7 @@ public class ChangePasswordActivity extends ClassicActivity{
     /**
      * @deprecated  com.android.support:design:25.2.0 已修复
      */
+    @Deprecated
     private void fixPasswordToggleViewInCenter() {
         TextInputLayout id_til_old_password = findById(R.id.id_til_old_password);
         PasswordToggleViewTool.fixPasswordToggleViewInCenter(id_til_old_password);
