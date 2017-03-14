@@ -46,22 +46,16 @@
             />
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_height="1dp"
+    <View
+        android:layout_height="1px"
         android:layout_width="match_parent"
-        android:paddingTop="10dp"
-        android:paddingLeft="16dp"
-        android:paddingBottom="10dp"
         android:background="@color/line"
         />
 
-    <LinearLayout
-        android:layout_marginTop="29dp"
-        android:layout_height="1dp"
+    <View
+        android:layout_marginTop="20dp"
+        android:layout_height="1px"
         android:layout_width="match_parent"
-        android:paddingTop="10dp"
-        android:paddingLeft="16dp"
-        android:paddingBottom="10dp"
         android:background="@color/line"
         />
 
