@@ -17,6 +17,11 @@
     <!-- 可选 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".app.AppApplication"
         android:allowBackup="true"
@@ -31,9 +36,7 @@
         <activity
             android:name=".logic.scan.ScanQrcodeActivity"
             android:theme="@style/ClassicTheme" />
-        <activity
-            android:name=".logic.usercenter.AboutActivity"
-             />
+        <activity android:name=".logic.usercenter.AboutActivity" />
         <activity android:name=".logic.usercenter.ChangePasswordActivity" />
         <activity
             android:name=".SplashActivity"
@@ -50,12 +53,19 @@
         <activity
             android:name=".logic.yuzhongtaizhang.YZTZActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".logic.xuanzhu.XuanZhuActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            />
-        <activity android:name=".logic.shangpinqi.SPQActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            ></activity>
+        <activity
+            android:name=".logic.xuanzhu.XuanZhuActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".logic.shangpinqi.SPQActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--<activity-->
+            <!--android:name=".LoginActivity"-->
+            <!--android:label="@string/title_activity_login"-->
+            <!--android:windowSoftInputMode="stateHidden|adjustResize" />-->
+        <activity
+            android:name=".logic.login.LoginActivity"
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>
