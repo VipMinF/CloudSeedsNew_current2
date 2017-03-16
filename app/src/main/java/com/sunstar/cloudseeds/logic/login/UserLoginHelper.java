@@ -22,15 +22,17 @@ import java.io.StreamCorruptedException;
 
 public class UserLoginHelper {
 
+    private static final  String cachename="LoginCache";
+    private static final  String cacheKey="userloginbean";
 
     public static void saveUserLoginBean_ToAcahe(Context context, UserLoginBean userloginbean){
-        ACache macache = ACache.get(context);
-        macache.put("userloginbean",userloginbean);
+        ACache macache = ACache.get(context,cachename);
+        macache.put(cacheKey,userloginbean);
     }
 
     public static Object getUserLoginBean_FromAcache(Context context){
-        ACache macache = ACache.get(context);
-        return macache.getAsObject("userloginbean");
+        ACache macache = ACache.get(context,cachename);
+        return macache.getAsObject(cacheKey);
     }
 
 
@@ -45,15 +47,14 @@ public class UserLoginHelper {
 
     public static Boolean loginOut(Context context){
 
-        ACache macache = ACache.get(context);
-        return  macache.remove("userloginbean");
+        ACache macache = ACache.get(context,cachename);
+        return  macache.remove(cacheKey);
     }
 
 
     public static  UserLoginBean userLoginBean(Context context){
         return  (UserLoginBean) getUserLoginBean_FromAcache(context);
     }
-
 
 
     public static Boolean autoLogin(File file){

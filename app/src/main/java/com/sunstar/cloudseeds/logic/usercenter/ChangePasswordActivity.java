@@ -18,7 +18,7 @@ import com.sunstar.cloudseeds.logic.usercenter.bean.SimpleBean;
 import com.sunstar.cloudseeds.logic.usercenter.model.ChangePassWordImpl;
 
 
-public class ChangePasswordActivity extends ClassicActivity{
+public class ChangePasswordActivity extends ClassicActivity {
 
     private TextInputEditText old_password;
     private TextInputEditText password;
@@ -73,9 +73,7 @@ public class ChangePasswordActivity extends ClassicActivity{
 
     private void subMitNewPassWord() {
 
-        //DialogManager.showLoadingDialog(this);
-        DialogManager.showTipDialog(this,null,"修改中",null);
-
+        DialogManager.showLoadingDialog(this);
         String old_paw = old_password.getText().toString();
         String psw = password.getText().toString();
         String psw_again = password_again.getText().toString();
@@ -84,9 +82,10 @@ public class ChangePasswordActivity extends ClassicActivity{
         changepswImpl.loadData(UrlDatas.ChangePassWord_URL,userloginben.getUserid(), old_paw, psw, psw_again, new BasicCallBack<SimpleBean>() {
             @Override
             public void onSuccess(SimpleBean simpleBean) {
-                //ToastTool.showShort(simpleBean.getShow_msg());
+
                 DialogManager.hideLoadingDialog();
-                //finish();
+                ToastTool.showShort(simpleBean.getShow_msg());
+                finish();
             }
 
             @Override
@@ -96,5 +95,6 @@ public class ChangePasswordActivity extends ClassicActivity{
 
         });
     }
+
 
 }
