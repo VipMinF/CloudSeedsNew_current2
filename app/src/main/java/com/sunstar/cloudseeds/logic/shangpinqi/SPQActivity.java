@@ -3,8 +3,8 @@ package com.sunstar.cloudseeds.logic.shangpinqi;
 import com.classichu.classichu.classic.ClassicActivity;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
-import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQDetailFragment;
 import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment;
+import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQDetailFragment;
 
 public class SPQActivity extends ClassicActivity {
 
@@ -48,4 +48,5 @@ public class SPQActivity extends ClassicActivity {
     protected AppBarStyle configAppBarStyle() {
         return AppBarStyle.ClassicTitleBar;
     }
+
 }

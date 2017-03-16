@@ -24,7 +24,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/img_logo"
         android:supportsRtl="true"
-        android:theme="@style/ClassicTheme.Transparent">
+        android:theme="@style/ClassicThemeTransparentMy">
         <activity
             android:name=".MainActivity"
             android:theme="@style/ClassicThemeHasPreferenceCompatTheme" />

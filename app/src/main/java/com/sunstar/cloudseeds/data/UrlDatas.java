@@ -22,5 +22,10 @@ public class UrlDatas {
     public  static  final String
             YU_ZHONG_XUAN_ZHU_DETAIL=String.format("%s%s",BASE_URL,"api/project/tertiary/detail.json");
 
+    public  static  final String
+            SPQ_ADD_ITEM_RULE=String.format("%s%s",BASE_URL,"api/rule/spq_add_item.json");
+
+    public  static  final String
+            ZQ_ADD_ITEM_RULE=String.format("%s%s",BASE_URL,"api/rule/zq_add_item.json");
 
 }

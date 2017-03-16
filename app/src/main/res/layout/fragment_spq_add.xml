@@ -6,300 +6,31 @@
     android:background="?android:windowBackground"
     tools:context="com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <TableLayout
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:stretchColumns="1"
-                        >
-
-                        <TableRow>
-
-                            <TextView
-                                style="@style/ClassicTextPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:lines="1"
-                                android:padding="10dp"
-                                android:text="栽培代号:"
-                                android:textSize="14dp" />
-
-
-                            <TextView
-                                style="@style/ClassicTextPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:lines="1"
-                                android:textColor="@color/textColorSecondary"
-                                android:padding="10dp"
-                                android:text="xxxxx"
-                                android:textSize="14dp" />
-                        </TableRow>
-                        <TableRow>
-
-                            <TextView
-                                style="@style/ClassicTextPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:lines="1"
-                                android:padding="10dp"
-                                android:text="选株编号:"
-                                android:textSize="14dp" />
-
-
-                            <TextView
-                                style="@style/ClassicTextPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:lines="1"
-                                android:textColor="@color/textColorSecondary"
-                                android:padding="10dp"
-                                android:text="123"
-                                android:textSize="14dp" />
-                        </TableRow>
-
-                        <TableRow>
-
-                            <TextView
-                                style="@style/ClassicTextPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:lines="1"
-                                android:padding="10dp"
-                                android:text="系统名称:"
-                                android:textSize="14dp" />
-
-
-                            <TextView
-                                style="@style/ClassicTextPrimary"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:lines="1"
-                                android:textColor="@color/textColorSecondary"
-                                android:padding="10dp"
-                                android:text="xxxxx"
-                                android:textSize="14dp" />
-                        </TableRow>
-                    </TableLayout>
-
-
-                </LinearLayout>
 
                 <TableLayout
+                    android:id="@+id/id_tl_item_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:stretchColumns="1">
 
-                    <TableRow>
+                   <!--add in code-->
 
-                        <TextView
-                            style="@style/ClassicTextPrimary"
-                            android:layout_width="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/shape_form_frame_right_bottom"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:text="播种时间:"
-                            android:textSize="14dp" />
-
-                        <com.classichu.dateselectview.widget.DateSelectView
-                            android:id="@+id/dateSelectView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/selector_classic_form_bottom_item_bg"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:textColor="@color/textColorSecondary"
-                            android:text="xxxxx"
-                            android:textSize="14dp" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            style="@style/ClassicTextPrimary"
-                            android:layout_width="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/shape_form_frame_right_bottom"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:text="株型:"
-                            android:textSize="14dp" />
-
-
-                        <com.classichu.dropselectview.widget.ClassicSelectView
-                           android:id="@+id/id_classic_select_view_zx"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="请选择"
-                            android:lines="1"
-                            android:background="@drawable/selector_classic_form_bottom_item_bg"
-                            android:padding="10dp"
-                            android:textColor="@color/textColorSecondary" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            style="@style/ClassicTextPrimary"
-                            android:layout_width="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_height="match_parent"
-                            android:lines="1"
-                            android:background="@drawable/shape_form_frame_right_bottom"
-                            android:padding="10dp"
-                            android:text="株高:"
-                            android:textSize="14dp" />
-
-
-                        <com.classichu.dropselectview.widget.ClassicSelectView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="请选择"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:background="@drawable/selector_classic_form_bottom_item_bg"
-                            android:textColor="@color/textColorSecondary" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            style="@style/ClassicTextPrimary"
-                            android:layout_width="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/shape_form_frame_right_bottom"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:text="叶展:"
-                            android:textSize="14dp" />
-
-
-                        <com.classichu.dropselectview.widget.ClassicSelectView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="请选择"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:background="@drawable/selector_classic_form_bottom_item_bg"
-
-                            android:textColor="@color/textColorSecondary" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            style="@style/ClassicTextPrimary"
-                            android:layout_width="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/shape_form_frame_right_bottom"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:text="叶色:"
-                            android:textSize="14dp" />
-
-
-                        <com.classichu.dropselectview.widget.ClassicSelectView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="请选择"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:background="@drawable/selector_classic_form_bottom_item_bg"
-
-                            android:textColor="@color/textColorSecondary" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            style="@style/ClassicTextPrimary"
-                            android:layout_width="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/shape_form_frame_right_bottom"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:text="侧芽:"
-                            android:textSize="14dp" />
-
-
-                        <com.classichu.dropselectview.widget.ClassicSelectView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="请选择"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:background="@drawable/selector_classic_form_bottom_item_bg"
-                            android:textColor="@color/textColorSecondary" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            style="@style/ClassicTextPrimary"
-                            android:layout_width="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/shape_form_frame_right_bottom"
-                            android:lines="1"
-                            android:padding="10dp"
-                            android:text="备注:"
-                            android:textSize="14dp" />
-
-
-                        <com.classichu.lineseditview.LinesEditView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:classic_contentHeight="80dp"
-                            android:background="@drawable/selector_classic_form_bottom_item_bg"
-                            app:classic_hintText="请输入备注"
-                            />
-                    </TableRow>
 
                 </TableLayout>
-
-            </LinearLayout>
-
 
 
         </ScrollView>
 
 
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
     <Button
+        android:id="@+id/id_btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/ClassicButton"

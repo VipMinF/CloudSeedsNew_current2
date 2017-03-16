@@ -5,6 +5,8 @@
     <color name="colorAccent">#009688</color>
     <color name="line">#22000000</color>
 
+    <color name="windowBackground">#ffe044</color>
+
     <color name="background">#FFFFFF</color>
 
     <color name="click_black">#22000000</color>

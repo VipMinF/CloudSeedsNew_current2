@@ -1,16 +1,26 @@
 package com.sunstar.cloudseeds.logic.shangpinqi.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
+import com.classichu.classichu.app.CLog;
+import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
+import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
+import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.classic.ClassicFragment;
-import com.classichu.dropselectview.bean.ClassfiyBean;
-import com.classichu.dropselectview.widget.ClassicSelectView;
+import com.classichu.itemselector.ClassicItemSelectorDataHelper;
+import com.classichu.itemselector.bean.ItemSelectBean;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.data.BasicBean;
+import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
+import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQAddBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,19 +29,13 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class SPQAddFragment extends ClassicFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
 
     public SPQAddFragment() {
         // Required empty public constructor
     }
+
+
 
     /**
      * Use this factory method to create a new instance of
@@ -66,22 +70,80 @@ public class SPQAddFragment extends ClassicFragment {
         return R.layout.fragment_spq_add;
     }
 
+    TableLayout id_tl_item_container;
+
     @Override
     protected void initView(View view) {
-       ClassicSelectView id_classic_select_view_zx= findById(R.id.id_classic_select_view_zx);
-        List<ClassfiyBean> classfiyBeanList=new ArrayList<>();
-        for (int i = 0; i <5 ; i++) {
-            ClassfiyBean classfiyBean=new ClassfiyBean();
-            classfiyBean.setName("dsa"+i);
-            classfiyBean.setID(i);
-            classfiyBeanList.add(classfiyBean);
-        }
-        id_classic_select_view_zx.setupClassfiyBeanList(classfiyBeanList);
+        id_tl_item_container = findById(R.id.id_tl_item_container);
+
+
+        initEditItemRuleData();
+    }
+
+    private void initEditItemRuleData() {
+        HttpRequestManagerFactory.getRequestManager().getUrlBackStr(UrlDatas.SPQ_ADD_ITEM_RULE, null, new GsonHttpRequestCallback<BasicBean<SPQAddBean>>() {
+            @Override
+            public BasicBean<SPQAddBean> OnSuccess(String s) {
+                return BasicBean.fromJson(s, SPQAddBean.class);
+            }
+
+            @Override
+            public void OnSuccessOnUI(BasicBean<SPQAddBean> spqAddBeanBasicBean) {
+                backData(spqAddBeanBasicBean.getInfo().get(0));
+            }
+
+            @Override
+            public void OnError(String s) {
+
+            }
+        });
+
     }
 
     @Override
     protected void initListener() {
+       setOnNotFastClickListener(findById(R.id.id_btn_submit), new OnNotFastClickListener() {
+           @Override
+           protected void onNotFastClick(View view) {
+               submitData();
+           }
+       });
+    }
+
+    private void submitData() {
+      String json=  EditItemRuleHelper.generateViewBackJson(id_tl_item_container);
+      CLog.d("zzqqff:"+json);
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        CLog.d("zhufq:" + requestCode);
+        ClassicItemSelectorDataHelper.callAtOnActivityResult(requestCode, resultCode, data,
+                new ClassicItemSelectorDataHelper.ItemSelectBackData() {
+                    @Override
+                    public void backData(View view, List<ItemSelectBean> list) {
+
+                        StringBuilder sb = new StringBuilder();
+                        for (ItemSelectBean isb : list
+                                ) {
+                            if (isb.isSelected()) {
+                                sb.append(isb.getItemTitle());
+                            }
+                        }
+                        TextView tv = (TextView) view;
+                        tv.setText(sb.toString());
+                    }
+                });
+    }
+
+    public void backData(SPQAddBean spqAddBean) {
+        //
+        List<SPQAddBean.KeyValueBean> kvbList = spqAddBean.getKey_value();
+        //
+        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList);
+    }
+
 
 }

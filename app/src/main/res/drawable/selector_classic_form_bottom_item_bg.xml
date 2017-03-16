@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/classicItemClickColor" android:state_pressed="true">
+    <item android:drawable="@color/classicSecondaryItemClickColor" android:state_pressed="true">
     </item>
     <item android:drawable="@drawable/shape_form_frame_bottom">
     </item>
