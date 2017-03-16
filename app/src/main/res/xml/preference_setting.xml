@@ -88,4 +88,18 @@
                android:title="子类复选框首选项" />
        </PreferenceCategory>-->
 
+    <Preference
+        android:key="preference_space"
+        android:title=""
+        android:enabled="false"
+        android:layout="@layout/layout_custom_preference"
+        />
+
+    <Preference
+        android:key="preference_exit"
+        android:layout="@layout/layout_custom_preference_exitlogin"
+        android:title="注销登录"
+
+        />
+
 </PreferenceScreen>

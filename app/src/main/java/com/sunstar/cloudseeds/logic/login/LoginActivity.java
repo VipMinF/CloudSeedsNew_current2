@@ -3,9 +3,11 @@ package com.sunstar.cloudseeds.logic.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -15,23 +17,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.classichu.classichu.basic.BasicCallBack;
+import com.classichu.classichu.basic.extend.ACache;
 import com.classichu.classichu.basic.tool.SizeTool;
 import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicActivity;
 import com.sunstar.cloudseeds.MainActivity;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
+import com.sunstar.cloudseeds.logic.login.model.LoginModelImpl;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-public class LoginActivity extends ClassicActivity {
+public class LoginActivity extends ClassicActivity  {
 
-
+    public static final int LOGIN_V = 2;
+    public static final String FILENAME_USERLOGIN = "userlogin"+ LOGIN_V+".dat";
+    public Context mcontext;
     private UserLoginTask mAuthTask = null;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
+    private ACache macache;
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "123456@qq.com:123456", "111111@qq.com:111111"
     };
@@ -40,6 +49,12 @@ public class LoginActivity extends ClassicActivity {
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mcontext=this;
+       macache = ACache.get(this);
+    }
 
     @Override
     protected int setupLayoutResId() {
@@ -74,6 +89,7 @@ public class LoginActivity extends ClassicActivity {
         //登录界面和进度条界面
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
     }
 
     @Override
@@ -136,25 +152,20 @@ public class LoginActivity extends ClassicActivity {
         if (mAuthTask != null) {
             return;
         }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
-
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
@@ -165,17 +176,31 @@ public class LoginActivity extends ClassicActivity {
             focusView = mEmailView;
             cancel = true;
         }
-
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            //mAuthTask = new UserLoginTask(email, password);
+            //mAuthTask.execute((Void) null);
+
+            LoginModelImpl loginmodelimpl= new LoginModelImpl();
+            loginmodelimpl.loadData(UrlDatas.Login_URL ,email,password,new BasicCallBack<UserLoginBean>(){
+                @Override
+                public void onSuccess(UserLoginBean userloginBean) {
+
+                    showProgress(false);
+                    UserLoginHelper.saveUserLoginBean_ToAcahe(mcontext,userloginBean);
+                    ToastTool.showShort("登录成功");
+                    startAty(MainActivity.class);
+                    finish();
+                }
+                @Override
+                public void onError(String s) {
+                    showProgress(false);
+                    ToastTool.showShort(s);
+                }
+            });
         }
     }
 
@@ -224,7 +249,9 @@ public class LoginActivity extends ClassicActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+
     }
+
 
 
     /**
@@ -236,7 +263,6 @@ public class LoginActivity extends ClassicActivity {
 
         private final String mEmail;
         private final String mPassword;
-
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -248,6 +274,7 @@ public class LoginActivity extends ClassicActivity {
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
+
             } catch (InterruptedException e) {
                 return false;
             }
@@ -259,8 +286,11 @@ public class LoginActivity extends ClassicActivity {
                     return pieces[1].equals(mPassword);
                 }
             }
+
             return false;
         }
+
+
 
         @Override
         protected void onPostExecute(final Boolean success) {
@@ -268,9 +298,27 @@ public class LoginActivity extends ClassicActivity {
             showProgress(false);
             if (success) {
 
+                //File file = new File(getFilesDir(),FILENAME_USERLOGIN);
+                //UserLoginHelper.saveUserLoginBean(file);
+
+                UserLoginBean userloginbean = new UserLoginBean();
+                userloginbean.setUserid("111111@qq.com");
+                userloginbean.setUsername("Polo");
+                userloginbean.setPassword("111111");
+                userloginbean.setAddress("振宁路1号");
+                userloginbean.setCompany("浙江瞬时达网络有限公司");
+                userloginbean.setEmail("111111@qq.com");
+                userloginbean.setMoible("13000000000");
+                userloginbean.setTickname("刘章湧");
+                userloginbean.setUserface("");
+                userloginbean.setShow_code("1");
+                userloginbean.setShow_msg("登录成功");
+                UserLoginHelper.saveUserLoginBean_ToAcahe(mcontext,userloginbean);
+
                 ToastTool.showShort("登录成功");
                 startAty(MainActivity.class);
                 finish();
+
             } else {
 
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -283,4 +331,8 @@ public class LoginActivity extends ClassicActivity {
             showProgress(false);
         }
     }
+
+
+
+
 }

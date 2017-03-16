@@ -5,6 +5,8 @@ package com.sunstar.cloudseeds.data;
  */
 
 public class UrlDatas {
+
+
     private   static  final String
             BASE_URL="https://git.oschina.net/louisgeek/Demo/raw/master/";
     public  static  final String
@@ -22,5 +24,6 @@ public class UrlDatas {
     public  static  final String
             YU_ZHONG_XUAN_ZHU_DETAIL=String.format("%s%s",BASE_URL,"api/project/tertiary/detail.json");
 
-
+    public  static  final String
+            Login_URL=String.format("%s%s",BASE_URL,"api/user/login.json");
 }

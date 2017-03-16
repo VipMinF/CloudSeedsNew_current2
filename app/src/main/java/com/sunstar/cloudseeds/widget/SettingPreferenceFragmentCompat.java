@@ -10,8 +10,10 @@ import com.classichu.classichu.basic.tool.AppTool;
 import com.classichu.dialogview.manager.DialogManager;
 import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.logic.usercenter.ChangePasswordActivity;
+import com.sunstar.cloudseeds.logic.login.LoginActivity;
+import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.usercenter.AboutActivity;
+import com.sunstar.cloudseeds.logic.usercenter.ChangePasswordActivity;
 
 /**
  * Created by louisgeek on 2017/3/8.
@@ -39,6 +41,8 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
 
         //#####!!!  Preference preference_feedback = findPreference("preference_feedback");
         Preference preference_about = findPreference("preference_about");
+        Preference preference_exit = findPreference("preference_exit");
+
 
         //#### preference_user.setOnPreferenceClickListener(this);
         preference_password.setOnPreferenceClickListener(this);
@@ -52,6 +56,8 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
 
         //#####!!!   preference_feedback.setOnPreferenceClickListener(this);
         preference_about.setOnPreferenceClickListener(this);
+
+        preference_exit.setOnPreferenceClickListener(this);
 
 
         /* #####!!!    boolean isNoPic = PreferenceManagerHelper.isNoPic(getActivity());
@@ -84,46 +90,60 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
             // return false;
         }*/
 
-        @Override
-        public boolean onPreferenceClick(Preference preference) {
-            switch (preference.getKey()) {
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        switch (preference.getKey()) {
               /*  case "preference_user":
                     //Toast.makeText(getActivity(), "preference_user", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getActivity(), UserLoginActivity.class));
                     break;*/
-                case "preference_password":
-                    //Toast.makeText(getActivity(), "preference_password", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
-                    break;
-                case "preference_clear":
-                    // startActivity(new Intent(getActivity(), GuideActivity.class));
-                    //###EventBus.getDefault().post(new EventPreferenceShowAskDialog());
-                    DialogManager.showClassicDialog(getActivity(), "温馨提示", "是否确定清除缓存?", new ClassicDialogFragment.OnBtnClickListener() {
-                        @Override
-                        public void onBtnClickOk(DialogInterface dialogInterface) {
-                            super.onBtnClickOk(dialogInterface);
-
-
-                        }
-                    });
-                    break;
-                case "preference_update":
-                    // ToastTool.showImageOk("已经是最新版本了！");
-                    //###  EventBus.getDefault().post(new EventCheckUpdate());
-                    break;
+            case "preference_password":
+                //Toast.makeText(getActivity(), "preference_password", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
+                break;
+            case "preference_clear":
+                // startActivity(new Intent(getActivity(), GuideActivity.class));
+                //###EventBus.getDefault().post(new EventPreferenceShowAskDialog());
+                DialogManager.showClassicDialog(getActivity(), "温馨提示", "是否确定清除缓存?", new ClassicDialogFragment.OnBtnClickListener() {
+                    @Override
+                    public void onBtnClickOk(DialogInterface dialogInterface) {
+                        super.onBtnClickOk(dialogInterface);
+                        //开始清理缓存
+                    }
+                });
+                break;
+            case "preference_update":
+                // ToastTool.showImageOk("已经是最新版本了！");
+                //###  EventBus.getDefault().post(new EventCheckUpdate());
+                break;
              /*   case "preference_feedback":
                     //  Toast.makeText(getActivity(), "preference_feedback", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getActivity(), FeedBackActivity.class));
                     break;*/
-                case "preference_about":
-                    // Toast.makeText(getActivity(), "preference_about", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getActivity(), AboutActivity.class));
+            case "preference_about":
+                // Toast.makeText(getActivity(), "preference_about", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), AboutActivity.class));
+                break;
 
+            case  "preference_exit":
 
+                DialogManager.showClassicDialog(getActivity(), "注销登录", "您是否确定退出当前账号？", new ClassicDialogFragment.OnBtnClickListener() {
 
-                    break;
-            }
-            return true;
-            // return false;
+                    @Override
+                    public void onBtnClickOk(DialogInterface dialogInterface) {
+                        super.onBtnClickOk(dialogInterface);
+
+                       if( UserLoginHelper.loginOut(getActivity())){
+
+                           startActivity(new Intent(getActivity(), LoginActivity.class));
+                           getActivity().finish();
+                       }
+                    }
+                });
+
+                break;
         }
+        return true;
+        // return false;
     }
+}

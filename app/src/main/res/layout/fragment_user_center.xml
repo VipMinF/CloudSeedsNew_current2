@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.sunstar.cloudseeds.ui.UserCenterFragment">
+    tools:context="com.sunstar.cloudseeds.ui.UserCenterFragment"
+    >
 
     <LinearLayout
         android:orientation="vertical"
@@ -12,15 +13,19 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:layout_height="wrap_content"
-      >
-        <TextView android:layout_height="wrap_content"
+        >
+        <TextView
+            android:id="@+id/usercenter_account"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:paddingTop="10dp"
             android:paddingLeft="16dp"
             android:textSize="@dimen/classic_text_size_primary"
             android:text="账号：rqweqweqwe"
             />
-        <TextView android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/usercenter_company"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:paddingTop="10dp"
             android:paddingLeft="16dp"
@@ -28,7 +33,9 @@
             android:text="企业：浙江瞬时达"
             />
 
-        <TextView android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/usercenter_tickname"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:paddingTop="10dp"
             android:paddingLeft="16dp"
@@ -36,7 +43,9 @@
             android:text="育种家：张三"
             />
 
-        <TextView android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/usercenter_mobile"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:paddingTop="10dp"
             android:paddingLeft="16dp"
@@ -44,7 +53,7 @@
             android:textSize="@dimen/classic_text_size_primary"
             android:text="联系方式：18458222208"
             />
-        </LinearLayout>
+    </LinearLayout>
 
     <View
         android:layout_height="1px"
@@ -63,8 +72,10 @@
         android:layout_weight="1"
         android:id="@+id/id_frame_layout_content"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="1dp"
         />
+
+
 
 </LinearLayout>
