@@ -30,4 +30,8 @@ public class UrlDatas {
 
     public  static  final String
             Login_URL=String.format("%s%s",BASE_URL,"api/user/login.json");
+
+    public  static  final String
+            ChangePassWord_URL=String.format("%s%s",BASE_URL,"api/user/changepass.json");
+
 }
