@@ -1,7 +1,6 @@
 package com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicPresenter;
-import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZDetailContract;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.model.YZTZDetailModelImpl;
@@ -18,9 +17,9 @@ public class YZTZDetailPresenterImpl extends ClassicPresenter<YZTZDetailContract
     }
 
     @Override
-    public void gainData() {
+    public void gainData(String url) {
         mView.showProgress();
-        mModel.loadData(UrlDatas.YU_ZHONG_TAI_ZHANG_DETAIL, new BasicCallBack<YZTZDetailBean>() {
+        mModel.loadData(url, new BasicCallBack<YZTZDetailBean>() {
             @Override
             public void onSuccess(YZTZDetailBean bean) {
                 mView.hideProgress();

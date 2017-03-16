@@ -13,7 +13,7 @@ public class YZTZDetailContract {
     }
 
     public interface Presenter {
-        void gainData();
+        void gainData(String url);
     }
 
     public interface Model<D> extends BasicContract.Model<D>{

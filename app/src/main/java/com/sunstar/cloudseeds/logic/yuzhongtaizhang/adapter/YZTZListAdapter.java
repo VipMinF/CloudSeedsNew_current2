@@ -40,12 +40,12 @@ public class YZTZListAdapter extends ClassicRVHeaderFooterAdapter<YZTZListBean.L
 
     @Override
     public void findBindView(final int pos, ClassicRVHeaderFooterViewHolder classicRVHeaderFooterViewHolder) {
-        TextView id_tv_item_title_bzsj= classicRVHeaderFooterViewHolder.findBindView(R.id.id_tv_item_title_bzsj);
-        TextView id_tv_item_title_bzsl= classicRVHeaderFooterViewHolder.findBindView(R.id.id_tv_item_title_bzsl);
-        TextView id_tv_item_title_dzsl= classicRVHeaderFooterViewHolder.findBindView(R.id.id_tv_item_title_dzsl);
-        TextView id_tv_item_title_xtmc= classicRVHeaderFooterViewHolder.findBindView(R.id.id_tv_item_title_xtmc);
-        TextView id_tv_item_title_zpdh= classicRVHeaderFooterViewHolder.findBindView(R.id.id_tv_item_title_zpdh);
-        TextView id_tv_item_title_zzph= classicRVHeaderFooterViewHolder.findBindView(R.id.id_tv_item_title_zzph);
+        TextView id_tv_item_title_bzsj= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_title_bzsj);
+        TextView id_tv_item_title_bzsl= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_title_bzsl);
+        TextView id_tv_item_title_dzsl= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_title_dzsl);
+        TextView id_tv_item_title_xtmc= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_title_xtmc);
+        TextView id_tv_item_title_zpdh= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_title_zpdh);
+        TextView id_tv_item_title_zzph= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_title_zzph);
 
         id_tv_item_title_bzsj.setText(mDataList.get(pos).getTime());
         id_tv_item_title_bzsl.setText(mDataList.get(pos).getSow_num());
@@ -54,7 +54,7 @@ public class YZTZListAdapter extends ClassicRVHeaderFooterAdapter<YZTZListBean.L
         id_tv_item_title_zpdh.setText(mDataList.get(pos).getPlant_code());
         id_tv_item_title_zzph.setText(mDataList.get(pos).getSeed_batches());
 
-        Button id_btn_item_show_detail= classicRVHeaderFooterViewHolder.findBindView(R.id.id_btn_item_show_detail);
+        Button id_btn_item_show_detail= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_detail);
         id_btn_item_show_detail.setOnClickListener(new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
@@ -64,7 +64,7 @@ public class YZTZListAdapter extends ClassicRVHeaderFooterAdapter<YZTZListBean.L
             }
         });
 
-        Button id_btn_item_show_xuan_zhu= classicRVHeaderFooterViewHolder.findBindView(R.id.id_btn_item_show_xuan_zhu);
+        Button id_btn_item_show_xuan_zhu= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_xuan_zhu);
         id_btn_item_show_xuan_zhu.setOnClickListener(new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
@@ -74,7 +74,7 @@ public class YZTZListAdapter extends ClassicRVHeaderFooterAdapter<YZTZListBean.L
             }
         });
 
-        Button id_btn_item_show_qrcode= classicRVHeaderFooterViewHolder.findBindView(R.id.id_btn_item_show_qrcode);
+        Button id_btn_item_show_qrcode= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_qrcode);
         id_btn_item_show_qrcode.setOnClickListener(new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {

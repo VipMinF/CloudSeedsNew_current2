@@ -9,17 +9,16 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.classichu.classichu.app.CLog;
-import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
-import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
-import com.classichu.classichu.classic.ClassicFragment;
+import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.itemselector.ClassicItemSelectorDataHelper;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.ZQAddBean;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZDetailContract;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZDetailPresenterImpl;
 
 import java.util.List;
 
@@ -28,11 +27,17 @@ import java.util.List;
  * Use the {@link YZTZAddFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class YZTZAddFragment extends ClassicFragment {
+public class YZTZAddFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
+        implements YZTZDetailContract.View<YZTZDetailBean> {
 
 
     public YZTZAddFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected YZTZDetailPresenterImpl setupPresenter() {
+        return new YZTZDetailPresenterImpl(this);
     }
 
     /**
@@ -68,13 +73,13 @@ public class YZTZAddFragment extends ClassicFragment {
         return R.layout.fragment_yztz_add;
     }
 
-    TableLayout id_tl_item_container;
+    private  TableLayout id_tl_item_container;
 
     @Override
     protected void initView(View view) {
         id_tl_item_container = findById(R.id.id_tl_item_container);
 
-        initEditItemRuleData();
+        toRefreshData();
     }
 
     @Override
@@ -87,32 +92,20 @@ public class YZTZAddFragment extends ClassicFragment {
         });
     }
 
+    @Override
+    protected void toRefreshData() {
+        super.toRefreshData();
+        mPresenter.gainData(UrlDatas.ZQ_ADD_ITEM_RULE);
+    }
+
+
     private void submitData() {
         String json = EditItemRuleHelper.generateViewBackJson(id_tl_item_container);
         CLog.d("zzqqff:" + json);
 
     }
 
-    private void initEditItemRuleData() {
-        HttpRequestManagerFactory.getRequestManager().getUrlBackStr(UrlDatas.ZQ_ADD_ITEM_RULE, null,
-                new GsonHttpRequestCallback<BasicBean<ZQAddBean>>() {
-                    @Override
-                    public BasicBean<ZQAddBean> OnSuccess(String s) {
-                        return BasicBean.fromJson(s, ZQAddBean.class);
-                    }
 
-                    @Override
-                    public void OnSuccessOnUI(BasicBean<ZQAddBean> zqAddBeanBasicBean) {
-                        backData(zqAddBeanBasicBean.getInfo().get(0));
-                    }
-
-                    @Override
-                    public void OnError(String s) {
-
-                    }
-                });
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -136,10 +129,37 @@ public class YZTZAddFragment extends ClassicFragment {
                 });
     }
 
-    public void backData(ZQAddBean zqAddBean) {
+
+    @Override
+    public void showProgress() {
+        showSwipeRefreshLayout();
+    }
+
+    @Override
+    public void hideProgress() {
+        hideSwipeRefreshLayout();
+    }
+
+    @Override
+    protected int configSwipeRefreshLayoutResId() {
+        return R.id.id_swipe_refresh_layout;
+    }
+
+    @Override
+    public void showMessage(String s) {
+
+    }
+
+    @Override
+    public void setupData(YZTZDetailBean yztzBean) {
         //
-        List<ZQAddBean.KeyValueBean> kvbList = zqAddBean.getKey_value();
+        List<YZTZDetailBean.KeyValueBean> kvbList = yztzBean.getKey_value();
         //
-        EditItemRuleHelper.generateZQChildView(getActivity(), id_tl_item_container, kvbList);
+        EditItemRuleHelper.generateYZTZChildView(getActivity(), id_tl_item_container, kvbList);
+    }
+
+    @Override
+    public void setupMoreData(YZTZDetailBean yztzDetailBean) {
+
     }
 }

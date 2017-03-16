@@ -1,4 +1,4 @@
-package com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean;
+package com.sunstar.cloudseeds.logic.shangpinqi.bean;
 
 import java.util.List;
 
@@ -6,7 +6,8 @@ import java.util.List;
  * Created by louisgeek on 2017/3/16.
  */
 
-public class ZQAddBean {
+public class SPQDetailBean {
+
 
         /**
          * show_code : 1
@@ -14,7 +15,7 @@ public class ZQAddBean {
          * code : rule_zq
          * name : 族群调查编辑页
          * rule_id : 1212
-         * key_value : [{"key":"bzsj","title":"显示信息","value":"2017信息信息","code":"","input_type":"text","input_options":[],"input_configs":[],"img_upload_options":{}},{"key":"bzsj","title":"显示信息2","value":"2017信息信息3","code":"","input_type":"text","input_options":[],"input_configs":[],"img_upload_options":{}},{"key":"bzsj","title":"显示信息","value":"2017信息信息","code":"","input_type":"text","input_options":[],"input_configs":[],"img_upload_options":{}},{"key":"fysj","title":"发芽时间","code":"","value":"2017-3-16","input_type":"time","input_options":[],"input_configs":[{"config":"after","config_value":"2016-3-6 09:54:55"},{"config":"before","config_value":"2017-3-6 09:54:55"}],"img_upload_options":{}},{"key":"yzsj","title":"移栽输入","code":"","value":"2017-3-16","input_type":"edit","input_options":[],"input_configs":[{"config":"min","config_value":"5"},{"config":"max","config_value":"20"}],"img_upload_options":{"img_upload_key":"zx_upload_img","img_upload_title":"株型图片上传","img_upload_max_count":"1"}},{"key":"khsj","title":"开花多行输入","value":"多行输入大声大声道","input_type":"lines","code":"","input_options":[],"input_configs":[{"config":"min","config_value":""},{"config":"max","config_value":"300"}],"img_upload_options":{}},{"key":"bz","title":"下拉选择","value":"大声的选择打算","input_type":"select","code":"1","input_options":[{"option_code":"0","option_value":"请选择株型"},{"option_code":"1","option_value":"立"},{"option_code":"2","option_value":"半立"}],"input_configs":[],"img_upload_options":{"img_upload_key":"zx_upload_img","img_upload_title":"株型图片上传","img_upload_max_count":"1"}}]
+         * key_value : [{"key":"bzsj","title":"显示信息","value":"2017信息信息","code":"","input_type":"text","input_options":[],"input_configs":[],"img_upload_options":{}},{"key":"fysj","title":"发芽时间","code":"","value":"2017-3-16","input_type":"time","input_options":[],"input_configs":[{"config":"after","config_value":"2016-3-6 09:54:55"},{"config":"before","config_value":"2017-3-6 09:54:55"}],"img_upload_options":{}},{"key":"yzsj","title":"移栽输入","code":"","value":"2017-3-16","input_type":"edit","input_options":[],"input_configs":[{"config":"min","config_value":"5"},{"config":"max","config_value":"20"}],"img_upload_options":{"img_upload_key":"zx_upload_img","img_upload_title":"株型图片上传","img_upload_max_count":"1"}},{"key":"khsj","title":"开花多行输入","value":"多行输入大声大声道","input_type":"lines","code":"","input_options":[],"input_configs":[{"config":"min","config_value":""},{"config":"max","config_value":"300"}],"img_upload_options":{}},{"key":"bz","title":"下拉选择","value":"大声的选择打算","input_type":"select","code":"1","input_options":[{"option_code":"0","option_value":"请选择株型"},{"option_code":"1","option_value":"立"},{"option_code":"2","option_value":"半立"}],"input_configs":[],"img_upload_options":{"img_upload_key":"zx_upload_img","img_upload_title":"株型图片上传","img_upload_max_count":"1"}}]
          */
 
         private String show_code;

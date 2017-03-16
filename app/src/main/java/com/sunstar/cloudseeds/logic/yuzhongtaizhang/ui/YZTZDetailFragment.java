@@ -3,17 +3,21 @@ package com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.TableLayout;
 
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
+import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.YZTZActivity;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZDetailContract;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZDetailPresenterImpl;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +25,7 @@ import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZDetailPresente
  * create an instance of this fragment.
  */
 public class YZTZDetailFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
-implements YZTZDetailContract.View<YZTZDetailBean>{
+        implements YZTZDetailContract.View<YZTZDetailBean> {
 
 
     public YZTZDetailFragment() {
@@ -59,11 +63,12 @@ implements YZTZDetailContract.View<YZTZDetailBean>{
     protected int setupLayoutResId() {
         return R.layout.fragment_yztz_detail;
     }
-    TextView id_tv_item_title_jzsj;
+
+    TableLayout id_tl_item_container;
 
     @Override
     protected void initView(View view) {
-        id_tv_item_title_jzsj= findById(R.id.id_tv_item_title_jzsj);
+        id_tl_item_container = findById(R.id.id_tl_item_container);
 
         toRefreshData();
     }
@@ -73,7 +78,7 @@ implements YZTZDetailContract.View<YZTZDetailBean>{
         setOnNotFastClickListener(findById(R.id.id_btn_show_add), new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
-                startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.ADD));
+                startAty(YZTZActivity.class, createBundleExtraInt1(AtyGoToWhere.ADD));
             }
         });
     }
@@ -85,8 +90,8 @@ implements YZTZDetailContract.View<YZTZDetailBean>{
 
     @Override
     protected void toRefreshData() {
-        //###super.toRefreshData();
-        mPresenter.gainData();
+        super.toRefreshData();
+        mPresenter.gainData(UrlDatas.YU_ZHONG_TAI_ZHANG_DETAIL);
     }
 
     @Override
@@ -100,14 +105,20 @@ implements YZTZDetailContract.View<YZTZDetailBean>{
     }
 
     @Override
+    protected int configSwipeRefreshLayoutResId() {
+        return R.id.id_swipe_refresh_layout;
+    }
+
+    @Override
     public void showMessage(String msg) {
         //###   ToastTool.showShortCenter(msg);
-        DialogManager.showTipDialog(getActivity(),"提示",msg,null);
+        DialogManager.showTipDialog(getActivity(), "提示", msg, null);
     }
 
     @Override
     public void setupData(YZTZDetailBean yztzDetailBean) {
-        id_tv_item_title_jzsj.setText(yztzDetailBean.getSoaking_time());
+        List<YZTZDetailBean.KeyValueBean> keyValueBeanList = yztzDetailBean.getKey_value();
+        EditItemRuleHelper.generateYZTZChildView(getActivity(), id_tl_item_container, keyValueBeanList);
     }
 
     @Override

@@ -21,8 +21,8 @@ import com.classichu.lineseditview.LinesEditView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQAddBean;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.ZQAddBean;
+import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,8 @@ public class EditItemRuleHelper {
         return  jsonObject.toString();
     }
     public static void generateSPQChildView(final FragmentActivity fragmentActivity, TableLayout tableLayout,
-                                    List<SPQAddBean.KeyValueBean> keyValueBeanList) {
+                                    List<SPQDetailBean.KeyValueBean> keyValueBeanList) {
+        tableLayout.removeAllViews();
         Context context=fragmentActivity;
         for (int i = 0; i < keyValueBeanList.size(); i++) {
             String inputType = keyValueBeanList.get(i).getInput_type();
@@ -189,8 +190,9 @@ public class EditItemRuleHelper {
     }
 
 
-    public static void generateZQChildView(final FragmentActivity fragmentActivity, TableLayout tableLayout,
-                                         List<ZQAddBean.KeyValueBean> keyValueBeanList) {
+    public static void generateYZTZChildView(final FragmentActivity fragmentActivity, TableLayout tableLayout,
+                                         List<YZTZDetailBean.KeyValueBean> keyValueBeanList) {
+        tableLayout.removeAllViews();
         Context context=fragmentActivity;
         for (int i = 0; i < keyValueBeanList.size(); i++) {
             String inputType = keyValueBeanList.get(i).getInput_type();

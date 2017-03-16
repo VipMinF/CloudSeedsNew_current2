@@ -5,11 +5,14 @@
     android:layout_height="match_parent"
     tools:context="com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZAddFragment">
 
-
-    <ScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/id_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
             <TableLayout
@@ -24,8 +27,8 @@
             </TableLayout>
 
 
-    </ScrollView>
-
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <Button
         android:id="@+id/id_btn_submit"

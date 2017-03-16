@@ -6,13 +6,12 @@ import com.classichu.classichu.basic.BasicContract;
 /**
  * Created by louisgeek on 2017/3/16.
  */
-@Deprecated
-public class SPQAddContract {
+public class SPQDetailContract {
     public interface View<D> extends BasicContract.View<D> {
     }
 
     public interface Presenter {
-        void gainData();
+        void gainData(String url);
     }
 
     public interface Model<D> extends BasicContract.Model<D>{

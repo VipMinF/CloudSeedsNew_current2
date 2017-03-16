@@ -9,17 +9,16 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.classichu.classichu.app.CLog;
-import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
-import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
-import com.classichu.classichu.classic.ClassicFragment;
+import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.itemselector.ClassicItemSelectorDataHelper;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
-import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQAddBean;
+import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
+import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
+import com.sunstar.cloudseeds.logic.shangpinqi.presenter.SPQDetailPresenterImpl;
 
 import java.util.List;
 
@@ -28,14 +27,15 @@ import java.util.List;
  * Use the {@link SPQAddFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SPQAddFragment extends ClassicFragment {
-
-
+public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> implements SPQDetailContract.View<SPQDetailBean> {
     public SPQAddFragment() {
         // Required empty public constructor
     }
 
-
+    @Override
+    protected SPQDetailPresenterImpl setupPresenter() {
+        return new SPQDetailPresenterImpl(this);
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -76,29 +76,9 @@ public class SPQAddFragment extends ClassicFragment {
     protected void initView(View view) {
         id_tl_item_container = findById(R.id.id_tl_item_container);
 
-
-        initEditItemRuleData();
+         toRefreshData();
     }
 
-    private void initEditItemRuleData() {
-        HttpRequestManagerFactory.getRequestManager().getUrlBackStr(UrlDatas.SPQ_ADD_ITEM_RULE, null, new GsonHttpRequestCallback<BasicBean<SPQAddBean>>() {
-            @Override
-            public BasicBean<SPQAddBean> OnSuccess(String s) {
-                return BasicBean.fromJson(s, SPQAddBean.class);
-            }
-
-            @Override
-            public void OnSuccessOnUI(BasicBean<SPQAddBean> spqAddBeanBasicBean) {
-                backData(spqAddBeanBasicBean.getInfo().get(0));
-            }
-
-            @Override
-            public void OnError(String s) {
-
-            }
-        });
-
-    }
 
     @Override
     protected void initListener() {
@@ -114,6 +94,17 @@ public class SPQAddFragment extends ClassicFragment {
       String json=  EditItemRuleHelper.generateViewBackJson(id_tl_item_container);
       CLog.d("zzqqff:"+json);
 
+    }
+
+    @Override
+    protected void toRefreshData() {
+        super.toRefreshData();
+        mPresenter.gainData(UrlDatas.SPQ_ADD_ITEM_RULE);
+    }
+
+    @Override
+    protected int configSwipeRefreshLayoutResId() {
+        return R.id.id_swipe_refresh_layout;
     }
 
     @Override
@@ -138,12 +129,32 @@ public class SPQAddFragment extends ClassicFragment {
                 });
     }
 
-    public void backData(SPQAddBean spqAddBean) {
+
+    @Override
+    public void showProgress() {
+        showSwipeRefreshLayout();
+    }
+
+    @Override
+    public void hideProgress() {
+        hideSwipeRefreshLayout();
+    }
+
+    @Override
+    public void showMessage(String s) {
+
+    }
+
+    @Override
+    public void setupData(SPQDetailBean spqDetailBean) {
         //
-        List<SPQAddBean.KeyValueBean> kvbList = spqAddBean.getKey_value();
+        List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
         //
         EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList);
     }
 
+    @Override
+    public void setupMoreData(SPQDetailBean spqDetailBean) {
 
+    }
 }

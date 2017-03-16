@@ -1,5 +1,7 @@
 package com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean;
 
+import java.util.List;
+
 /**
  * Created by louisgeek on 2017/3/13.
  */
@@ -8,23 +10,19 @@ public class YZTZDetailBean {
 
         /**
          * show_code : 1
-         * show_msg : 信息获取成功
-         * soaking_time : 2017-3-2 20:41:41
-         * germinating_time : 2017-3-2 20:43:28
-         * probability : 90%
-         * transplanting_time : 2017-3-2 20:44:44
-         * stretch_tendril_time : 2017-3-2 20:44:54
-         * remark : 备注
+         * show_msg : 列表获取成功
+         * code : rule_spq
+         * name : 族群调查详细页
+         * rule_id : 1212
+         * key_value : [{"key":"bzsj","title":"显示信息","value":"2017信息信息","code":"","input_type":"text","input_options":[],"input_configs":[],"img_upload_options":{}},{"key":"fysj","title":"发芽时间","code":"","value":"2017-3-16","input_type":"time","input_options":[],"input_configs":[],"img_upload_options":{}},{"key":"yzsj","title":"移栽输入","code":"","value":"2017-3-16","input_type":"edit","input_options":[],"input_configs":[],"img_upload_options":{"img_upload_key":"zx_upload_img","img_upload_title":"株型图片上传","img_upload_max_count":"1"}},{"key":"khsj","title":"开花多行输入","value":"多行输入大声大声道","input_type":"lines","code":"","input_options":[],"input_configs":[],"img_upload_options":{}},{"key":"bz","title":"下拉选择","value":"大声的选择打算","input_type":"select","code":"1","input_options":[],"input_configs":[],"img_upload_options":{"img_upload_key":"zx_upload_img","img_upload_title":"株型图片上传","img_upload_max_count":"1"}}]
          */
 
         private String show_code;
         private String show_msg;
-        private String soaking_time;
-        private String germinating_time;
-        private String probability;
-        private String transplanting_time;
-        private String stretch_tendril_time;
-        private String remark;
+        private String code;
+        private String name;
+        private String rule_id;
+        private List<KeyValueBean> key_value;
 
         public String getShow_code() {
             return show_code;
@@ -42,51 +40,124 @@ public class YZTZDetailBean {
             this.show_msg = show_msg;
         }
 
-        public String getSoaking_time() {
-            return soaking_time;
+        public String getCode() {
+            return code;
         }
 
-        public void setSoaking_time(String soaking_time) {
-            this.soaking_time = soaking_time;
+        public void setCode(String code) {
+            this.code = code;
         }
 
-        public String getGerminating_time() {
-            return germinating_time;
+        public String getName() {
+            return name;
         }
 
-        public void setGerminating_time(String germinating_time) {
-            this.germinating_time = germinating_time;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public String getProbability() {
-            return probability;
+        public String getRule_id() {
+            return rule_id;
         }
 
-        public void setProbability(String probability) {
-            this.probability = probability;
+        public void setRule_id(String rule_id) {
+            this.rule_id = rule_id;
         }
 
-        public String getTransplanting_time() {
-            return transplanting_time;
+        public List<KeyValueBean> getKey_value() {
+            return key_value;
         }
 
-        public void setTransplanting_time(String transplanting_time) {
-            this.transplanting_time = transplanting_time;
+        public void setKey_value(List<KeyValueBean> key_value) {
+            this.key_value = key_value;
         }
 
-        public String getStretch_tendril_time() {
-            return stretch_tendril_time;
-        }
+        public static class KeyValueBean {
+            /**
+             * key : bzsj
+             * title : 显示信息
+             * value : 2017信息信息
+             * code :
+             * input_type : text
+             * input_options : []
+             * input_configs : []
+             * img_upload_options : {}
+             */
 
-        public void setStretch_tendril_time(String stretch_tendril_time) {
-            this.stretch_tendril_time = stretch_tendril_time;
-        }
+            private String key;
+            private String title;
+            private String value;
+            private String code;
+            private String input_type;
+            private ImgUploadOptionsBean img_upload_options;
+            private List<?> input_options;
+            private List<?> input_configs;
 
-        public String getRemark() {
-            return remark;
-        }
+            public String getKey() {
+                return key;
+            }
 
-        public void setRemark(String remark) {
-            this.remark = remark;
+            public void setKey(String key) {
+                this.key = key;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getValue() {
+                return value;
+            }
+
+            public void setValue(String value) {
+                this.value = value;
+            }
+
+            public String getCode() {
+                return code;
+            }
+
+            public void setCode(String code) {
+                this.code = code;
+            }
+
+            public String getInput_type() {
+                return input_type;
+            }
+
+            public void setInput_type(String input_type) {
+                this.input_type = input_type;
+            }
+
+            public ImgUploadOptionsBean getImg_upload_options() {
+                return img_upload_options;
+            }
+
+            public void setImg_upload_options(ImgUploadOptionsBean img_upload_options) {
+                this.img_upload_options = img_upload_options;
+            }
+
+            public List<?> getInput_options() {
+                return input_options;
+            }
+
+            public void setInput_options(List<?> input_options) {
+                this.input_options = input_options;
+            }
+
+            public List<?> getInput_configs() {
+                return input_configs;
+            }
+
+            public void setInput_configs(List<?> input_configs) {
+                this.input_configs = input_configs;
+            }
+
+            public static class ImgUploadOptionsBean {
+            }
         }
 }

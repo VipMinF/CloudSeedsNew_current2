@@ -4,24 +4,37 @@ package com.sunstar.cloudseeds.logic.shangpinqi.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.TableLayout;
 
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
-import com.classichu.classichu.classic.ClassicFragment;
+import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
+import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.shangpinqi.SPQActivity;
+import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
+import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
+import com.sunstar.cloudseeds.logic.shangpinqi.presenter.SPQDetailPresenterImpl;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SPQDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SPQDetailFragment extends ClassicFragment {
+public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> implements SPQDetailContract.View<SPQDetailBean> {
 
 
 
     public SPQDetailFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected SPQDetailPresenterImpl setupPresenter() {
+        return new SPQDetailPresenterImpl(this);
     }
 
     /**
@@ -55,10 +68,12 @@ public class SPQDetailFragment extends ClassicFragment {
     protected int setupLayoutResId() {
         return R.layout.fragment_spq_detail;
     }
-
+    TableLayout id_tl_item_container;
     @Override
     protected void initView(View view) {
+        id_tl_item_container=findById(R.id.id_tl_item_container);
 
+        toRefreshData();
     }
 
     @Override
@@ -72,4 +87,40 @@ public class SPQDetailFragment extends ClassicFragment {
         });
     }
 
+    @Override
+    protected void toRefreshData() {
+        super.toRefreshData();
+        mPresenter.gainData(UrlDatas.YU_ZHONG_TAI_ZHANG_DETAIL);
+    }
+    @Override
+    protected int configSwipeRefreshLayoutResId() {
+        return R.id.id_swipe_refresh_layout;
+    }
+    @Override
+    public void showProgress() {
+        showSwipeRefreshLayout();
+    }
+
+    @Override
+    public void hideProgress() {
+        hideSwipeRefreshLayout();
+    }
+
+    @Override
+    public void showMessage(String s) {
+
+    }
+
+    @Override
+    public void setupData(SPQDetailBean spqDetailBean) {
+        //
+        List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
+        //
+        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList);
+    }
+
+    @Override
+    public void setupMoreData(SPQDetailBean spqDetailBean) {
+
+    }
 }

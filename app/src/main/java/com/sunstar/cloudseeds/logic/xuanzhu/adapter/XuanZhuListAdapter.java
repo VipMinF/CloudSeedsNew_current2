@@ -40,11 +40,11 @@ public class XuanZhuListAdapter extends ClassicRVHeaderFooterAdapter<XuanZhuList
 
     @Override
     public void findBindView(final int pos, ClassicRVHeaderFooterViewHolder classicRVHeaderFooterViewHolder) {
-        TextView id_tv_item_title= classicRVHeaderFooterViewHolder.findBindView(R.id.id_tv_item_title);
+        TextView id_tv_item_title= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_title);
         id_tv_item_title.setText("选株编号:"+mDataList.get(pos).getSelected_code());
 
 
-        Button id_btn_item_show_qrcode= classicRVHeaderFooterViewHolder.findBindView(R.id.id_btn_item_show_qrcode);
+        Button id_btn_item_show_qrcode= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_qrcode);
         id_btn_item_show_qrcode.setOnClickListener(new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
@@ -54,7 +54,7 @@ public class XuanZhuListAdapter extends ClassicRVHeaderFooterAdapter<XuanZhuList
             }
         });
 
-        Button id_btn_item_show_detail= classicRVHeaderFooterViewHolder.findBindView(R.id.id_btn_item_show_detail);
+        Button id_btn_item_show_detail= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_detail);
         id_btn_item_show_detail.setOnClickListener(new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
@@ -64,7 +64,7 @@ public class XuanZhuListAdapter extends ClassicRVHeaderFooterAdapter<XuanZhuList
             }
         });
 
-        Button id_btn_item_show_spqdc= classicRVHeaderFooterViewHolder.findBindView(R.id.id_btn_item_show_spqdc);
+        Button id_btn_item_show_spqdc= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_spqdc);
         id_btn_item_show_spqdc.setOnClickListener(new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
