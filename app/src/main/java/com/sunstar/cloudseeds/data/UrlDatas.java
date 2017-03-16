@@ -28,4 +28,6 @@ public class UrlDatas {
     public  static  final String
             ZQ_ADD_ITEM_RULE=String.format("%s%s",BASE_URL,"api/rule/zq_add_item.json");
 
+    public  static  final String
+            Login_URL=String.format("%s%s",BASE_URL,"api/user/login.json");
 }

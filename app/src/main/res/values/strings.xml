@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">云种</string>
     <!--classic_app-->
     <string name="classic_app_ok">好</string>
@@ -20,6 +21,20 @@
     <string name="phonenumber">0571-86713550</string>
     <string name="banquan">版权所有©云种</string>
     <string name="title_activity_setup">SetupActivity</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- 登录页面 -->
+    <string name="prompt_email">请输入账号</string>
+    <string name="prompt_password">请输入密码</string>
+    <string name="action_sign_in">登录</string>
+    <string name="action_sign_in_short">登录中</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">登录失败</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 
 
 </resources>

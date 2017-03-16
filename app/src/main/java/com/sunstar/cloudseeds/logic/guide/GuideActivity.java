@@ -13,7 +13,10 @@ import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.ImagesDatas;
 import com.sunstar.cloudseeds.logic.guide.adapter.GuidePagerAdapter;
 import com.sunstar.cloudseeds.logic.guide.bean.GuideBean;
+import com.sunstar.cloudseeds.logic.login.LoginActivity;
+import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,14 +81,13 @@ public class GuideActivity extends ClassicActivity {
             @Override
             public void onJumpInClick(View v) {
                 setHasOpenedGuide();
-                //
-                goToMain();
-              /*  if (UserLoginHelper.hasUserLoginInfo()){
+
+                File file = new File(getFilesDir(),LoginActivity.FILENAME_USERLOGIN);
+                if (UserLoginHelper.autoLogin(file)){
                     goToMain();
                 }else {
                     goToLogin();
-                }*/
-
+                }
             }
         });
         viewPager.setAdapter(mGuidePagerAdapter);
@@ -98,10 +100,9 @@ public class GuideActivity extends ClassicActivity {
     }
 
     private void goToLogin() {
-     /*   //startAty(UserLoginActivity.class);
-        UserLoginActivity.startMe(mContext, UserLoginActivity.class, createBundleExtraStr1(CommFinalData.BUNDLE_EXTRA_VALUE_HIDE_BACK_BTN));
-        //###finish();
-        finishAtyAfterTransition();*/
+
+        startAty(LoginActivity.class);
+        finish();
     }
 
     private void goToMain() {

@@ -19,4 +19,10 @@
     <color name="text_black_second">#89000000</color>
     <color name="text_black_third">#42000000</color>
 
+    <color name="TopBarColor">#f6f5f1</color>
+    <color name="TopBarColor_imagelayout">#22292c</color>
+    <color name="TopBarLine">#EBE9E0</color>
+    <color name="ThemeOld">#45c01a</color>
+    <color name="Theme">#2b9c14</color>
+
 </resources>
