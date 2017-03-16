@@ -1,5 +1,6 @@
 package com.sunstar.cloudseeds.logic.guide;
 
+import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
@@ -16,12 +17,12 @@ import com.sunstar.cloudseeds.logic.guide.bean.GuideBean;
 import com.sunstar.cloudseeds.logic.login.LoginActivity;
 import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GuideActivity extends ClassicActivity {
 
+    private Context mcontext;
 
     @Override
     protected int setupLayoutResId() {
@@ -30,6 +31,7 @@ public class GuideActivity extends ClassicActivity {
 
     @Override
     protected void initView() {
+        mcontext=this;
         initGuide();
         setupImageData();
     }
@@ -81,13 +83,8 @@ public class GuideActivity extends ClassicActivity {
             @Override
             public void onJumpInClick(View v) {
                 setHasOpenedGuide();
+                goToMain();
 
-                File file = new File(getFilesDir(),LoginActivity.FILENAME_USERLOGIN);
-                if (UserLoginHelper.autoLogin(file)){
-                    goToMain();
-                }else {
-                    goToLogin();
-                }
             }
         });
         viewPager.setAdapter(mGuidePagerAdapter);
@@ -107,8 +104,12 @@ public class GuideActivity extends ClassicActivity {
 
     private void goToMain() {
 
-        startAty(MainActivity.class);
-        finish();
+        if (UserLoginHelper.autoLoginApp(mcontext)){
+            startAty(MainActivity.class);
+            finish();
+        }else {
+            goToLogin();
+        }
     }
 
 }
