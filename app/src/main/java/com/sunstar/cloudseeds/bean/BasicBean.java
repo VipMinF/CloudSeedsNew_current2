@@ -1,4 +1,4 @@
-package com.sunstar.cloudseeds.data;
+package com.sunstar.cloudseeds.bean;
 
 import android.util.Log;
 

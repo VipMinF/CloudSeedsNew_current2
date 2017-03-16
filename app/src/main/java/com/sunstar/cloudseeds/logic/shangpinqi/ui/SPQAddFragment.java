@@ -16,7 +16,7 @@ import com.classichu.classichu.classic.ClassicFragment;
 import com.classichu.itemselector.ClassicItemSelectorDataHelper;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.data.BasicBean;
+import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQAddBean;

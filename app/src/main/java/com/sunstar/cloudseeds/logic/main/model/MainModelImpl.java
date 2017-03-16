@@ -3,7 +3,7 @@ package com.sunstar.cloudseeds.logic.main.model;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
-import com.sunstar.cloudseeds.data.BasicBean;
+import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.logic.main.bean.TaiZhangBean;
 import com.sunstar.cloudseeds.logic.main.contract.MainContract;
 
