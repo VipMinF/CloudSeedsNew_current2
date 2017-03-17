@@ -3,14 +3,22 @@ package com.sunstar.cloudseeds.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.classic.ClassicFragment;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.logic.search.OnRecentbuttonClickListener;
+import com.sunstar.cloudseeds.logic.search.SearchRecentAdapter;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZListFragment;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -23,11 +31,19 @@ import io.reactivex.functions.Consumer;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends ClassicFragment {
+public class SearchFragment extends ClassicFragment implements OnRecentbuttonClickListener{
+
+    private  SearchView searchView;
+    private String mQueryText;
+    private  RecyclerView recyclerView;
+    private  SearchRecentAdapter searchrecentAdapter;
+    Fragment searchResultFragment;
 
     public SearchFragment() {
         // Required empty public constructor
     }
+
+
 
     /**
      * Use this factory method to create a new instance of
@@ -64,6 +80,7 @@ public class SearchFragment extends ClassicFragment {
     @Override
     protected void initView(View view) {
         initSearchView();
+        initRecentSearchView();
     }
 
     @Override
@@ -72,9 +89,8 @@ public class SearchFragment extends ClassicFragment {
     }
 
 
-    private String mQueryText;
     private void initSearchView() {
-        final SearchView searchView = findById(R.id.id_search_view);
+        searchView = findById(R.id.id_search_view);
         //设置搜索图标是否显示在搜索框内
         searchView.setIconifiedByDefault(false);//The default value is true   ，设置为false直接展开显示 左侧有放大镜  右侧无叉叉   有输入内容后有叉叉
         //!!! searchView.setIconified(false);//true value will collapse the SearchView to an icon, while a false will expand it. 左侧无放大镜 右侧直接有叉叉
@@ -108,13 +124,12 @@ public class SearchFragment extends ClassicFragment {
                             public void accept(@NonNull CharSequence charSequence) throws Exception {
                                 mQueryText = charSequence.toString();
                                 if (mQueryText.trim().length() > 0) {
-                                    // mPresenter.querySSQData();
-                                    // TODO: 2017/1/18
-                                } else {//空白
-                                    //  mPresenter.gainCountData(Integer.MAX_VALUE);
-                                    // TODO: 2017/1/18
+
+                                    initSearchResultView("",mQueryText);
+                                } else {
+
+                                    initRecentSearchView ();
                                 }
-                                CLog.d("queryTextChanges:" + mQueryText);
                             }
 
                         });
@@ -123,4 +138,58 @@ public class SearchFragment extends ClassicFragment {
             }
         });
     }
+
+    private void  initRecentSearchView (){
+
+        LinearLayout linearLayout_searchrecent=findById(R.id.id_linearlayout_searchrecent);
+        linearLayout_searchrecent.setVisibility(View.VISIBLE);
+
+        if (recyclerView == null){
+            recyclerView = findById(R.id.id_recylerview_search);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,  StaggeredGridLayoutManager.VERTICAL));
+            recyclerView.setAdapter(searchrecentAdapter = new SearchRecentAdapter());
+            searchrecentAdapter.setOnItemClickListener(this);
+        }
+        searchrecentAdapter.replaceAll(getSearchRecentData());
+        removeSearchResultView();
+    }
+
+    public ArrayList<String> getSearchRecentData() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("111");
+        list.add("222");
+        list.add("333");
+        list.add("444");
+        list.add("555");
+        return list;
+    }
+
+    private void initSearchResultView(String primary_id ,String search_keyword){
+
+        LinearLayout linearLayout_searchrecent=findById(R.id.id_linearlayout_searchrecent);
+        linearLayout_searchrecent.setVisibility(View.GONE);
+
+        searchResultFragment=YZTZListFragment.newInstance(primary_id,search_keyword);
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.id_framlayout_searchrecent,searchResultFragment)
+                .commit();
+    }
+
+
+    private void removeSearchResultView(){
+        if (searchResultFragment !=null){
+            getChildFragmentManager().beginTransaction()
+                    .remove(searchResultFragment)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onRecentButtonClick(View v){
+        Button btn=(Button)v;
+        searchView.setQuery(btn.getText().toString(),true);
+    }
+
+
 }

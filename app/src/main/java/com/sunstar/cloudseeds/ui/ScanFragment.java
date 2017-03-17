@@ -48,8 +48,6 @@ public class ScanFragment extends ClassicFragment {
         }
     }
 
-
-
     @Override
     protected int setupLayoutResId() {
         return R.layout.fragment_scan;
@@ -57,7 +55,6 @@ public class ScanFragment extends ClassicFragment {
 
     @Override
     protected void initView(View view) {
-
 
         setOnNotFastClickListener(findById(R.id.id_tv_scan), new OnNotFastClickListener() {
             @Override
