@@ -133,7 +133,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
 
     private void checkOrBindQrcode(String qrcode ){
 
-
+        //DialogManager.showCustomLoadingDialog(this);
         String key=getResources().getString(R.string.scanqrcode_bundleextrakey_bindId);
         bindId=this.getBundleExtra().getString(key);
 
@@ -142,12 +142,13 @@ public class ScanQrcodeActivity extends ClassicActivity  {
             @Override
             public void onSuccess(QrcodeBean qrcodeBean) {
 
+                //DialogManager.hideLoadingDialog();
                 ToastTool.showShort(qrcodeBean.getShow_msg().toString());
                 handelWithResult(qrcodeBean);
             }
             @Override
             public void onError(String s) {
-
+                //DialogManager.hideLoadingDialog();
                 ToastTool.showShort(s);
             }
         });
@@ -155,6 +156,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
 
 
     private  void  handelWithResult(QrcodeBean qrcodeBean){
+
 
         int scanqrcodeType=getBundleExtraInt1();
         switch (scanqrcodeType)

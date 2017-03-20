@@ -16,6 +16,7 @@ import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.logic.search.OnRecentbuttonClickListener;
 import com.sunstar.cloudseeds.logic.search.SearchRecentAdapter;
+import com.sunstar.cloudseeds.logic.search.SearchRecentHelper;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZListFragment;
 
 import java.util.ArrayList;
@@ -37,12 +38,11 @@ public class SearchFragment extends ClassicFragment implements OnRecentbuttonCli
     private String mQueryText;
     private  RecyclerView recyclerView;
     private  SearchRecentAdapter searchrecentAdapter;
-    Fragment searchResultFragment;
+    private Fragment searchResultFragment;
 
     public SearchFragment() {
         // Required empty public constructor
     }
-
 
 
     /**
@@ -66,6 +66,7 @@ public class SearchFragment extends ClassicFragment implements OnRecentbuttonCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -91,7 +92,7 @@ public class SearchFragment extends ClassicFragment implements OnRecentbuttonCli
 
 
     private void initSearchView() {
-        searchView = findById(R.id.id_search_view);
+        searchView = findById(R.id.id_search_view_searchfragment);
         //设置搜索图标是否显示在搜索框内
         searchView.setIconifiedByDefault(false);//The default value is true   ，设置为false直接展开显示 左侧有放大镜  右侧无叉叉   有输入内容后有叉叉
         //!!! searchView.setIconified(false);//true value will collapse the SearchView to an icon, while a false will expand it. 左侧无放大镜 右侧直接有叉叉
@@ -148,7 +149,7 @@ public class SearchFragment extends ClassicFragment implements OnRecentbuttonCli
         if (recyclerView == null){
             recyclerView = findById(R.id.id_recylerview_search);
             recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,  StaggeredGridLayoutManager.VERTICAL));
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
             recyclerView.setAdapter(searchrecentAdapter = new SearchRecentAdapter());
             searchrecentAdapter.setOnItemClickListener(this);
         }
@@ -157,12 +158,8 @@ public class SearchFragment extends ClassicFragment implements OnRecentbuttonCli
     }
 
     public ArrayList<String> getSearchRecentData() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("111");
-        list.add("222");
-        list.add("333");
-        list.add("444");
-        list.add("555");
+
+        ArrayList<String> list=(ArrayList<String>)SearchRecentHelper.getRecentSearchList_FromAcache(getContext());
         return list;
     }
 
