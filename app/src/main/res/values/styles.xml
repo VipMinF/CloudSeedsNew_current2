@@ -19,14 +19,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
+       <!-- <item name="android:windowBackground">@color/windowBackground</item>-->
     </style>
 
     <style name="ClassicThemeTransparentMy" parent="ClassicTheme.Transparent">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
+      <!--  <item name="android:windowBackground">@color/windowBackground</item>-->
     </style>
 
     <style name="ClassicThemeSplashFullscreen" parent="ClassicTheme.Transparent.Splash">

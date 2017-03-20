@@ -128,8 +128,9 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
             public void onItemShowQrcode(int position) {
                 super.onItemShowQrcode(position);
                 //ToastTool.showShortCenter("onItemShowQrcode" + position);
+                XuanZhuListBean.ListBean listBean= (XuanZhuListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
                 Bundle bundle = createBundleExtraInt1(ScanQrCodeType.bind_xuanzhu);
-                bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), "选株id");
+                bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId),listBean.getTertiary_id());
                 startAty(ScanQrcodeActivity.class,bundle);
             }
 

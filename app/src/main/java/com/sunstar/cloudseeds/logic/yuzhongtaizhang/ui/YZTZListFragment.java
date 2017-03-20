@@ -129,9 +129,6 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
         //
         mRecyclerView.setVisibility(View.VISIBLE);//返回数据后 显示
 
-        Class cc=
-                getParentFragment().getClass();
-
     }
 
     @Override
@@ -183,8 +180,10 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             public void onItemShowQrcode(int position) {
                 super.onItemShowQrcode(position);
                 //ToastTool.showShortCenter("绑定二维码"+position);
+                YZTZListBean.ListBean listBean= (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+
                 Bundle bundle = createBundleExtraInt1(ScanQrCodeType.bind_zuqun);
-                bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), "族群id");
+                bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), listBean.getSecondary_id());
                 startAty(ScanQrcodeActivity.class,bundle);
             }
         });
