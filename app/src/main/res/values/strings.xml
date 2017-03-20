@@ -36,5 +36,8 @@
         completions."
     </string>
 
+    <!-- 搜索 -->
+    <string name="search_recent">历史搜索</string>
+
 
 </resources>
