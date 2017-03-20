@@ -6,14 +6,15 @@
     tools:context="com.sunstar.cloudseeds.ui.MainFragment">
 
     <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:scrollbars="none"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="3dp"
-        android:layout_height="wrap_content">
+        android:background="@color/white"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,27 +23,26 @@
 
             <com.classichu.dropselectview.widget.ClassicSelectView
                 android:id="@+id/id_csv"
+                style="@style/ClassicSelectViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="时间"
-                style="@style/ClassicSelectViewStyle" />
+                android:text="时间" />
 
             <com.classichu.dropselectview.widget.ClassicSelectView
                 android:id="@+id/id_csv2"
+                style="@style/ClassicSelectViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ClassicSelectViewStyle"
-                android:text="分类"
-                 />
+                android:text="分类" />
 
             <com.classichu.dropselectview.widget.ClassicSelectView
                 android:id="@+id/id_csv3"
-                android:textColor="@color/textColorPrimary"
+                style="@style/ClassicSelectViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ClassicSelectViewStyle"
+                android:background="@drawable/selector_classic_form_bottom_item_bg"
                 android:text="计划类型"
-                />
+                android:textColor="@color/textColorPrimary" />
 
         </LinearLayout>
 

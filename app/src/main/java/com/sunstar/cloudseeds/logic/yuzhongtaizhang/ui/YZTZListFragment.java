@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
@@ -14,12 +15,14 @@ import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
 import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
+import com.sunstar.cloudseeds.logic.search.SearchRecentHelper;
 import com.sunstar.cloudseeds.logic.xuanzhu.XuanZhuActivity;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.YZTZActivity;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.adapter.YZTZListAdapter;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZListBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZListContract;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZListPresenterImpl;
+import com.sunstar.cloudseeds.ui.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,7 @@ import java.util.List;
  */
 public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> implements YZTZListContract.View<List<YZTZListBean.ListBean>>{
 
-
+    public Boolean from_searchFragment;
 
     public YZTZListFragment() {
         // Required empty public constructor
@@ -64,14 +67,21 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
         }
     }
 
-
     @Override
-    protected int setupLayoutResId() {
-        return R.layout.fragment_yztz_list;
-    }
+    protected int setupLayoutResId() { return R.layout.fragment_yztz_list; }
 
     @Override
     protected void initView(View view) {
+
+        //-- add by lzy -2017.3.20
+        //隐藏搜索框
+        from_searchFragment=false;
+        Fragment searchFragment= getParentFragment();
+        if(searchFragment !=null && searchFragment instanceof SearchFragment){
+            from_searchFragment=true;
+            SearchView searchV=findById(R.id.id_search_view);
+            searchV.setVisibility(View.GONE);
+        }
         toRefreshData();
     }
 
@@ -129,6 +139,11 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
         //
         mRecyclerView.setVisibility(View.VISIBLE);//返回数据后 显示
 
+        //-- add by lzy -2017.3.20
+        //如果是搜索界面进来->保存搜索关键词
+        if(yztzBeanList!=null && from_searchFragment){
+            SearchRecentHelper.setRecentSearchkey(mContext,mParam2);
+        }
     }
 
     @Override

@@ -54,7 +54,7 @@ public class SearchRecentAdapter extends RecyclerView.Adapter<SearchRecentAdapte
         public OneViewHolder(View view) {
             super(view);
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,120);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,100);
             view.setLayoutParams(params);
 
             button_searrecent = (Button)view.findViewById(R.id.id_searchrecent_button);
