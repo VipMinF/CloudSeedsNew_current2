@@ -73,6 +73,8 @@ public class ChangePasswordActivity extends ClassicActivity {
 
     private void subMitNewPassWord() {
 
+        if (!checkPassWordInfo()) return;
+
         DialogManager.showLoadingDialog(this);
         String old_paw = old_password.getText().toString();
         String psw = password.getText().toString();
@@ -87,7 +89,6 @@ public class ChangePasswordActivity extends ClassicActivity {
                 ToastTool.showShort(simpleBean.getShow_msg());
                 finish();
             }
-
             @Override
             public void onError(String s) {
                 ToastTool.showShort(s);
@@ -97,4 +98,27 @@ public class ChangePasswordActivity extends ClassicActivity {
     }
 
 
+    private Boolean checkPassWordInfo(){
+
+        String old_paw = old_password.getText().toString();
+        String psw = password.getText().toString();
+        String psw_again = password_again.getText().toString();
+
+        if (old_paw==null || old_paw.length()==0){
+
+            ToastTool.showShortCenter("请输入原密码");
+            return false;
+        }
+        if (psw==null || psw.length()==0){
+
+            ToastTool.showShortCenter("请输入新密码");
+            return false;
+        }
+        if (psw_again==null || psw_again.length()==0){
+
+            ToastTool.showShortCenter("请确认新密码");
+            return false;
+        }
+        return true;
+    }
 }

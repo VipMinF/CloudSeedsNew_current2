@@ -79,6 +79,7 @@ public class SearchFragment extends ClassicFragment implements OnRecentbuttonCli
 
     @Override
     protected void initView(View view) {
+
         initSearchView();
         initRecentSearchView();
     }

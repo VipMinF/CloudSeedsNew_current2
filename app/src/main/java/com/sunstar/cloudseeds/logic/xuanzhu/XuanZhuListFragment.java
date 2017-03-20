@@ -10,12 +10,13 @@ import android.widget.SearchView;
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
 import com.classichu.classichu.app.CLog;
-import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
+import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
+import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
 import com.sunstar.cloudseeds.logic.shangpinqi.SPQActivity;
 import com.sunstar.cloudseeds.logic.xuanzhu.adapter.XuanZhuListAdapter;
 import com.sunstar.cloudseeds.logic.xuanzhu.bean.XuanZhuListBean;
@@ -126,7 +127,10 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
             @Override
             public void onItemShowQrcode(int position) {
                 super.onItemShowQrcode(position);
-                ToastTool.showShortCenter("onItemShowQrcode" + position);
+                //ToastTool.showShortCenter("onItemShowQrcode" + position);
+                Bundle bundle = createBundleExtraInt1(ScanQrCodeType.bind_xuanzhu);
+                bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), "选株id");
+                startAty(ScanQrcodeActivity.class,bundle);
             }
 
             @Override

@@ -34,4 +34,8 @@ public class UrlDatas {
     public  static  final String
             ChangePassWord_URL=String.format("%s%s",BASE_URL,"api/user/changepass.json");
 
+    public  static  final String
+            CheckOrBindQrCode_URL=String.format("%s%s",BASE_URL,"api/qrcode/query.json");
+
+
 }

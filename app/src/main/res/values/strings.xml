@@ -39,5 +39,8 @@
     <!-- 搜索 -->
     <string name="search_recent">历史搜索</string>
 
+    <!-- 扫描二维码 -->
+    <string name="scanqrcode_bundleextrakey_bindId">bundleextrakey_bindId</string>
+
 
 </resources>

@@ -8,6 +8,7 @@ import android.view.View;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.classic.ClassicFragment;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
 
 /**
@@ -59,7 +60,9 @@ public class ScanFragment extends ClassicFragment {
         setOnNotFastClickListener(findById(R.id.id_tv_scan), new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
-                startAty(ScanQrcodeActivity.class);
+                Bundle bundle = createBundleExtraInt1(ScanQrCodeType.select);
+                bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), "");
+                startAty(ScanQrcodeActivity.class,bundle);
             }
         });
 
@@ -69,8 +72,6 @@ public class ScanFragment extends ClassicFragment {
     protected void initListener() {
 
     }
-
-
 
 
 

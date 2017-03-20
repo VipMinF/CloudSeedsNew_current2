@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -29,21 +28,22 @@ import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.logic.login.model.LoginModelImpl;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.sunstar.cloudseeds.R.id.email;
 
 public class LoginActivity extends ClassicActivity  {
 
     public static final int LOGIN_V = 2;
     public static final String FILENAME_USERLOGIN = "userlogin"+ LOGIN_V+".dat";
     public Context mcontext;
-    private UserLoginTask mAuthTask = null;
-    private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
     private ACache macache;
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "123456@qq.com:123456", "111111@qq.com:111111"
+            "123456:123456", "11111:111111"
     };
+
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -66,7 +66,7 @@ public class LoginActivity extends ClassicActivity  {
 
         initAppBar();
         //账号输入框
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mUsernameView = (AutoCompleteTextView) findViewById(email);
         populateAutoComplete();
         //密码输入框
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -79,8 +79,8 @@ public class LoginActivity extends ClassicActivity  {
         });
 
         //登录按钮
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+        Button mUsernameSignInButton = (Button) findViewById(R.id.username_sign_in_button);
+        mUsernameSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -128,7 +128,7 @@ public class LoginActivity extends ClassicActivity  {
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mUsernameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -149,14 +149,12 @@ public class LoginActivity extends ClassicActivity  {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+
         // Reset errors.
-        mEmailView.setError(null);
+        mUsernameView.setError(null);
         mPasswordView.setError(null);
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String username =mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
         boolean cancel = false;
         View focusView = null;
@@ -167,13 +165,13 @@ public class LoginActivity extends ClassicActivity  {
             cancel = true;
         }
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        if (TextUtils.isEmpty(username)) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        } else if (!isloginNameValid(username)) {
+            mUsernameView.setError(getString(R.string.error_invalid_email));
+            focusView = mUsernameView;
             cancel = true;
         }
         if (cancel) {
@@ -183,9 +181,8 @@ public class LoginActivity extends ClassicActivity  {
             showProgress(true);
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
-
             LoginModelImpl loginmodelimpl= new LoginModelImpl();
-            loginmodelimpl.loadData(UrlDatas.Login_URL ,email,password,new BasicCallBack<UserLoginBean>(){
+            loginmodelimpl.loadData(UrlDatas.Login_URL ,username,password,new BasicCallBack<UserLoginBean>(){
                 @Override
                 public void onSuccess(UserLoginBean userloginBean) {
 
@@ -205,14 +202,15 @@ public class LoginActivity extends ClassicActivity  {
     }
 
 
-    private boolean isEmailValid(String email) {
+    private boolean isloginNameValid(String loginname) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        //return email.contains("@");
+        return loginname.length() > 0;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 0;
     }
 
     /**
@@ -249,90 +247,5 @@ public class LoginActivity extends ClassicActivity  {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-
     }
-
-
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     * 显示异步登录注册任务，继承异步任务
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            return false;
-        }
-
-
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-            if (success) {
-
-                //File file = new File(getFilesDir(),FILENAME_USERLOGIN);
-                //UserLoginHelper.saveUserLoginBean(file);
-
-                UserLoginBean userloginbean = new UserLoginBean();
-                userloginbean.setUserid("111111@qq.com");
-                userloginbean.setUsername("Polo");
-                userloginbean.setPassword("111111");
-                userloginbean.setAddress("振宁路1号");
-                userloginbean.setCompany("浙江瞬时达网络有限公司");
-                userloginbean.setEmail("111111@qq.com");
-                userloginbean.setMoible("13000000000");
-                userloginbean.setTickname("刘章湧");
-                userloginbean.setUserface("");
-                userloginbean.setShow_code("1");
-                userloginbean.setShow_msg("登录成功");
-                UserLoginHelper.saveUserLoginBean_ToAcahe(mcontext,userloginbean);
-
-                ToastTool.showShort("登录成功");
-                startAty(MainActivity.class);
-                finish();
-
-            } else {
-
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
-
-
-
 }
