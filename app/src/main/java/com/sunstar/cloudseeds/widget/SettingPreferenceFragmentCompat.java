@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
+import com.classichu.classichu.basic.extend.ACache;
 import com.classichu.classichu.basic.tool.AppTool;
+import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.dialogview.manager.DialogManager;
 import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.sunstar.cloudseeds.R;
@@ -92,6 +94,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
+
         switch (preference.getKey()) {
               /*  case "preference_user":
                     //Toast.makeText(getActivity(), "preference_user", Toast.LENGTH_SHORT).show();
@@ -109,6 +112,9 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
                     public void onBtnClickOk(DialogInterface dialogInterface) {
                         super.onBtnClickOk(dialogInterface);
                         //开始清理缓存
+                        ACache macache = ACache.get(getContext());
+                        macache.clear();
+                        ToastTool.showShortCenter("清除完成");
                     }
                 });
                 break;
@@ -132,7 +138,6 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
                     @Override
                     public void onBtnClickOk(DialogInterface dialogInterface) {
                         super.onBtnClickOk(dialogInterface);
-
                        if( UserLoginHelper.loginOut(getActivity())){
 
                            startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -140,7 +145,6 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
                        }
                     }
                 });
-
                 break;
         }
         return true;

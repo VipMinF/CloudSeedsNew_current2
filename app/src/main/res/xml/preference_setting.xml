@@ -99,7 +99,6 @@
         android:key="preference_exit"
         android:layout="@layout/layout_custom_preference_exitlogin"
         android:title="注销登录"
-
         />
 
 </PreferenceScreen>
