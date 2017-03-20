@@ -32,6 +32,7 @@ public class LoginModelImpl implements LoginContract.Model<UserLoginBean>{
                     @Override
                     public void OnSuccessOnUI(BasicBean<UserLoginBean> basicBean) {
 
+                        //UserLoginBean userloginBean=UserLoginBean.getUserLoginBean();
                         UserLoginBean userloginBean=basicBean.getInfo().get(0);
 
                         if ("1".equals(basicBean.getCode())){

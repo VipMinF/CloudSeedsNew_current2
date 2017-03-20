@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.classichu.classichu.basic.BasicCallBack;
-import com.classichu.classichu.basic.extend.ACache;
 import com.classichu.classichu.basic.tool.SizeTool;
 import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicActivity;
@@ -39,10 +38,6 @@ public class LoginActivity extends ClassicActivity  {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private ACache macache;
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "123456:123456", "11111:111111"
-    };
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -53,7 +48,7 @@ public class LoginActivity extends ClassicActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mcontext=this;
-       macache = ACache.get(this);
+
     }
 
     @Override

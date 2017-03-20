@@ -5,8 +5,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
 
+import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.data.FinalData;
 import com.classichu.classichu.basic.tool.SharedPreferencesTool;
+import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.basic.viewpager.DepthPageTransformer;
 import com.classichu.classichu.classic.ClassicActivity;
 import com.sunstar.cloudseeds.MainActivity;
@@ -16,6 +18,7 @@ import com.sunstar.cloudseeds.logic.guide.adapter.GuidePagerAdapter;
 import com.sunstar.cloudseeds.logic.guide.bean.GuideBean;
 import com.sunstar.cloudseeds.logic.login.LoginActivity;
 import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
+import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,12 +107,29 @@ public class GuideActivity extends ClassicActivity {
 
     private void goToMain() {
 
-        if (UserLoginHelper.autoLoginApp(mcontext)){
-            startAty(MainActivity.class);
-            finish();
-        }else {
-            goToLogin();
-        }
+       UserLoginHelper.autoLoginApp(mContext, new BasicCallBack<UserLoginBean>() {
+            @Override
+            public void onSuccess(UserLoginBean userLoginBean) {
+                goToMain();
+                startAty(MainActivity.class);
+                finish();
+            }
+            @Override
+            public void onError(String s) {
+                ToastTool.showShortCenter(s);
+                goToLogin();
+            }
+        });
+
+
+//        if (UserLoginHelper.autoLogin(mContext)){
+//            goToMain();
+//
+//        }else {
+//
+//            goToLogin();
+//        }
+
     }
 
 }

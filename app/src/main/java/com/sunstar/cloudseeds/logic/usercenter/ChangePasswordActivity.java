@@ -85,6 +85,8 @@ public class ChangePasswordActivity extends ClassicActivity {
             @Override
             public void onSuccess(SimpleBean simpleBean) {
 
+
+
                 DialogManager.hideLoadingDialog();
                 ToastTool.showShort(simpleBean.getShow_msg());
                 finish();

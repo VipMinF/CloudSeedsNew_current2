@@ -2,8 +2,11 @@ package com.sunstar.cloudseeds.logic.login;
 
 import android.content.Context;
 
+import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.extend.ACache;
+import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
+import com.sunstar.cloudseeds.logic.login.model.LoginModelImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +16,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
-
 
 
 /**
@@ -35,14 +37,37 @@ public class UserLoginHelper {
         return macache.getAsObject(cacheKey);
     }
 
+    public static Boolean autoLogin(Context context) {
 
-    public static Boolean autoLoginApp(Context context){
+        UserLoginBean userloginbean = (UserLoginBean)getUserLoginBean_FromAcache(context);
+        if(userloginbean!= null && userloginbean.getUserid().length() > 0) {
+            return true;
+        }
+        return false;
+    }
 
-            UserLoginBean userloginbean = (UserLoginBean)getUserLoginBean_FromAcache(context);
-            if(userloginbean!= null && userloginbean.getUserid().length() > 0) {
-                return  true;
-            }
-        return  false;
+    public static void autoLoginApp(final Context context,final BasicCallBack<UserLoginBean> loginCallBack) {
+
+        UserLoginBean userloginbean = (UserLoginBean)getUserLoginBean_FromAcache(context);
+        if(userloginbean!= null && userloginbean.getUserid().length() > 0) {
+
+            LoginModelImpl loginmodelimpl= new LoginModelImpl();
+            loginmodelimpl.loadData(UrlDatas.Login_URL ,userloginbean.getUsername(),userloginbean.getPassword(),new BasicCallBack<UserLoginBean>(){
+                @Override
+                public void onSuccess(UserLoginBean userloginBean) {
+
+                    loginCallBack.onSuccess(userloginBean);
+                    UserLoginHelper.saveUserLoginBean_ToAcahe(context,userloginBean);
+                }
+                @Override
+                public void onError(String s) {
+                    loginCallBack.onError(s);
+                }
+            });
+
+        }else {
+            loginCallBack.onError("登录失败");
+        }
     }
 
     public static Boolean loginOut(Context context){
@@ -57,38 +82,7 @@ public class UserLoginHelper {
     }
 
 
-    public static Boolean autoLogin(File file){
 
-        if (file.exists()) {
-            UserLoginBean userloginbean = (UserLoginBean) readObject(file);
-            if(userloginbean!= null && userloginbean.getUserid().length() > 0) {
-                return  true;
-            }
-        }
-        return  false;
-    }
-
-    public static void saveUserLoginBean(File file){
-
-        //保存数据
-        UserLoginBean userloginbean = new UserLoginBean();
-        userloginbean.setUserid("111111@qq.com");
-        userloginbean.setUsername("123");
-        userloginbean.setPassword("111111");
-        userloginbean.setAddress("00");
-        userloginbean.setCompany("浙江瞬时达网络有限公司");
-        userloginbean.setEmail("111111@qq.com");
-        userloginbean.setMoible("13000000000");
-        userloginbean.setTickname("hello");
-        userloginbean.setUserface("");
-        userloginbean.setShow_code("1");
-        userloginbean.setShow_msg("登录成功");
-
-        if (file.exists()){
-            writeObject(userloginbean,file);
-        }
-
-    }
 
 
     /**
@@ -100,7 +94,6 @@ public class UserLoginHelper {
             file.delete();
         }
     }
-
 
     /**
      * 序列化存储文件
@@ -121,7 +114,6 @@ public class UserLoginHelper {
             e.printStackTrace();
         }
     }
-
 
     /**
      * 反序列化
