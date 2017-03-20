@@ -62,4 +62,42 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
             }
         });
     }
+
+    @Override
+    public void gainCountData(int pageCount, String keyword) {
+        mView.showProgress();
+        mModel.loadData(UrlDatas.YU_ZHONG_TAI_ZHANG_LIST,ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT,pageCount, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
+            @Override
+            public void onSuccess(List<YZTZListBean.ListBean> data) {
+                mView.hideProgress();
+                mView.setupData(data);
+            }
+
+            @Override
+            public void onError(String s) {
+                mView.hideProgress();
+                mView.showMessage(s);
+            }
+        });
+    }
+
+    @Override
+    public void gainMoreData(int pageNum, String keyword) {
+        mModel.loadData(UrlDatas.YU_ZHONG_TAI_ZHANG_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
+            @Override
+            public void onSuccess(final List<YZTZListBean.ListBean> data) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.setupMoreData(data);
+                    }
+                },2*1000);
+            }
+
+            @Override
+            public void onError(String msg) {
+                mView.showMessage(msg);
+            }
+        });
+    }
 }

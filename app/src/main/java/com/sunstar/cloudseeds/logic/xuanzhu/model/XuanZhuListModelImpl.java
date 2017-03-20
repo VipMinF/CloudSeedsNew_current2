@@ -18,13 +18,13 @@ import java.util.List;
 public  class XuanZhuListModelImpl implements XuanZhuListContract.Model<List<XuanZhuListBean.ListBean>>{
 
     @Override
-    public void loadData(String url, final int pageNum, final int pageSize, String s1,
+    public void loadData(String url, final int pageNum, final int pageSize, final String keyword,
                          final BasicCallBack<List<XuanZhuListBean.ListBean>> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
         paramsMap.put("userid","21");
         paramsMap.put("pagenum",String.valueOf(pageNum));
         paramsMap.put("pagesize",String.valueOf(pageSize));
-        paramsMap.put("search_keyword","");
+        paramsMap.put("search_keyword",keyword);
         HttpRequestManagerFactory.getRequestManager().getUrlBackStr(url,null,
                 new GsonHttpRequestCallback<BasicBean<XuanZhuListBean>>() {
                     @Override
@@ -38,8 +38,8 @@ public  class XuanZhuListModelImpl implements XuanZhuListContract.Model<List<Xua
                         List<XuanZhuListBean.ListBean> lbL=new ArrayList<>();
                         for (int i = 0; i < pageSize; i++) {
                             XuanZhuListBean.ListBean lb=new XuanZhuListBean.ListBean();
-                            lb.setName("xuan zhu测试数据"+i+"===页码"+pageNum+"===每页显示"+pageSize);
-                            lb.setSelected_code("212"+i);
+                            lb.setName("xuanzhu测"+keyword+i+"===页码"+pageNum+"===每页显示"+pageSize);
+                            lb.setSelected_code("212"+keyword+i);
                             lbL.add(lb);
                         }
                         //##  basicBean.getInfo().get(0).setList(lbL);

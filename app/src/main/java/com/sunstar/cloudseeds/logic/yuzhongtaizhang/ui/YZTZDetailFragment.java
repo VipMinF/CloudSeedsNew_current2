@@ -3,6 +3,7 @@ package com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TableLayout;
 
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
@@ -65,9 +66,10 @@ public class YZTZDetailFragment extends ClassicMvpFragment<YZTZDetailPresenterIm
     }
 
     TableLayout id_tl_item_container;
-
+    Button id_btn_show_add;
     @Override
     protected void initView(View view) {
+        id_btn_show_add= findById(R.id.id_btn_show_add);
         id_tl_item_container = findById(R.id.id_tl_item_container);
 
         toRefreshData();
@@ -75,7 +77,7 @@ public class YZTZDetailFragment extends ClassicMvpFragment<YZTZDetailPresenterIm
 
     @Override
     protected void initListener() {
-        setOnNotFastClickListener(findById(R.id.id_btn_show_add), new OnNotFastClickListener() {
+        setOnNotFastClickListener(id_btn_show_add, new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
                 startAty(YZTZActivity.class, createBundleExtraInt1(AtyGoToWhere.ADD));

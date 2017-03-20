@@ -195,7 +195,9 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
         mPresenter.gainMoreData(mClassicRVHeaderFooterAdapter.getNextPageNum());
     }
 
-
+    private void toSearchData() {
+        mPresenter.gainCountData(mClassicRVHeaderFooterAdapter.getNowPageCount(),mQueryText);
+    }
 
     private String mQueryText;
     private void initSearchView() {
@@ -209,8 +211,9 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-               /* mQueryText = query;
-                mPresenter.querySSQData();*/
+                mQueryText = query;
+                //
+                toSearchData();
                 CLog.d("onQueryTextSubmit:" + query);
                 return false;
             }
@@ -233,11 +236,10 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
                             public void accept(@NonNull CharSequence charSequence) throws Exception {
                                 mQueryText = charSequence.toString();
                                 if (mQueryText.trim().length() > 0) {
-                                    // mPresenter.querySSQData();
-                                    // TODO: 2017/1/18
+                                    toSearchData();
                                 } else {//空白
-                                    //  mPresenter.gainCountData(Integer.MAX_VALUE);
-                                    // TODO: 2017/1/18
+                                    //刷新所有
+                                    toRefreshData();
                                 }
                                 CLog.d("queryTextChanges:" + mQueryText);
                             }

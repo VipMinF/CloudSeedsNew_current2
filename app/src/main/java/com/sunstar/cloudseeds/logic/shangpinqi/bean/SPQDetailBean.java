@@ -91,8 +91,8 @@ public class SPQDetailBean {
             private String code;
             private String input_type;
             private ImgUploadOptionsBean img_upload_options;
-            private List<?> input_options;
-            private List<?> input_configs;
+            private List<InputOptionsBean> input_options;
+            private List<InputConfigsBean> input_configs;
 
             public String getKey() {
                 return key;
@@ -142,20 +142,62 @@ public class SPQDetailBean {
                 this.img_upload_options = img_upload_options;
             }
 
-            public List<?> getInput_options() {
+            public List<InputOptionsBean> getInput_options() {
                 return input_options;
             }
 
-            public void setInput_options(List<?> input_options) {
+            public void setInput_options(List<InputOptionsBean> input_options) {
                 this.input_options = input_options;
             }
 
-            public List<?> getInput_configs() {
+            public List<InputConfigsBean> getInput_configs() {
                 return input_configs;
             }
 
-            public void setInput_configs(List<?> input_configs) {
+            public void setInput_configs(List<InputConfigsBean> input_configs) {
                 this.input_configs = input_configs;
+            }
+
+            public static class InputOptionsBean {
+                public String getOption_code() {
+                    return option_code;
+                }
+
+                public void setOption_code(String option_code) {
+                    this.option_code = option_code;
+                }
+
+                public String getOption_value() {
+                    return option_value;
+                }
+
+                public void setOption_value(String option_value) {
+                    this.option_value = option_value;
+                }
+
+                private String option_code;
+                private String option_value;
+            }
+
+            public static class InputConfigsBean {
+                public String getConfig() {
+                    return config;
+                }
+
+                public void setConfig(String config) {
+                    this.config = config;
+                }
+
+                public String getConfig_value() {
+                    return config_value;
+                }
+
+                public void setConfig_value(String config_value) {
+                    this.config_value = config_value;
+                }
+
+                private String config;
+                private String config_value;
             }
 
             public static class ImgUploadOptionsBean {

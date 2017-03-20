@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +8,9 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/id_swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
 
         <ScrollView
             android:layout_width="match_parent"
@@ -36,4 +38,4 @@
         android:background="@drawable/selector_classic_btn_item_bg"
         android:text="调查记录" />
 
-</FrameLayout>
+</LinearLayout>

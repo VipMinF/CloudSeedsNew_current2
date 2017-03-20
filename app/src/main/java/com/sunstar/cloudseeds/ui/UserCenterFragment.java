@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.classichu.classichu.classic.ClassicFragment;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
+import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.widget.SettingPreferenceFragmentCompat;
 
 /**

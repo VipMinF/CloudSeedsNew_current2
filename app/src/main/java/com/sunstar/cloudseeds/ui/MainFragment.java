@@ -8,14 +8,17 @@ import android.view.ViewGroup;
 
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
+import com.classichu.classichu.basic.tool.ScreenTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
+import com.classichu.dropselectview.widget.ClassicSelectView;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.logic.main.adapter.MainAdapter;
 import com.sunstar.cloudseeds.logic.main.bean.TaiZhangBean;
 import com.sunstar.cloudseeds.logic.main.contract.MainContract;
 import com.sunstar.cloudseeds.logic.main.presenter.MainPresenterImpl;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.YZTZActivity;
+import com.sunstar.cloudseeds.widget.ClassicMaskFrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +66,84 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
     protected int setupLayoutResId() {
         return R.layout.fragment_main;
     }
-
+    ClassicMaskFrameLayout mMaskFrameLayout;
     @Override
     protected void initView(View view) {
-       toRefreshData();
+        toRefreshData();
+
+    /*    Button id_clcik=findById(R.id.id_clcik);
+        id_clcik.setOnClickListener(new OnNotFastClickListener() {
+            @Override
+            protected void onNotFastClick(View view) {
+                mMaskFrameLayout.toggleMask();
+            }
+        });*/
+        ClassicSelectView id_csv=findById(R.id.id_csv);
+        ClassicSelectView id_csv2=findById(R.id.id_csv2);
+        ClassicSelectView id_csv3=findById(R.id.id_csv3);
+        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight(mContext)*0.6));
+        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight(mContext)*0.6));
+        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight(mContext)*0.6));
+        mMaskFrameLayout= findById(R.id.id_mfl);
+
+
+        id_csv.setOnSelectViewStatusChangeListener(new ClassicSelectView.OnSelectViewStatusChangeListener() {
+            @Override
+            public void onSelectViewShow() {
+                super.onSelectViewShow();
+                mMaskFrameLayout.showMask();
+            }
+
+            @Override
+            public void onSelectViewDismiss() {
+                super.onSelectViewDismiss();
+                mMaskFrameLayout.hideMask();
+            }
+
+            @Override
+            public void onItemSelected(String key, String keyWithOutFix, String name) {
+                super.onItemSelected(key, keyWithOutFix, name);
+            }
+        });
+
+        id_csv2.setOnSelectViewStatusChangeListener(new ClassicSelectView.OnSelectViewStatusChangeListener() {
+            @Override
+            public void onSelectViewShow() {
+                super.onSelectViewShow();
+                mMaskFrameLayout.showMask();
+            }
+
+            @Override
+            public void onSelectViewDismiss() {
+                super.onSelectViewDismiss();
+                mMaskFrameLayout.hideMask();
+            }
+
+            @Override
+            public void onItemSelected(String key, String keyWithOutFix, String name) {
+                super.onItemSelected(key, keyWithOutFix, name);
+            }
+        });
+
+
+        id_csv3.setOnSelectViewStatusChangeListener(new ClassicSelectView.OnSelectViewStatusChangeListener() {
+            @Override
+            public void onSelectViewShow() {
+                super.onSelectViewShow();
+                mMaskFrameLayout.showMask();
+            }
+
+            @Override
+            public void onSelectViewDismiss() {
+                super.onSelectViewDismiss();
+                mMaskFrameLayout.hideMask();
+            }
+
+            @Override
+            public void onItemSelected(String key, String keyWithOutFix, String name) {
+                super.onItemSelected(key, keyWithOutFix, name);
+            }
+        });
     }
 
     @Override
@@ -86,8 +163,8 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
 
     @Override
     public void showMessage(String msg) {
-      //##  ToastTool.showShortCenter(msg);
-        DialogManager.showTipDialog(getActivity(),"提示",msg,null);
+        //##  ToastTool.showShortCenter(msg);
+        DialogManager.showTipDialog(getActivity(), "提示", msg, null);
     }
 
     @Override
@@ -95,7 +172,6 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
         mClassicRVHeaderFooterAdapter.refreshDataList(beanList);
         //
         mRecyclerView.setVisibility(View.VISIBLE);//返回数据后 显示
-
 
 
     }
@@ -117,7 +193,7 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
     protected ClassicRVHeaderFooterAdapter configClassicRVHeaderFooterAdapter() {
         List<TaiZhangBean.ListBean> listBeanList = new ArrayList<>();
         ClassicRVHeaderFooterAdapter classicRVHeaderFooterAdapter
-                = new MainAdapter(mContext,listBeanList, R.layout.item_list_tai_zhang);
+                = new MainAdapter(mContext, listBeanList, R.layout.item_list_tai_zhang);
         ClassicEmptyView classicEmptyView = new ClassicEmptyView(getContext());
         classicEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         classicRVHeaderFooterAdapter.setEmptyView(classicEmptyView);
@@ -125,7 +201,7 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
             @Override
             public void onItemClick(View itemView, int position) {
                 super.onItemClick(itemView, position);
-               // ToastTool.showShortCenter("sda" + position);
+                // ToastTool.showShortCenter("sda" + position);
                 startAty(YZTZActivity.class);
             }
         });

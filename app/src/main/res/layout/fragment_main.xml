@@ -1,49 +1,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.sunstar.cloudseeds.ui.MainFragment">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:scrollbars="none"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="3dp"
         android:layout_height="wrap_content">
-        <com.classichu.dropselectview.widget.ClassicSelectView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="时间"
-            android:textColor="@color/textColorSecondary" />
 
-        <com.classichu.dropselectview.widget.ClassicSelectView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:gravity="center_vertical"
-            android:text="分类"
-            android:textColor="@color/textColorSecondary" />
+            android:orientation="horizontal">
 
-        <com.classichu.dropselectview.widget.ClassicSelectView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:gravity="center_vertical"
-            android:text="计划类型"
-            android:textColor="@color/textColorSecondary" />
-    </LinearLayout>
+            <com.classichu.dropselectview.widget.ClassicSelectView
+                android:id="@+id/id_csv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="时间"
+                style="@style/ClassicSelectViewStyle" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/id_swipe_refresh_layout"
+            <com.classichu.dropselectview.widget.ClassicSelectView
+                android:id="@+id/id_csv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ClassicSelectViewStyle"
+                android:text="分类"
+                 />
+
+            <com.classichu.dropselectview.widget.ClassicSelectView
+                android:id="@+id/id_csv3"
+                android:textColor="@color/textColorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ClassicSelectViewStyle"
+                android:text="计划类型"
+                />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <com.sunstar.cloudseeds.widget.ClassicMaskFrameLayout
+        android:id="@+id/id_mfl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/id_recycler_view"
-            android:padding="10dp"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/id_swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/id_recycler_view"
+                style="@style/ClassicRecyclerViewStyle" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </com.sunstar.cloudseeds.widget.ClassicMaskFrameLayout>
 </LinearLayout>

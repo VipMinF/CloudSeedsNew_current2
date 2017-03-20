@@ -1,14 +1,17 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZAddFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/id_swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
 
         <ScrollView
             android:layout_width="match_parent"
@@ -19,7 +22,6 @@
                 android:id="@+id/id_tl_item_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:stretchColumns="1">
 
                 <!--add in code-->
@@ -38,4 +40,4 @@
         android:layout_gravity="bottom"
         android:background="@drawable/selector_classic_btn_item_bg"
         android:text="保存" />
-</FrameLayout>
+</LinearLayout>

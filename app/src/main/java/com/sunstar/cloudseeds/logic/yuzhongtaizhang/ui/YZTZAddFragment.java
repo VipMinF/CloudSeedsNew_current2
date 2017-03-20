@@ -5,14 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.classic.ClassicMvpFragment;
-import com.classichu.itemselector.ClassicItemSelectorDataHelper;
 import com.classichu.itemselector.bean.ItemSelectBean;
+import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
@@ -74,9 +75,10 @@ public class YZTZAddFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
     }
 
     private  TableLayout id_tl_item_container;
-
+    Button id_btn_submit;
     @Override
     protected void initView(View view) {
+        id_btn_submit= findById(R.id.id_btn_submit);
         id_tl_item_container = findById(R.id.id_tl_item_container);
 
         toRefreshData();
@@ -84,7 +86,7 @@ public class YZTZAddFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
 
     @Override
     protected void initListener() {
-        setOnNotFastClickListener(findById(R.id.id_btn_submit), new OnNotFastClickListener() {
+        setOnNotFastClickListener(id_btn_submit, new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
                 submitData();

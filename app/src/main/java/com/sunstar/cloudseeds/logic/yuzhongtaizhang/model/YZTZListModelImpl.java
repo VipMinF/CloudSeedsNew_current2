@@ -19,13 +19,13 @@ import java.util.List;
 public class YZTZListModelImpl implements YZTZListContract.Model<List<YZTZListBean.ListBean>> {
 
     @Override
-    public void loadData(String url, final int pageNum, final int pageSize, String s1,
+    public void loadData(String url, final int pageNum, final int pageSize, final String keyword,
                          final BasicCallBack<List<YZTZListBean.ListBean>> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
         paramsMap.put("userid","21");
         paramsMap.put("pagenum",String.valueOf(pageNum));
         paramsMap.put("pagesize",String.valueOf(pageSize));
-        paramsMap.put("search_keyword","");
+        paramsMap.put("search_keyword",keyword);
         HttpRequestManagerFactory.getRequestManager().getUrlBackStr(url,null,
                 new GsonHttpRequestCallback<BasicBean<YZTZListBean>>() {
                     @Override
@@ -39,7 +39,7 @@ public class YZTZListModelImpl implements YZTZListContract.Model<List<YZTZListBe
                         List<YZTZListBean.ListBean> lbL=new ArrayList<>();
                         for (int i = 0; i < pageSize; i++) {
                             YZTZListBean.ListBean lb=new YZTZListBean.ListBean();
-                            lb.setName("yztz 测试数据"+i+"===页码"+pageNum+"===每页显示"+pageSize);
+                            lb.setName("yztz 测"+keyword+i+"===页码"+pageNum+"===每页显示"+pageSize);
                             lb.setPlant_code("品种分类"+i);
                             lb.setSeed_batches("种子批号"+i);
                             lb.setSow_num("50"+i);
