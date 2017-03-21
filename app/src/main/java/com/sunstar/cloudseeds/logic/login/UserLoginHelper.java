@@ -1,21 +1,16 @@
 package com.sunstar.cloudseeds.logic.login;
 
 import android.content.Context;
-
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.extend.ACache;
 import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.data.EnCodes;
 import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.logic.login.model.LoginModelImpl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
+import static com.sunstar.cloudseeds.data.EnCodes.decodeHex;
+import static com.sunstar.cloudseeds.data.EnCodes.digest;
+import static com.sunstar.cloudseeds.data.EnCodes.unescapeHtml;
 
 
 /**
@@ -26,6 +21,10 @@ public class UserLoginHelper {
 
     private static final  String cachename="LoginCache";
     private static final  String cacheKey="userloginbean";
+    public static final int SALT_SIZE = 8;
+    public static final int HASH_INTERATIONS = 1024;
+    private static final String SHA1 = "SHA-1";
+
 
     public static void saveUserLoginBean_ToAcahe(Context context, UserLoginBean userloginbean){
         ACache macache = ACache.get(context,cachename);
@@ -37,7 +36,7 @@ public class UserLoginHelper {
         return macache.getAsObject(cacheKey);
     }
 
-    public static Boolean autoLogin(Context context) {
+    public static Boolean autoLogin_Onlocal(Context context) {
 
         UserLoginBean userloginbean = (UserLoginBean)getUserLoginBean_FromAcache(context);
         if(userloginbean!= null && userloginbean.getUserid().length() > 0) {
@@ -46,11 +45,10 @@ public class UserLoginHelper {
         return false;
     }
 
-    public static void autoLoginApp(final Context context,final BasicCallBack<UserLoginBean> loginCallBack) {
+    public static void autoLogin_Online(final Context context,final BasicCallBack<UserLoginBean> loginCallBack) {
 
         UserLoginBean userloginbean = (UserLoginBean)getUserLoginBean_FromAcache(context);
         if(userloginbean!= null && userloginbean.getUserid().length() > 0) {
-
             LoginModelImpl loginmodelimpl= new LoginModelImpl();
             loginmodelimpl.loadData(UrlDatas.Login_URL ,userloginbean.getUsername(),userloginbean.getPassword(),new BasicCallBack<UserLoginBean>(){
                 @Override
@@ -82,60 +80,28 @@ public class UserLoginHelper {
     }
 
 
-
+    /**
+     * 生成加密的密码，生成随机的16位salt并经过1024次 sha-1 hash
+     */
+    public static String entryptionPassword(String plainPassword) {
+        String plain = unescapeHtml(plainPassword);
+        byte[] salt = EnCodes.generateSalt(SALT_SIZE);
+        byte[] hashPassword = EnCodes.digest(plain.getBytes(), SHA1,salt, HASH_INTERATIONS);
+        return  EnCodes.encodeHex(salt)+ EnCodes.encodeHex(hashPassword);
+    }
 
 
     /**
-     * 删除本地信息
+     * 验证密码
      */
-    public static void loginOut(File file) {
+    public static Boolean validatePassWord(String psw,String entryptedPsw){
 
-        if (file.exists()) {
-            file.delete();
-        }
+        String pain= unescapeHtml(psw);
+        byte[] salt =decodeHex(entryptedPsw.substring(0,16));
+        byte[] hashPassword =digest(pain.getBytes(), SHA1,salt, HASH_INTERATIONS);
+        String psssword =  EnCodes.encodeHex(salt)  +  EnCodes.encodeHex(hashPassword);
+        return entryptedPsw.equals(psssword);
     }
 
-    /**
-     * 序列化存储文件
-     * @param object
-     * @param file
-     */
-    public static void writeObject(Object object,File file){
-        ObjectOutputStream oos;
-        boolean bb = file.exists();
-        try {
-            oos = new ObjectOutputStream(new FileOutputStream(file));
-            oos.writeObject(object);
-            oos.flush();
-            oos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 反序列化
-     * @param file
-     */
-    public static Object readObject(File file){
-        ObjectInputStream ois = null;
-        Object object = null;
-        try {
-            ois = new ObjectInputStream(new FileInputStream(file));
-            object = ois.readObject();
-            ois.close();
-        } catch (StreamCorruptedException e1) {
-            e1.printStackTrace();
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return object;
-    }
 
 }

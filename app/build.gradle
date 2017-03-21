@@ -48,4 +48,6 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.0.7'
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     testCompile 'junit:junit:4.12'
+    compile files('E:/MJJ/workspase/CloudSeedsNew/commons-lang3-3.1.jar')
+    compile files('E:/MJJ/workspase/CloudSeedsNew/commons-codec-1.9.jar')
 }

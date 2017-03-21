@@ -18,10 +18,10 @@ import java.util.HashMap;
 public class LoginModelImpl implements LoginContract.Model<UserLoginBean>{
 
     @Override
-    public void loadData (String url,String username, String paw,final BasicCallBack<UserLoginBean> basicCallBack) {
+    public void loadData (String url, String username, final String psw, final BasicCallBack<UserLoginBean> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
         paramsMap.put("username",username);
-        paramsMap.put("password",paw);
+        paramsMap.put("password",psw);
         HttpRequestManagerFactory.getRequestManager().getUrlBackStr(url,null,
                 new GsonHttpRequestCallback<BasicBean<UserLoginBean>>() {
                     @Override
@@ -31,11 +31,9 @@ public class LoginModelImpl implements LoginContract.Model<UserLoginBean>{
                     }
                     @Override
                     public void OnSuccessOnUI(BasicBean<UserLoginBean> basicBean) {
-
-                        //UserLoginBean userloginBean=UserLoginBean.getUserLoginBean();
                         UserLoginBean userloginBean=basicBean.getInfo().get(0);
-
                         if ("1".equals(basicBean.getCode())){
+                            userloginBean.setPassword(psw);
                             basicCallBack.onSuccess(userloginBean);
                         }else{
                             basicCallBack.onError(basicBean.getMessage());

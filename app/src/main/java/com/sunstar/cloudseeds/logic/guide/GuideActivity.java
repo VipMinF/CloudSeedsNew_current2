@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.data.FinalData;
 import com.classichu.classichu.basic.tool.SharedPreferencesTool;
-import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.basic.viewpager.DepthPageTransformer;
 import com.classichu.classichu.classic.ClassicActivity;
 import com.sunstar.cloudseeds.MainActivity;
@@ -107,7 +106,7 @@ public class GuideActivity extends ClassicActivity {
 
     private void goToMain() {
 
-       UserLoginHelper.autoLoginApp(mContext, new BasicCallBack<UserLoginBean>() {
+       UserLoginHelper.autoLogin_Online(mContext, new BasicCallBack<UserLoginBean>() {
             @Override
             public void onSuccess(UserLoginBean userLoginBean) {
                 goToMain();
@@ -116,13 +115,12 @@ public class GuideActivity extends ClassicActivity {
             }
             @Override
             public void onError(String s) {
-                ToastTool.showShortCenter(s);
                 goToLogin();
             }
         });
 
 
-//        if (UserLoginHelper.autoLogin(mContext)){
+//        if (UserLoginHelper.autoLogin_Onlocal(mContext)){
 //            goToMain();
 //
 //        }else {

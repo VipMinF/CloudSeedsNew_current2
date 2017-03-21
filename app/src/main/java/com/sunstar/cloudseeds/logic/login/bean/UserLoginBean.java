@@ -100,23 +100,21 @@ public class UserLoginBean implements Serializable {
     }
 
 
-
-//
-//    private static UserLoginBean userLoginBean;
-//    // 构造函数私有化
-//    private UserLoginBean() {
-//    }
-//    // 提供一个全局的静态方法
-//    public static UserLoginBean getUserLoginBean() {
-//        if (userLoginBean == null) {
-//            synchronized (UserLoginBean.class) {
-//                if (userLoginBean == null) {
-//                    userLoginBean = new UserLoginBean();
-//                }
-//            }
-//        }
-//        return userLoginBean;
-//    }
+    private static UserLoginBean userLoginBean;
+    // 构造函数私有化
+    private UserLoginBean() {
+    }
+    // 提供一个全局的静态方法
+    public static UserLoginBean getUserLoginBean() {
+        if (userLoginBean == null) {
+            synchronized (UserLoginBean.class) {
+                if (userLoginBean == null) {
+                    userLoginBean = new UserLoginBean();
+                }
+            }
+        }
+        return userLoginBean;
+    }
 
 
 }
