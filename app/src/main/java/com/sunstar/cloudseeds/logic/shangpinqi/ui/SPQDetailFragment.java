@@ -90,7 +90,7 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
     @Override
     protected void toRefreshData() {
         super.toRefreshData();
-        mPresenter.gainData(UrlDatas.YU_ZHONG_XUAN_ZHU_DETAIL);
+        mPresenter.gainData(UrlDatas.TERTIARY_DETAIL);
     }
     @Override
     protected int configSwipeRefreshLayoutResId() {

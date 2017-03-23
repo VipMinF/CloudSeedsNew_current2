@@ -10,18 +10,25 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.classichu.classichu.app.CLog;
+import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
+import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.bean.InfoBean;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZDetailContract;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZDetailPresenterImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,11 +81,12 @@ public class YZTZAddFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
         return R.layout.fragment_yztz_add;
     }
 
-    private  TableLayout id_tl_item_container;
+    private TableLayout id_tl_item_container;
     Button id_btn_submit;
+
     @Override
     protected void initView(View view) {
-        id_btn_submit= findById(R.id.id_btn_submit);
+        id_btn_submit = findById(R.id.id_btn_submit);
         id_tl_item_container = findById(R.id.id_tl_item_container);
 
         toRefreshData();
@@ -97,16 +105,44 @@ public class YZTZAddFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
     @Override
     protected void toRefreshData() {
         super.toRefreshData();
-        mPresenter.gainData(UrlDatas.ZQ_ADD_ITEM_RULE);
+        mPresenter.gainData(UrlDatas.SECONDARY_EDIT);
     }
 
 
     private void submitData() {
-        String json = EditItemRuleHelper.generateViewBackJson(id_tl_item_container);
-        CLog.d("zzqqff:" + json);
+        String result = EditItemRuleHelper.generateViewBackString(id_tl_item_container);
+        //CLog.d("zzqqff:" + result);
 
+        Map<String, String> stringMap = new HashMap<>();
+        stringMap.put("id", "f275ce6d5ed343449d65fe2d9f3ad313");
+        stringMap.put("itemvalue", result);
+
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.SECONDARY_SAVE,
+                HeadsParamsHelper.setupDefaultHeaders(), stringMap, new GsonHttpRequestCallback<BasicBean<InfoBean>>() {
+
+
+                    @Override
+                    public BasicBean<InfoBean> OnSuccess(String s) {
+                        return BasicBean.fromJson(s, InfoBean.class);
+                    }
+
+                    @Override
+                    public void OnSuccessOnUI(BasicBean<InfoBean> infoBeanBasicBean) {
+                        if ("1".equals(infoBeanBasicBean.getCode())) {
+                            showMessage(infoBeanBasicBean.getInfo().get(0).getShow_msg());
+                        } else {
+                            showMessage(infoBeanBasicBean.getInfo().get(0).getShow_msg());
+                        }
+                    }
+
+                    @Override
+                    public void OnError(String s) {
+                        showMessage(s);
+                    }
+                }
+
+        );
     }
-
 
 
     @Override

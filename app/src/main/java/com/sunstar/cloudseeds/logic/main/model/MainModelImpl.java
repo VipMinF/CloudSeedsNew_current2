@@ -8,7 +8,6 @@ import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.main.bean.TaiZhangBean;
 import com.sunstar.cloudseeds.logic.main.contract.MainContract;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class MainModelImpl implements MainContract.Model<List<TaiZhangBean.ListB
 
             @Override
             public void OnSuccessOnUI(BasicBean<TaiZhangBean> basicBean) {
-                List<TaiZhangBean.ListBean> lbL=new ArrayList<>();
+             /*   List<TaiZhangBean.ListBean> lbL=new ArrayList<>();
                 for (int i = 0; i < pageSize; i++) {
                     TaiZhangBean.ListBean lb=new TaiZhangBean.ListBean();
                     lb.setName("测试数据"+i+"===页码"+pageNum+"===每页显示"+pageSize);
@@ -45,9 +44,9 @@ public class MainModelImpl implements MainContract.Model<List<TaiZhangBean.ListB
                // basicBean.getInfo().get(0).setList(lbL);
                 if (pageNum>3){
                     lbL.clear();
-                }
+                }*/
                 if ("1".equals(basicBean.getCode())){
-                    basicCallBack.onSuccess(lbL);
+                    basicCallBack.onSuccess(basicBean.getInfo().get(0).getList());
                 }else{
                     basicCallBack.onError(basicBean.getMessage());
                 }

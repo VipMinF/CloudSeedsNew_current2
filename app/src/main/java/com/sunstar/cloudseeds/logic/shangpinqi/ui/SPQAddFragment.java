@@ -103,7 +103,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     @Override
     protected void toRefreshData() {
         super.toRefreshData();
-        mPresenter.gainData(UrlDatas.SPQ_ADD_ITEM_RULE);
+        mPresenter.gainData(UrlDatas.TERTIARY_EDIT);
     }
 
     @Override

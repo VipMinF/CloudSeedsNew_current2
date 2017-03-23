@@ -8,7 +8,11 @@ public class UrlDatas {
     private   static  final String
             BASE_URL="http://192.168.1.80:8080/yunzhong/";
     private   static  final String
-            BASE_URL_ONLINE="http://192.168.1.67:8085/";
+            BASE_URL_Local="http://192.168.1.67:8085/";
+
+    /**
+     * 首页分类相关
+     */
     public  static  final String
             MAIN_DATE_CLASSIFY=String.format("%s%s",BASE_URL,"api/classify/date_classify");
     public  static  final String
@@ -16,30 +20,39 @@ public class UrlDatas {
     public  static  final String
             MAIN_PRODUCT_CLASSIFY=String.format("%s%s",BASE_URL,"api/classify/product_classify");
 
+    /**
+     * 列表相关
+     */
     public  static  final String
-            TAI_ZHANG_LIST=String.format("%s%s",BASE_URL,"api/project/primary/list");
+            PRIMARY_LIST=String.format("%s%s",BASE_URL,"api/project/primary/list");
 
+    //
     public  static  final String
-            YU_ZHONG_TAI_ZHANG_LIST=String.format("%s%s",BASE_URL,"api/project/secondary/list");
-
-    public  static  final String
-            YU_ZHONG_TAI_ZHANG_DETAIL=String.format("%s%s",BASE_URL,"api/project/secondary/detail");
-
-    public  static  final String
-            YU_ZHONG_XUAN_ZHU_LIST=String.format("%s%s",BASE_URL,"api/project/tertiary/list");
+            SECONDARY_LIST=String.format("%s%s",BASE_URL_Local,"api/project/secondary/list");
 
     public  static  final String
-            YU_ZHONG_XUAN_ZHU_DETAIL=String.format("%s%s",BASE_URL,"api/project/tertiary/detail");
+            SECONDARY_DETAIL=String.format("%s%s",BASE_URL_Local,"api/project/secondary/detail");
 
     public  static  final String
-            SPQ_ADD_ITEM_RULE=String.format("%s%s",BASE_URL,"api/rule/spq_add_item");
-
-   /* public  static  final String
-            ZQ_ADD_ITEM_RULE=String.format("%s%s",BASE_URL,"api/rule/zq_add_item.json");*/
+            SECONDARY_EDIT=String.format("%s%s",BASE_URL_Local,"api/project/secondary/edit");
     public  static  final String
-            ZQ_ADD_ITEM_RULE=String.format("%s%s",BASE_URL_ONLINE,"api/rule/zq_add_item");
+            SECONDARY_SAVE=String.format("%s%s",BASE_URL_Local,"api/project/secondary/save");
+    //
+    public  static  final String
+            TERTIARY_LIST=String.format("%s%s",BASE_URL,"api/project/tertiary/list");
 
+    public  static  final String
+            TERTIARY_DETAIL=String.format("%s%s",BASE_URL,"api/project/tertiary/detail");
 
+    public  static  final String
+            TERTIARY_EDIT=String.format("%s%s",BASE_URL,"api/project/tertiary/edit");
+
+    public  static  final String
+            TERTIARY_SAVE=String.format("%s%s",BASE_URL,"api/project/tertiary/save");
+
+    /**
+     * 用户相关
+     */
     public  static  final String
             Login_URL=String.format("%s%s",BASE_URL,"api/user/login");
 

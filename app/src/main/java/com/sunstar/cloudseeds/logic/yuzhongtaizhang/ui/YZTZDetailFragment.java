@@ -93,7 +93,7 @@ public class YZTZDetailFragment extends ClassicMvpFragment<YZTZDetailPresenterIm
     @Override
     protected void toRefreshData() {
         super.toRefreshData();
-        mPresenter.gainData(UrlDatas.YU_ZHONG_TAI_ZHANG_DETAIL);
+        mPresenter.gainData(UrlDatas.SECONDARY_DETAIL);
     }
 
     @Override

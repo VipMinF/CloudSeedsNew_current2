@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="hold_view_key" type="id"/>
+    <item name="hold_view_input_type_text" type="id"/>
     <item name="hold_view_code" type="id"/>
     <item name="hold_view_list" type="id"/>
 </resources>

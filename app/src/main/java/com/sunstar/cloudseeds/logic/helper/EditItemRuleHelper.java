@@ -45,10 +45,49 @@ public class EditItemRuleHelper {
     private static final String ITEM_TYPE_LINES = "lines";
     private static final String ITEM_TYPE_TIME = "time";
     private static final String ITEM_TYPE_SELECT = "select";
-    private static final String ITEM_TYPE_INTEGER= "integer";
+    private static final String ITEM_TYPE_INTEGER = "integer";
     private static final String ITEM_TYPE_DOUBLE = "double";
 
 
+    public static String generateViewBackString(TableLayout tableLayout) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < tableLayout.getChildCount(); i++) {
+            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
+            View view = tableRow.getChildAt(1);//第二个
+            String key = (String) view.getTag(R.id.hold_view_key);
+            String code = "";
+            if (view.getTag(R.id.hold_view_code) != null) {
+                code = (String) view.getTag(R.id.hold_view_code);
+            }
+            String value = "";
+            if (view instanceof DateSelectView) {
+                DateSelectView dsv = (DateSelectView) view;
+                value = dsv.getNowSelectData();
+            } else if (view instanceof LinesEditView) {
+                LinesEditView lev = (LinesEditView) view;
+                value = lev.getContentText();
+            } else if (view instanceof EditText) {
+                EditText et = (EditText) view;
+                value = et.getText().toString();
+            } else if (view instanceof TextView) {
+                TextView tv = (TextView) view;
+                value = tv.getText().toString();
+            }
+            if (view.getTag(R.id.hold_view_input_type_text)!=null&&"true".equals(view.getTag(R.id.hold_view_input_type_text))) {//
+              //do nothing
+            }else {
+                sb.append(value);
+                sb.append(",");
+            }
+        }
+        String result = sb.toString();
+        if (!"".equals(result)) {
+            result = result.substring(0, result.length() - 1);
+        }
+        return result;
+    }
+
+    @Deprecated
     public static String generateViewBackJson(TableLayout tableLayout) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("code", "2121");
@@ -91,7 +130,7 @@ public class EditItemRuleHelper {
     private static void generateChildView(String inputType, TableLayout tableLayout, final FragmentActivity fragmentActivity,
                                           final String leftTitleStr, String rightValue, String rightKey, String rightCode,
                                           List<KeyAndValueBean> options, List<KeyAndValueBean> configs,
-                                          List<ImageCommmBean> imageCommmBeanList,boolean needRight,boolean isAdd) {
+                                          List<ImageCommmBean> imageCommmBeanList, boolean needRight, boolean isAdd) {
         Context context = fragmentActivity;
         //
         int padding = 12;
@@ -111,7 +150,7 @@ public class EditItemRuleHelper {
         TextView rightImage = null;
         if (needRight) {
             //
-             rightImage = new TextView(fragmentActivity);
+            rightImage = new TextView(fragmentActivity);
             //高 填充副本  宽永远都是MATCH_PARENT
             rightImage.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.MATCH_PARENT));
@@ -140,7 +179,7 @@ public class EditItemRuleHelper {
                     });
                     rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
                             VectorOrImageResHelper.getDrawable(fragmentActivity, R.drawable.ic_image_black_24dp), null);
-                }else{
+                } else {
                     rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
                             VectorOrImageResHelper.getDrawable(fragmentActivity, R.drawable.ic_add_box_black_24dp), null);
 
@@ -167,6 +206,7 @@ public class EditItemRuleHelper {
                 rightTitle.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.MATCH_PARENT));
                 rightTitle.setTag(R.id.hold_view_key, rightKey);
+                rightTitle.setTag(R.id.hold_view_input_type_text, "true");
                 rightTitle.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
                 rightTitle.setPadding(SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding),
                         SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding));
@@ -198,8 +238,8 @@ public class EditItemRuleHelper {
                 tableRow2.addView(rightEdit);
                 //
 
-                if (rightImage!=null){
-                tableRow2.addView(rightImage);
+                if (rightImage != null) {
+                    tableRow2.addView(rightImage);
                 }
 
                 tableLayout.addView(tableRow2);
@@ -226,7 +266,7 @@ public class EditItemRuleHelper {
                 tableRow6.addView(rightEditInteger);
                 //
 
-                if (rightImage!=null){
+                if (rightImage != null) {
                     tableRow6.addView(rightImage);
                 }
 
@@ -243,7 +283,7 @@ public class EditItemRuleHelper {
                 rightEditDouble.setSelectAllOnFocus(true);
                 rightEditDouble.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 rightEditDouble.setLines(1);
-              //##  rightEditDouble.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                //##  rightEditDouble.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 rightEditDouble.setInputType(8194);//http://www.cnblogs.com/janehlp/p/6129053.html
                 rightEditDouble.setGravity(Gravity.CENTER_VERTICAL);
                 rightEditDouble.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -255,7 +295,7 @@ public class EditItemRuleHelper {
                 tableRow7.addView(rightEditDouble);
                 //
 
-                if (rightImage!=null){
+                if (rightImage != null) {
                     tableRow7.addView(rightImage);
                 }
 
@@ -303,7 +343,7 @@ public class EditItemRuleHelper {
                         SizeTool.dp2px(context, paddingCustomLeftRight), SizeTool.dp2px(context, paddingCustomTopBottom));
                 tableRow3.addView(rightDate);
                 //
-                if (rightImage!=null) {
+                if (rightImage != null) {
                     tableRow3.addView(rightImage);
                 }
                 tableLayout.addView(tableRow3);
@@ -345,7 +385,7 @@ public class EditItemRuleHelper {
                 rightLines.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
                 tableRow4.addView(rightLines);
                 //
-                if (rightImage!=null) {
+                if (rightImage != null) {
                     tableRow4.addView(rightImage);
                 }
                 tableLayout.addView(tableRow4);
@@ -368,7 +408,7 @@ public class EditItemRuleHelper {
                     }
                 }
                 /**=====================================*/
-                rightSelect.setText(TextUtils.isEmpty(rightValue)?"请选择":rightValue);
+                rightSelect.setText(TextUtils.isEmpty(rightValue) ? "请选择" : rightValue);
                 rightSelect.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
                 rightSelect.setLines(1);
                 rightSelect.setGravity(Gravity.CENTER_VERTICAL);
@@ -395,7 +435,7 @@ public class EditItemRuleHelper {
                         SizeTool.dp2px(fragmentActivity, paddingCustomLeftRight), SizeTool.dp2px(fragmentActivity, paddingCustomTopBottom));
                 tableRow5.addView(rightSelect);
                 //
-                if (rightImage!=null) {
+                if (rightImage != null) {
                     tableRow5.addView(rightImage);
                 }
                 tableLayout.addView(tableRow5);
@@ -409,7 +449,7 @@ public class EditItemRuleHelper {
 
 
     public static void generateSPQChildView(final FragmentActivity fragmentActivity, TableLayout tableLayout,
-                                            List<SPQDetailBean.KeyValueBean> keyValueBeanList,boolean isAdd) {
+                                            List<SPQDetailBean.KeyValueBean> keyValueBeanList, boolean isAdd) {
         tableLayout.removeAllViews();
         for (int i = 0; i < keyValueBeanList.size(); i++) {
             String inputType = keyValueBeanList.get(i).getInput_type();
@@ -454,10 +494,9 @@ public class EditItemRuleHelper {
 
 
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
-                    kvList_options, kvList_configs, imageCommmBeanList,true,isAdd);
+                    kvList_options, kvList_configs, imageCommmBeanList, true, isAdd);
         }
     }
-
 
 
     public static void generateYZTZChildView(final FragmentActivity fragmentActivity, TableLayout tableLayout,
@@ -493,7 +532,7 @@ public class EditItemRuleHelper {
             }
 
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
-                    kvList_options, kvList_configs, null,false,false);
+                    kvList_options, kvList_configs, null, false, false);
         }
     }
 }
