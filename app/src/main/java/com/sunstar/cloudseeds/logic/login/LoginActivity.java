@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +20,8 @@ import com.classichu.classichu.classic.ClassicActivity;
 import com.classichu.dialogview.manager.DialogManager;
 import com.sunstar.cloudseeds.MainActivity;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.logic.helper.CommHandlerForNoLeak;
+import com.sunstar.cloudseeds.logic.helper.CommRunnableForNoLeak;
 import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.logic.login.contract.LoginContract;
 import com.sunstar.cloudseeds.logic.login.presenter.LoginPresenterImpl;
@@ -36,13 +37,12 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private Handler handler=null;
+    private CommHandlerForNoLeak mHandler=new CommHandlerForNoLeak();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mcontext=this;
-        handler=new Handler();
     }
 
     @Override
@@ -105,11 +105,11 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
     @Override
     public void hideProgress() {
 
-        handler.post(runnableUi);
+        mHandler.post(mRunnable);
     }
 
     //runnable中更新界面
-    Runnable  runnableUi=new  Runnable(){
+    private CommRunnableForNoLeak mRunnable=new  CommRunnableForNoLeak(){
         @Override
         public void run() {
             showProgress(false);
@@ -137,8 +137,8 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
         if (mClassicTitleBar!=null){
             mClassicTitleBar.setLeftImage(null);
             mClassicTitleBar.setLeftText("登录云种")
-                    .setLeftAndRightTextSize(SizeTool.dp2px(this,22))
-                    .setLeftMaxWidth(SizeTool.dp2px(this,200));
+                    .setLeftAndRightTextSize(SizeTool.dp2px(22))
+                    .setLeftMaxWidth(SizeTool.dp2px(200));
         }
     }
 

@@ -26,14 +26,15 @@ public class SPQDetailPresenterImpl extends ClassicPresenter<SPQDetailContract.V
         mModel.loadData(url, new BasicCallBack<SPQDetailBean>() {
             @Override
             public void onSuccess(SPQDetailBean bean) {
-                mView.hideProgress();
-                mView.setupData(bean);
+                if (mView != null) {
+                    mView.hideProgress();
+                    mView.setupData(bean);
+                }
             }
 
             @Override
             public void onError(String msg) {
-                mView.hideProgress();
-                mView.showMessage(msg);
+                CommPresenterHelper.doErrorThing(mView,msg);
             }
         });
     }

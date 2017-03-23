@@ -1,7 +1,5 @@
 package com.sunstar.cloudseeds.logic.main.presenter;
 
-import android.os.Handler;
-
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicPresenter;
@@ -33,14 +31,15 @@ public class MainPresenterImpl extends ClassicPresenter<MainContract.View,MainCo
             mModel.loadData(UrlDatas.PRIMARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<TaiZhangBean.ListBean>>() {
                 @Override
                 public void onSuccess(List<TaiZhangBean.ListBean> data) {
+                    if (mView != null) {
                         mView.hideProgress();
                         mView.setupData(data);
+                    }
                 }
 
                 @Override
                 public void onError(String msg) {
-                       mView.hideProgress();
-                       mView.showMessage(msg);
+                    CommPresenterHelper.doErrorThing(mView,msg);
                 }
             });
     }
@@ -53,12 +52,7 @@ public class MainPresenterImpl extends ClassicPresenter<MainContract.View,MainCo
         mModel.loadData(UrlDatas.PRIMARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<TaiZhangBean.ListBean>>() {
             @Override
             public void onSuccess(final List<TaiZhangBean.ListBean> data) {
-              new Handler().postDelayed(new Runnable() {
-                  @Override
-                  public void run() {
-                      mView.setupMoreData(data);
-                  }
-              },2*1000);
+                mView.setupMoreData(data);
             }
 
             @Override

@@ -2,6 +2,7 @@ package com.sunstar.cloudseeds.logic.usercenter;
 
 import android.content.DialogInterface;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
@@ -176,13 +177,8 @@ public class ChangePasswordActivity extends ClassicActivity {
      * 延迟x毫秒进入
      */
     private void delayJump(long delayMilliseconds) {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                goTOLoginActivity();
-            }
-        }, delayMilliseconds);
+        //
+        mMyHandler.postDelayed(mMyRunnable, delayMilliseconds);
     }
 
     private void  goTOLoginActivity(){
@@ -192,4 +188,43 @@ public class ChangePasswordActivity extends ClassicActivity {
         this.finish();
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //
+        mMyHandler.removeCallbacksAndMessages(null);
+    }
+
+    private MyHandler mMyHandler = new MyHandler();
+    private MyRunnable mMyRunnable = new MyRunnable() {
+        @Override
+        public void run() {
+            super.run();
+            //
+            goTOLoginActivity();
+        }
+    };
+    //静态内部类
+    private static class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    }
+
+    //匿名类的静态实例
+  /*  private static Runnable sMyRunnable = new Runnable() {
+        @Override
+        public void run() {
+                //
+            nextWhere();
+        }
+    };*/
+    //静态内部类
+    private static class MyRunnable implements Runnable {
+        @Override
+        public void run() {
+        }
+    }
 }

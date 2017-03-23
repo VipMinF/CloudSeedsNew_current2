@@ -1,6 +1,5 @@
 package com.sunstar.cloudseeds.logic.guide;
 
-import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
@@ -24,8 +23,6 @@ import java.util.List;
 
 public class GuideActivity extends ClassicActivity {
 
-    private Context mcontext;
-
     @Override
     protected int setupLayoutResId() {
         return R.layout.activity_guide;
@@ -33,7 +30,7 @@ public class GuideActivity extends ClassicActivity {
 
     @Override
     protected void initView() {
-        mcontext=this;
+
         initGuide();
         setupImageData();
     }
@@ -95,7 +92,7 @@ public class GuideActivity extends ClassicActivity {
 
     private void setHasOpenedGuide() {
         //
-        SharedPreferencesTool.put(mContext, FinalData.SP_HAS_OPENED_GUIDE, true);
+        SharedPreferencesTool.put(FinalData.SP_HAS_OPENED_GUIDE, true);
     }
 
     private void goToLogin() {

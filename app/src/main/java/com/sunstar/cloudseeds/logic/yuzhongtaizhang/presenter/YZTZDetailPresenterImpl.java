@@ -28,14 +28,15 @@ public class YZTZDetailPresenterImpl extends ClassicPresenter<YZTZDetailContract
         mModel.loadData(url, new BasicCallBack<YZTZDetailBean>() {
             @Override
             public void onSuccess(YZTZDetailBean bean) {
-                mView.hideProgress();
-                mView.setupData(bean);
+                if (mView != null) {
+                    mView.hideProgress();
+                    mView.setupData(bean);
+                }
             }
 
             @Override
             public void onError(String msg) {
-                mView.hideProgress();
-                mView.showMessage(msg);
+                CommPresenterHelper.doErrorThing(mView,msg);
             }
         });
     }

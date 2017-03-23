@@ -16,12 +16,10 @@ import com.classichu.dialogview.manager.DialogManager;
 import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.data.AtyGoToWhere;
 import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
 import com.sunstar.cloudseeds.logic.search.SearchRecentHelper;
 import com.sunstar.cloudseeds.logic.xuanzhu.XuanZhuActivity;
-import com.sunstar.cloudseeds.logic.yuzhongtaizhang.YZTZActivity;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.adapter.YZTZListAdapter;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZListBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZListContract;
@@ -242,7 +240,9 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             public void onItemShowDetail(int position) {
                 super.onItemShowDetail(position);
                 //
-                startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
+                //
+                startAty(XuanZhuActivity.class);
+               //2017年3月23日15:31:28 暂时不需要族群详细页 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
             }
 
             @Override

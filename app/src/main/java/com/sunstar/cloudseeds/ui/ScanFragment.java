@@ -80,7 +80,7 @@ public class ScanFragment extends ClassicFragment {
                             public void onBtnClickOk(DialogInterface dialogInterface) {
                                 super.onBtnClickOk(dialogInterface);
                                 //
-                                GoToSysConfigHelper.goToNormalEnterWithManufacturer(getActivity());
+                                GoToSysConfigHelper.goToNormalEnterWithManufacturer();
                             }
                         });
 

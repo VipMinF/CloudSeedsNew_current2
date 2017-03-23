@@ -208,7 +208,7 @@
                 android:layout_marginTop="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="族群信息" />
+                android:text="选株列表" />
 
             <Button
                 android:id="@+id/id_btn_item_show_qrcode"

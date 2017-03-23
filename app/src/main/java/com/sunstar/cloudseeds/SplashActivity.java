@@ -1,6 +1,7 @@
 package com.sunstar.cloudseeds;
 
 import android.os.Handler;
+import android.os.Message;
 import android.widget.ImageView;
 
 import com.classichu.classichu.app.CLog;
@@ -49,13 +50,8 @@ public class SplashActivity extends ClassicActivity {
      * 延迟x毫秒进入
      */
     private void delayJump(long delayMilliseconds) {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                nextWhere();
-            }
-        }, delayMilliseconds);
+        //
+        mMyHandler.postDelayed(mMyRunnable, delayMilliseconds);
     }
 
 
@@ -79,7 +75,7 @@ public class SplashActivity extends ClassicActivity {
      */
     private void nextWhere() {
 
-        boolean hasOpenedGuide = (boolean) SharedPreferencesTool.get(mContext,
+        boolean hasOpenedGuide = (boolean) SharedPreferencesTool.get(
                 FinalData.SP_HAS_OPENED_GUIDE, false);
         CLog.d("hasOpenedGuide DD:" + hasOpenedGuide);
         if (hasOpenedGuide) {
@@ -89,6 +85,7 @@ public class SplashActivity extends ClassicActivity {
                 public void onSuccess(UserLoginBean userLoginBean) {
                     goToMain();
                 }
+
                 @Override
                 public void onError(String s) {
 
@@ -106,6 +103,46 @@ public class SplashActivity extends ClassicActivity {
 
         } else {
             goToGuide();
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //
+        mMyHandler.removeCallbacksAndMessages(null);
+    }
+
+    private MyHandler mMyHandler = new MyHandler();
+    private MyRunnable mMyRunnable = new MyRunnable() {
+        @Override
+        public void run() {
+            super.run();
+            //
+            nextWhere();
+        }
+    };
+    //静态内部类
+    private static class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    }
+
+    //匿名类的静态实例
+  /*  private static Runnable sMyRunnable = new Runnable() {
+        @Override
+        public void run() {
+                //
+            nextWhere();
+        }
+    };*/
+    //静态内部类
+    private static class MyRunnable implements Runnable {
+        @Override
+        public void run() {
         }
     }
 }

@@ -93,7 +93,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
                 public void onBtnClickOk(DialogInterface dialogInterface) {
                     super.onBtnClickOk(dialogInterface);
                     //
-                    GoToSysConfigHelper.goToNormalEnterWithManufacturer(mContext);
+                    GoToSysConfigHelper.goToNormalEnterWithManufacturer();
                     //
                     ScanQrcodeActivity.this.finish();
                 }

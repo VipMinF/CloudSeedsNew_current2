@@ -29,14 +29,15 @@ public class LoginPresenterImpl extends ClassicPresenter<LoginContract.View, Log
         mModel.loadData(UrlDatas.Login_URL, loginname, password, new BasicCallBack<UserLoginBean>() {
             @Override
             public void onSuccess(UserLoginBean userloginBean) {
-                mView.hideProgress();
-                mView.setupData(userloginBean);
+                if (mView != null) {
+                    mView.hideProgress();
+                    mView.setupData(userloginBean);
+                }
             }
 
             @Override
             public void onError(String msg) {
-                mView.hideProgress();
-                mView.showMessage(msg);
+                CommPresenterHelper.doErrorThing(mView,msg);
             }
         });
     }

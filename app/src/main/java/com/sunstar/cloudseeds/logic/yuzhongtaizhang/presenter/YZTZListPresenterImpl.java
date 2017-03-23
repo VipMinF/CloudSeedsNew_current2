@@ -1,7 +1,5 @@
 package com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter;
 
-import android.os.Handler;
-
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicPresenter;
@@ -45,10 +43,7 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
 
             @Override
             public void onError(String s) {
-                if (mView != null) {
-                    mView.hideProgress();
-                    mView.showMessage(s);
-                }
+                CommPresenterHelper.doErrorThing(mView,s);
             }
         });
     }
@@ -61,12 +56,7 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
         mModel.loadData(UrlDatas.SECONDARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(final List<YZTZListBean.ListBean> data) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mView.setupMoreData(data);
-                    }
-                }, 2 * 1000);
+                mView.setupMoreData(data);
             }
 
             @Override
@@ -85,14 +75,15 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
         mModel.loadData(UrlDatas.SECONDARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(List<YZTZListBean.ListBean> data) {
-                mView.hideProgress();
-                mView.setupData(data);
+                if (mView != null) {
+                    mView.hideProgress();
+                    mView.setupData(data);
+                }
             }
 
             @Override
             public void onError(String s) {
-                mView.hideProgress();
-                mView.showMessage(s);
+                CommPresenterHelper.doErrorThing(mView,s);
             }
         });
     }
@@ -105,12 +96,7 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
         mModel.loadData(UrlDatas.SECONDARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(final List<YZTZListBean.ListBean> data) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mView.setupMoreData(data);
-                    }
-                }, 2 * 1000);
+                mView.setupMoreData(data);
             }
 
             @Override

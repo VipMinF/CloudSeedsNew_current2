@@ -88,9 +88,9 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
          id_csv=findById(R.id.id_csv);
          id_csv2=findById(R.id.id_csv2);
          id_csv3=findById(R.id.id_csv3);
-        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight(mContext)*0.6));
-        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight(mContext)*0.6));
-        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight(mContext)*0.6));
+        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight()*0.6));
+        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight()*0.6));
+        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight()*0.6));
         mMaskFrameLayout= findById(R.id.id_mfl);
 
 

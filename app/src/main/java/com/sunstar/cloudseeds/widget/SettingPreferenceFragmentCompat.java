@@ -40,7 +40,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
 
         String versionFormat = getResources().getString(R.string.classic_version_format);
         String versionStr = String.format(versionFormat,
-                AppTool.getVersionName(getActivity()), AppTool.getVersionCode(getActivity()));
+                AppTool.getVersionName(), AppTool.getVersionCode());
         //preference_update.setSummary(versionStr);
 
         //#####!!!  Preference preference_feedback = findPreference("preference_feedback");

@@ -143,8 +143,8 @@ public class EditItemRuleHelper {
                 TableRow.LayoutParams.MATCH_PARENT));
         leftTitle.setGravity(Gravity.CENTER_VERTICAL);
         leftTitle.setText(leftTitleStr);
-        leftTitle.setPadding(SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding),
-                SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding));
+        leftTitle.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),
+                SizeTool.dp2px(padding), SizeTool.dp2px(padding));
         leftTitle.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
         //
         TextView rightImage = null;
@@ -178,10 +178,10 @@ public class EditItemRuleHelper {
                         }
                     });
                     rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                            VectorOrImageResHelper.getDrawable(fragmentActivity, R.drawable.ic_image_black_24dp), null);
+                            VectorOrImageResHelper.getDrawable(R.drawable.ic_image_black_24dp), null);
                 } else {
                     rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                            VectorOrImageResHelper.getDrawable(fragmentActivity, R.drawable.ic_add_box_black_24dp), null);
+                            VectorOrImageResHelper.getDrawable( R.drawable.ic_add_box_black_24dp), null);
 
                     rightImage.setOnClickListener(new OnNotFastClickListener() {
                         @Override
@@ -208,8 +208,8 @@ public class EditItemRuleHelper {
                 rightTitle.setTag(R.id.hold_view_key, rightKey);
                 rightTitle.setTag(R.id.hold_view_input_type_text, "true");
                 rightTitle.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightTitle.setPadding(SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding),
-                        SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding));
+                rightTitle.setPadding(SizeTool.dp2px( padding), SizeTool.dp2px( padding),
+                        SizeTool.dp2px( padding), SizeTool.dp2px( padding));
                 tableRow.addView(rightTitle);
                 //
                 if (needRight) {
@@ -233,8 +233,8 @@ public class EditItemRuleHelper {
                         TableRow.LayoutParams.MATCH_PARENT));
                 rightEdit.setTag(R.id.hold_view_key, rightKey);
                 rightEdit.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightEdit.setPadding(SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding),
-                        SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding));
+                rightEdit.setPadding(SizeTool.dp2px( padding), SizeTool.dp2px( padding),
+                        SizeTool.dp2px( padding), SizeTool.dp2px( padding));
                 tableRow2.addView(rightEdit);
                 //
 
@@ -261,8 +261,8 @@ public class EditItemRuleHelper {
                         TableRow.LayoutParams.MATCH_PARENT));
                 rightEditInteger.setTag(R.id.hold_view_key, rightKey);
                 rightEditInteger.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightEditInteger.setPadding(SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding),
-                        SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding));
+                rightEditInteger.setPadding(SizeTool.dp2px( padding), SizeTool.dp2px( padding),
+                        SizeTool.dp2px( padding), SizeTool.dp2px( padding));
                 tableRow6.addView(rightEditInteger);
                 //
 
@@ -290,8 +290,8 @@ public class EditItemRuleHelper {
                         TableRow.LayoutParams.MATCH_PARENT));
                 rightEditDouble.setTag(R.id.hold_view_key, rightKey);
                 rightEditDouble.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightEditDouble.setPadding(SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding),
-                        SizeTool.dp2px(context, padding), SizeTool.dp2px(context, padding));
+                rightEditDouble.setPadding(SizeTool.dp2px( padding), SizeTool.dp2px( padding),
+                        SizeTool.dp2px( padding), SizeTool.dp2px( padding));
                 tableRow7.addView(rightEditDouble);
                 //
 
@@ -339,8 +339,8 @@ public class EditItemRuleHelper {
                 rightDate.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.MATCH_PARENT));
                 rightDate.setTag(R.id.hold_view_key, rightKey);
-                rightDate.setPadding(SizeTool.dp2px(context, paddingCustomLeftRight), SizeTool.dp2px(context, paddingCustomTopBottom),
-                        SizeTool.dp2px(context, paddingCustomLeftRight), SizeTool.dp2px(context, paddingCustomTopBottom));
+                rightDate.setPadding(SizeTool.dp2px( paddingCustomLeftRight), SizeTool.dp2px( paddingCustomTopBottom),
+                        SizeTool.dp2px( paddingCustomLeftRight), SizeTool.dp2px( paddingCustomTopBottom));
                 tableRow3.addView(rightDate);
                 //
                 if (rightImage != null) {
@@ -429,10 +429,10 @@ public class EditItemRuleHelper {
                     }
                 });
                 rightSelect.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                        VectorOrImageResHelper.getDrawable(context, R.drawable.ic_keyboard_arrow_right_black_24dp), null);
+                        VectorOrImageResHelper.getDrawable( R.drawable.ic_keyboard_arrow_right_black_24dp), null);
                 rightSelect.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightSelect.setPadding(SizeTool.dp2px(fragmentActivity, paddingCustomLeftRight), SizeTool.dp2px(fragmentActivity, paddingCustomTopBottom),
-                        SizeTool.dp2px(fragmentActivity, paddingCustomLeftRight), SizeTool.dp2px(fragmentActivity, paddingCustomTopBottom));
+                rightSelect.setPadding(SizeTool.dp2px( paddingCustomLeftRight), SizeTool.dp2px( paddingCustomTopBottom),
+                        SizeTool.dp2px( paddingCustomLeftRight), SizeTool.dp2px( paddingCustomTopBottom));
                 tableRow5.addView(rightSelect);
                 //
                 if (rightImage != null) {

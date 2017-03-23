@@ -20,4 +20,11 @@ public class CommPresenterHelper {
         }
         return canNotContinue;
     }
+
+    public static void doErrorThing(BasicContract.View mView,String errorStr){
+        if (mView != null) {
+            mView.hideProgress();
+            mView.showMessage(errorStr);
+        }
+    }
 }

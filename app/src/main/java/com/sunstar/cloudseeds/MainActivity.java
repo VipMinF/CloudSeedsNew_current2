@@ -143,8 +143,8 @@ public class MainActivity extends ClassicActivity{
 
             }
             mClassicTitleBar.setRightText(company)
-                    .setLeftAndRightTextSize(SizeTool.dp2px(this,12))
-                    .setRightMaxWidth(SizeTool.dp2px(this,210));
+                    .setLeftAndRightTextSize(SizeTool.dp2px(12))
+                    .setRightMaxWidth(SizeTool.dp2px(210));
         }
     }
 
