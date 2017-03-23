@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.tool.SizeTool;
 import com.classichu.classichu.classic.ClassicActivity;
+import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
+import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.ui.MainFragment;
 import com.sunstar.cloudseeds.ui.ScanFragment;
 import com.sunstar.cloudseeds.ui.SearchFragment;
@@ -134,7 +136,11 @@ public class MainActivity extends ClassicActivity{
         setAppBarTitle("首页");
         //
         if (mClassicTitleBar!=null){
-            mClassicTitleBar.setRightText("浙江美之澳科技有限公司")
+            //update by lzy -2017.3.21
+            UserLoginBean userloginbean = UserLoginHelper.userLoginBean(this);
+            String company=userloginbean.getCompany();
+            if (company==null) company="";
+            mClassicTitleBar.setRightText(company)
                     .setLeftAndRightTextSize(SizeTool.dp2px(this,12))
                     .setRightMaxWidth(SizeTool.dp2px(this,210));
         }

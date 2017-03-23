@@ -14,7 +14,7 @@ public class LoginContract {
     }
 
     public interface Presenter {
-        void gainData();
+        void gainData(String loginname,String password);
     }
 
     public interface Model<D> extends BasicContract.Model<D>{

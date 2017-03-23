@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
 
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.BasicCallBack;
@@ -43,7 +44,6 @@ public class ScanQrcodeActivity extends ClassicActivity  {
         mQRCodeView.setDelegate(new QRCodeView.Delegate() {
             @Override
             public void onScanQRCodeSuccess(String result) {
-
                 //暂停
                 //###pauseScan();
                 /**
@@ -52,7 +52,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
                 Vibrator vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
                 vibrator.vibrate(200);
                 //停止识别
-                mQRCodeView.stopSpot();
+                mQRCodeView.startSpot();
                 ToastTool.showLong(result);
                 //校验二维码或者绑定二维码
                 checkOrBindQrcode(result);
@@ -141,7 +141,6 @@ public class ScanQrcodeActivity extends ClassicActivity  {
         qrcodemodelImpl.loadData(UrlDatas.CheckOrBindQrCode_URL ,qrcode,bindId,new BasicCallBack<QrcodeBean>(){
             @Override
             public void onSuccess(QrcodeBean qrcodeBean) {
-
                 //DialogManager.hideLoadingDialog();
                 ToastTool.showShort(qrcodeBean.getShow_msg().toString());
                 handelWithResult(qrcodeBean);
@@ -156,7 +155,6 @@ public class ScanQrcodeActivity extends ClassicActivity  {
 
 
     private  void  handelWithResult(QrcodeBean qrcodeBean){
-
 
         int scanqrcodeType=getBundleExtraInt1();
         switch (scanqrcodeType)
@@ -184,6 +182,10 @@ public class ScanQrcodeActivity extends ClassicActivity  {
 
                     goToSPQDetailFragment(userloginbean.getUserid(),qrcodeBean.getTertiary_id().toString());
                 }
+
+                mQRCodeView.stopCamera();
+                mQRCodeView.setVisibility(View.GONE);
+
                 break;
         }
 

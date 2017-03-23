@@ -4,32 +4,30 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.tool.SizeTool;
-import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicActivity;
+import com.classichu.dialogview.manager.DialogManager;
 import com.sunstar.cloudseeds.MainActivity;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
-import com.sunstar.cloudseeds.logic.login.model.LoginModelImpl;
+import com.sunstar.cloudseeds.logic.login.contract.LoginContract;
+import com.sunstar.cloudseeds.logic.login.presenter.LoginPresenterImpl;
 
-import static android.Manifest.permission.READ_CONTACTS;
 import static com.sunstar.cloudseeds.R.id.email;
 
-public class LoginActivity extends ClassicActivity  {
+public class LoginActivity extends ClassicActivity implements LoginContract.View<UserLoginBean>{
 
     public static final int LOGIN_V = 2;
     public static final String FILENAME_USERLOGIN = "userlogin"+ LOGIN_V+".dat";
@@ -38,17 +36,13 @@ public class LoginActivity extends ClassicActivity  {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
+    private Handler handler=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mcontext=this;
-
+        handler=new Handler();
     }
 
     @Override
@@ -62,7 +56,7 @@ public class LoginActivity extends ClassicActivity  {
         initAppBar();
         //账号输入框
         mUsernameView = (AutoCompleteTextView) findViewById(email);
-        populateAutoComplete();
+        //populateAutoComplete();
         //密码输入框
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -94,6 +88,39 @@ public class LoginActivity extends ClassicActivity  {
 
     @Override
     protected void initListener() {
+    }
+
+    @Override
+    public void showProgress() {
+        showProgress(true);
+    }
+    @Override
+    public void hideProgress() {
+
+        handler.post(runnableUi);
+    }
+
+    //runnable中更新界面
+    Runnable  runnableUi=new  Runnable(){
+        @Override
+        public void run() {
+            showProgress(false);
+        }
+    };
+
+    @Override
+    public void showMessage(String msg) {
+        DialogManager.showTipDialog(this,"提示", msg, null);
+    }
+    @Override
+    public void setupData(UserLoginBean userloginbean) {
+
+        UserLoginHelper.saveUserLoginBean_ToAcahe(mcontext,userloginbean);
+        startAty(MainActivity.class);
+        finish();
+    }
+    @Override
+    public void setupMoreData(UserLoginBean userloginbean) {
 
     }
 
@@ -105,36 +132,6 @@ public class LoginActivity extends ClassicActivity  {
                     .setLeftAndRightTextSize(SizeTool.dp2px(this,22))
                     .setLeftMaxWidth(SizeTool.dp2px(this,200));
         }
-    }
-
-    //加载本地账户
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-       // getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mUsernameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
     }
 
 
@@ -173,26 +170,15 @@ public class LoginActivity extends ClassicActivity  {
             focusView.requestFocus();
         } else {
 
-            showProgress(true);
-            //mAuthTask = new UserLoginTask(email, password);
-            //mAuthTask.execute((Void) null);
-            LoginModelImpl loginmodelimpl= new LoginModelImpl();
-            loginmodelimpl.loadData(UrlDatas.Login_URL ,username,password,new BasicCallBack<UserLoginBean>(){
-                @Override
-                public void onSuccess(UserLoginBean userloginBean) {
+            //强制隐藏键盘
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
 
-                    showProgress(false);
-                    UserLoginHelper.saveUserLoginBean_ToAcahe(mcontext,userloginBean);
-                    ToastTool.showShort("登录成功");
-                    startAty(MainActivity.class);
-                    finish();
-                }
-                @Override
-                public void onError(String s) {
-                    showProgress(false);
-                    ToastTool.showShort(s);
-                }
-            });
+            //执行登录
+            String entrytedPsw = UserLoginHelper.entryptionPassword(password);
+            LoginPresenterImpl loginperenter= new LoginPresenterImpl(this);
+            loginperenter.gainData(username,entrytedPsw);
+
         }
     }
 
@@ -213,9 +199,7 @@ public class LoginActivity extends ClassicActivity  {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -237,10 +221,10 @@ public class LoginActivity extends ClassicActivity  {
                 }
             });
         } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
+
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
+
 }
