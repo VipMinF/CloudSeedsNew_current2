@@ -1,7 +1,6 @@
 package com.sunstar.cloudseeds.logic.usercenter;
 
-import android.content.DialogInterface;
-import android.os.Handler;
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
@@ -12,10 +11,8 @@ import com.classichu.classichu.basic.tool.PasswordToggleViewTool;
 import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicActivity;
 import com.classichu.dialogview.manager.DialogManager;
-import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.UrlDatas;
-import com.sunstar.cloudseeds.logic.login.LoginActivity;
 import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.logic.usercenter.bean.SimpleBean;
@@ -90,9 +87,8 @@ public class ChangePasswordActivity extends ClassicActivity {
             public void onSuccess(SimpleBean simpleBean) {
 
                 DialogManager.hideLoadingDialog();
-                //ToastTool.showShortCenter(simpleBean.getShow_msg());
                 UserLoginHelper.loginOut(mContext);
-                showDialog();
+                goBack();
             }
             @Override
             public void onError(String s) {
@@ -160,35 +156,10 @@ public class ChangePasswordActivity extends ClassicActivity {
         return true;
     }
 
+    private void  goBack(){
 
-    private void showDialog(){
-
-        DialogManager.showTipDialog(this, "密码修改成功!", "您的密码已修改，请重新登录!", new ClassicDialogFragment.OnBtnClickListener() {
-            @Override
-            public void onBtnClickOk(DialogInterface dialogInterface) {
-                super.onBtnClickOk(dialogInterface);
-                goTOLoginActivity();
-            }
-        });
-    }
-
-    /**
-     * 延迟x毫秒进入
-     */
-    private void delayJump(long delayMilliseconds) {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                goTOLoginActivity();
-            }
-        }, delayMilliseconds);
-    }
-
-    private void  goTOLoginActivity(){
-
-        startAty(LoginActivity.class);
-        setResult(RESULT_OK);
+        Intent intent = new Intent();
+        setResult(RESULT_FIRST_USER,intent);
         this.finish();
     }
 
