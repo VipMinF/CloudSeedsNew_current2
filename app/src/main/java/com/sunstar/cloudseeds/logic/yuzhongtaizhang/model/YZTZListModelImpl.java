@@ -4,6 +4,7 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZListBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZListContract;
 
@@ -26,7 +27,7 @@ public class YZTZListModelImpl implements YZTZListContract.Model<List<YZTZListBe
         paramsMap.put("pagenum",String.valueOf(pageNum));
         paramsMap.put("pagesize",String.valueOf(pageSize));
         paramsMap.put("search_keyword",keyword);
-        HttpRequestManagerFactory.getRequestManager().getUrlBackStr(url,null,
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<YZTZListBean>>() {
                     @Override
                     public BasicBean<YZTZListBean> OnSuccess(String result) {
@@ -44,6 +45,11 @@ public class YZTZListModelImpl implements YZTZListContract.Model<List<YZTZListBe
                             lb.setSeed_batches("种子批号"+i);
                             lb.setSow_num("50"+i);
                             lb.setConfirm_num("30"+i);
+                           if (i%3==0){
+                               lb.setStatus("2");
+                           }else{
+                               lb.setStatus("1");
+                           }
                             lbL.add(lb);
                         }
                       //##  basicBean.getInfo().get(0).setList(lbL);

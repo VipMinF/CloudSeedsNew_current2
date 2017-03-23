@@ -4,6 +4,7 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.xuanzhu.bean.XuanZhuListBean;
 import com.sunstar.cloudseeds.logic.xuanzhu.contract.XuanZhuListContract;
 
@@ -25,7 +26,7 @@ public  class XuanZhuListModelImpl implements XuanZhuListContract.Model<List<Xua
         paramsMap.put("pagenum",String.valueOf(pageNum));
         paramsMap.put("pagesize",String.valueOf(pageSize));
         paramsMap.put("search_keyword",keyword);
-        HttpRequestManagerFactory.getRequestManager().getUrlBackStr(url,null,
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<XuanZhuListBean>>() {
                     @Override
                     public BasicBean<XuanZhuListBean> OnSuccess(String result) {

@@ -4,6 +4,7 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.usercenter.bean.SimpleBean;
 import com.sunstar.cloudseeds.logic.usercenter.contract.ChangePassWordContract;
 
@@ -23,7 +24,7 @@ public class ChangePassWordImpl implements ChangePassWordContract.Model<SimpleBe
         paramsMap.put("password2",psw_again);
         paramsMap.put("passwordOld",psw_old);
 
-        HttpRequestManagerFactory.getRequestManager().getUrlBackStr(url,null,
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<SimpleBean>>() {
                     @Override
                     public BasicBean<SimpleBean> OnSuccess(String result) {

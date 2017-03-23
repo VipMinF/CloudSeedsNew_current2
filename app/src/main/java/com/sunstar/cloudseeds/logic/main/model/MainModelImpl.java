@@ -4,6 +4,7 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.main.bean.TaiZhangBean;
 import com.sunstar.cloudseeds.logic.main.contract.MainContract;
 
@@ -25,7 +26,7 @@ public class MainModelImpl implements MainContract.Model<List<TaiZhangBean.ListB
         paramsMap.put("pagenum",String.valueOf(pageNum));
         paramsMap.put("pagesize",String.valueOf(pageSize));
         paramsMap.put("search_keyword","");
-        HttpRequestManagerFactory.getRequestManager().getUrlBackStr(url,null,
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<TaiZhangBean>>() {
             @Override
             public BasicBean<TaiZhangBean> OnSuccess(String result) {
@@ -59,4 +60,7 @@ public class MainModelImpl implements MainContract.Model<List<TaiZhangBean.ListB
         });
 
     }
+
+
+
 }

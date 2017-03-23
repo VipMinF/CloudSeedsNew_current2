@@ -4,6 +4,7 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.scan.bean.QrcodeBean;
 import com.sunstar.cloudseeds.logic.scan.contract.ScanQrCodeContract;
 
@@ -20,7 +21,7 @@ public class QrcodeModelImpl implements ScanQrCodeContract.Model<QrcodeBean>{
         HashMap<String,String> paramsMap=new HashMap<>();
         paramsMap.put("qrcode_value",qrcode_value);
         paramsMap.put("secondary_or_tertiary_id",secondary_or_tertiary_id);
-        HttpRequestManagerFactory.getRequestManager().getUrlBackStr(url,null,
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<QrcodeBean>>() {
                     @Override
                     public BasicBean<QrcodeBean> OnSuccess(String result) {

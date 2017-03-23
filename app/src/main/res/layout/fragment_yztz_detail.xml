@@ -37,6 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@drawable/selector_classic_btn_item_bg"
-        android:text="调查记录" />
+        android:text="记录数据" />
 
 </LinearLayout>

@@ -20,9 +20,10 @@
             android:id="@+id/id_tl_item_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:stretchColumns="1">
+            android:stretchColumns="1"
+            >
 
-            <!--add in code-->
+            <!--add in code -->
 
 
         </TableLayout>
@@ -38,7 +39,7 @@
         android:layout_height="wrap_content"
         style="@style/ClassicButton"
         android:background="@drawable/selector_classic_btn_item_bg"
-        android:text="商品期调查"
+        android:text="记录数据"
         android:layout_gravity="bottom"
         />
 </LinearLayout>

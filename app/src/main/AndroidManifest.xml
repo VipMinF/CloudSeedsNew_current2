@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -33,14 +33,21 @@
         android:theme="@style/ClassicThemeTransparentMy">
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/ClassicThemeHasPreferenceCompatTheme" />
         <activity
             android:name=".logic.scan.ScanQrcodeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/ClassicTheme" />
-        <activity android:name=".logic.usercenter.AboutActivity" />
-        <activity android:name=".logic.usercenter.ChangePasswordActivity" />
+        <activity
+            android:name=".logic.usercenter.AboutActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name=".logic.usercenter.ChangePasswordActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/ClassicThemeSplashFullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,20 +57,24 @@
         </activity>
         <activity
             android:name=".logic.guide.GuideActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/ClassicTheme.Fullscreen" />
         <activity
             android:name=".logic.yuzhongtaizhang.YZTZActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".logic.xuanzhu.XuanZhuActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".logic.shangpinqi.SPQActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!--<activity-->
-            <!--android:name=".LoginActivity"-->
-            <!--android:label="@string/title_activity_login"-->
-            <!--android:windowSoftInputMode="stateHidden|adjustResize" />-->
+        <!--android:name=".LoginActivity"-->
+        <!--android:label="@string/title_activity_login"-->
+        <!--android:windowSoftInputMode="stateHidden|adjustResize" />-->
         <activity
             android:name=".logic.login.LoginActivity"
             android:label="@string/title_activity_login"></activity>

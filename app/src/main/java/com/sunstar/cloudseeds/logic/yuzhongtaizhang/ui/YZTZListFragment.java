@@ -1,6 +1,7 @@
 package com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.classichu.adapter.widget.ClassicEmptyView;
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
+import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
@@ -247,8 +249,14 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             public void onItemShowXuanZhu(int position) {
                 super.onItemShowXuanZhu(position);
                 //##ToastTool.showShortCenter("选株"+position);
-                //
-                startAty(XuanZhuActivity.class);
+                DialogManager.showClassicDialog(getActivity(), "选株新增", "是否新增编号为001-1的选株", new ClassicDialogFragment.OnBtnClickListener() {
+                    @Override
+                    public void onBtnClickOk(DialogInterface dialogInterface) {
+                        super.onBtnClickOk(dialogInterface);
+                        //
+                        startAty(XuanZhuActivity.class);
+                    }
+                });
             }
 
             @Override

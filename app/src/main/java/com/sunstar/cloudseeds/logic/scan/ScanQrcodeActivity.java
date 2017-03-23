@@ -191,7 +191,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
 
 
     private void  goToYZTZDetailFragment(String param1,String param2 ){
-        setAppBarTitle("族群调查");
+        setAppBarTitle("族群信息");
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.id_frame_layout_content_scansqcode, YZTZDetailFragment.newInstance(param1,param2))
                 .commitAllowingStateLoss();

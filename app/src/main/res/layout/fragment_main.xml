@@ -41,8 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_classic_form_bottom_item_bg"
-                android:text="计划类型"
-                android:textColor="@color/textColorPrimary" />
+                android:text="计划类型" />
 
         </LinearLayout>
 

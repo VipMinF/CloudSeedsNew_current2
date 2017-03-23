@@ -1,5 +1,6 @@
 package com.sunstar.cloudseeds;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
+import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.tool.SizeTool;
 import com.classichu.classichu.classic.ClassicActivity;
 import com.sunstar.cloudseeds.ui.MainFragment;
@@ -92,6 +94,12 @@ public class MainActivity extends ClassicActivity{
        mCurrentFragment = fragment;
  }
 }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        CLog.d("onConfigurationChanged");
+    }
 
     private void showMainFragment() {
         if (mMainFragment==null){

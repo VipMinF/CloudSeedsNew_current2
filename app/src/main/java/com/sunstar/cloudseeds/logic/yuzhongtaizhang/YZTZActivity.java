@@ -34,13 +34,13 @@ public class YZTZActivity extends ClassicActivity {
                         .commitAllowingStateLoss();
                 break;
             case AtyGoToWhere.DETAIL:
-                setAppBarTitle("族群调查");
+                setAppBarTitle("族群信息");
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.id_frame_layout_content, YZTZDetailFragment.newInstance("",""))
                         .commitAllowingStateLoss();
                 break;
             case AtyGoToWhere.ADD:
-                setAppBarTitle("族群调查记录");
+                setAppBarTitle("族群信息记录");
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.id_frame_layout_content, YZTZAddFragment.newInstance("",""))
                         .commitAllowingStateLoss();

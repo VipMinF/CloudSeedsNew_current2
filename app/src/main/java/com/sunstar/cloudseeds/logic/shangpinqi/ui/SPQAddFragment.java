@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
@@ -94,7 +95,9 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     private void submitData() {
       String json=  EditItemRuleHelper.generateViewBackJson(id_tl_item_container);
       CLog.d("zzqqff:"+json);
-
+        //
+        Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
+        getActivity().onBackPressed();
     }
 
     @Override
@@ -151,7 +154,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         //
         List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
         //
-        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList);
+        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList,true);
     }
 
     @Override

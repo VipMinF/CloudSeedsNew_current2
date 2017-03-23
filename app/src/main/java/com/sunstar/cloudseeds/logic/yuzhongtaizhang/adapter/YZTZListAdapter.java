@@ -54,6 +54,9 @@ public class YZTZListAdapter extends ClassicRVHeaderFooterAdapter<YZTZListBean.L
         id_tv_item_title_zpdh.setText(mDataList.get(pos).getPlant_code());
         id_tv_item_title_zzph.setText(mDataList.get(pos).getSeed_batches());
 
+
+
+
         Button id_btn_item_show_detail= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_detail);
         id_btn_item_show_detail.setOnClickListener(new OnNotFastClickListener() {
             @Override
@@ -74,15 +77,24 @@ public class YZTZListAdapter extends ClassicRVHeaderFooterAdapter<YZTZListBean.L
             }
         });
 
+
         Button id_btn_item_show_qrcode= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_qrcode);
-        id_btn_item_show_qrcode.setOnClickListener(new OnNotFastClickListener() {
-            @Override
-            protected void onNotFastClick(View view) {
-                if (onItemOperationListener!=null){
-                    onItemOperationListener.onItemShowQrcode(pos);
+        if ("1".equals(mDataList.get(pos).getStatus())){
+            //未绑定
+            id_btn_item_show_qrcode.setOnClickListener(new OnNotFastClickListener() {
+                @Override
+                protected void onNotFastClick(View view) {
+                    if (onItemOperationListener!=null){
+                        onItemOperationListener.onItemShowQrcode(pos);
+                    }
                 }
-            }
-        });
+            });
+            id_btn_item_show_qrcode.setEnabled(true);
+        }else {
+            //已绑定
+            id_btn_item_show_qrcode.setText("已绑二维码");
+            id_btn_item_show_qrcode.setEnabled(false);
+        }
     }
 
     private  OnItemOperationListener onItemOperationListener;

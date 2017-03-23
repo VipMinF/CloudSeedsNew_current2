@@ -94,6 +94,16 @@ public class SPQDetailBean {
             private List<InputOptionsBean> input_options;
             private List<InputConfigsBean> input_configs;
 
+            public List<ImagesBean> getImages() {
+                return images;
+            }
+
+            public void setImages(List<ImagesBean> images) {
+                this.images = images;
+            }
+
+            private List<ImagesBean> images;
+
             public String getKey() {
                 return key;
             }
@@ -177,6 +187,39 @@ public class SPQDetailBean {
 
                 private String option_code;
                 private String option_value;
+            }
+
+            public static class ImagesBean {
+
+
+                private String img_title;
+
+                public String getImg_title() {
+                    return img_title;
+                }
+
+                public void setImg_title(String img_title) {
+                    this.img_title = img_title;
+                }
+
+                public String getImg_url() {
+                    return img_url;
+                }
+
+                public void setImg_url(String img_url) {
+                    this.img_url = img_url;
+                }
+
+                public String getSmall_img_url() {
+                    return small_img_url;
+                }
+
+                public void setSmall_img_url(String small_img_url) {
+                    this.small_img_url = small_img_url;
+                }
+
+                private String img_url;
+                private String small_img_url;
             }
 
             public static class InputConfigsBean {

@@ -90,7 +90,7 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
     @Override
     protected void toRefreshData() {
         super.toRefreshData();
-        mPresenter.gainData(UrlDatas.YU_ZHONG_TAI_ZHANG_DETAIL);
+        mPresenter.gainData(UrlDatas.YU_ZHONG_XUAN_ZHU_DETAIL);
     }
     @Override
     protected int configSwipeRefreshLayoutResId() {
@@ -116,7 +116,7 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         //
         List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
         //
-        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList);
+        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList,false);
     }
 
     @Override

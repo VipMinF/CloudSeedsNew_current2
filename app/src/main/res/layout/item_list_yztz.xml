@@ -208,11 +208,12 @@
                 android:layout_marginTop="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="查看" />
+                android:text="族群信息" />
 
             <Button
                 android:id="@+id/id_btn_item_show_qrcode"
                 style="@style/ClassicButtonRound"
+                android:background="@drawable/selector_btn_status"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"

@@ -1,12 +1,20 @@
 package com.sunstar.cloudseeds.ui;
 
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
+import com.classichu.classichu.basic.helper.GoToSysConfigHelper;
+import com.classichu.classichu.basic.helper.PermissionsHelper;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.classic.ClassicFragment;
+import com.classichu.dialogview.manager.DialogManager;
+import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
@@ -57,15 +65,53 @@ public class ScanFragment extends ClassicFragment {
     @Override
     protected void initView(View view) {
 
-        setOnNotFastClickListener(findById(R.id.id_tv_scan), new OnNotFastClickListener() {
+        PermissionsHelper.initDangerousPermissionOperation(new PermissionsHelper.DangerousPermissionOperation() {
             @Override
-            protected void onNotFastClick(View view) {
-                Bundle bundle = createBundleExtraInt1(ScanQrCodeType.select);
-                bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), "");
-                startAty(ScanQrcodeActivity.class,bundle);
+            public void doDangerousOperation(FragmentActivity fragmentActivity, String... strings) {
+               goScanContinue();
+            }
+
+            @Override
+            public void permissionProhibition() {
+                //Toast.makeText(mContext, "没有相机权限", Toast.LENGTH_SHORT).show();
+                DialogManager.showClassicDialog(getActivity(),"打开相机出错,请允许使用相机权限，是否去应用详情设置？",
+                         "ask c", new ClassicDialogFragment.OnBtnClickListener() {
+                            @Override
+                            public void onBtnClickOk(DialogInterface dialogInterface) {
+                                super.onBtnClickOk(dialogInterface);
+                                //
+                                GoToSysConfigHelper.goToNormalEnterWithManufacturer(getActivity());
+                            }
+                        });
+
             }
         });
 
+        setOnNotFastClickListener(findById(R.id.id_tv_scan), new OnNotFastClickListener() {
+            @Override
+            protected void onNotFastClick(View view) {
+                goScan();
+            }
+        });
+
+    }
+
+    private void goScanContinue() {
+        Bundle bundle = createBundleExtraInt1(ScanQrCodeType.select);
+        bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), "");
+        startAty(ScanQrcodeActivity.class,bundle);
+    }
+
+    private void goScan() {
+        PermissionsHelper.checkPermissions(getActivity(), Manifest.permission.CAMERA);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //
+        PermissionsHelper.callAtOnRequestPermissionsResult(getActivity(),requestCode,permissions,grantResults);
     }
 
     @Override
