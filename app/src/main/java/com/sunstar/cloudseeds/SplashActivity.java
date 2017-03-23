@@ -4,11 +4,15 @@ import android.os.Handler;
 import android.widget.ImageView;
 
 import com.classichu.classichu.app.CLog;
+import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.data.FinalData;
 import com.classichu.classichu.basic.factory.imageloader.ImageLoaderFactory;
 import com.classichu.classichu.basic.tool.SharedPreferencesTool;
 import com.classichu.classichu.classic.ClassicActivity;
 import com.sunstar.cloudseeds.logic.guide.GuideActivity;
+import com.sunstar.cloudseeds.logic.login.LoginActivity;
+import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
+import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 
 public class SplashActivity extends ClassicActivity {
 
@@ -23,8 +27,6 @@ public class SplashActivity extends ClassicActivity {
         ImageView id_iv_start_image = findById(R.id.id_iv_start_image);
         //  GlideHelper.displayImageRes(id_iv_start_image, R.drawable.img_welcome);
         ImageLoaderFactory.getManager().displayImage(id_iv_start_image, R.drawable.img_welcome);
-
-
         delayJump(1000);
     }
 
@@ -48,13 +50,12 @@ public class SplashActivity extends ClassicActivity {
      */
     private void delayJump(long delayMilliseconds) {
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    nextWhere();
-                }
-            }, delayMilliseconds);
-
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                nextWhere();
+            }
+        }, delayMilliseconds);
     }
 
 
@@ -67,6 +68,12 @@ public class SplashActivity extends ClassicActivity {
         startAty(MainActivity.class);
         finish();
     }
+
+    private void goToLogin() {
+        startAty(LoginActivity.class);
+        finish();
+    }
+
     /**
      *
      */
@@ -76,11 +83,29 @@ public class SplashActivity extends ClassicActivity {
                 FinalData.SP_HAS_OPENED_GUIDE, false);
         CLog.d("hasOpenedGuide DD:" + hasOpenedGuide);
         if (hasOpenedGuide) {
-            goToMain();
+
+            UserLoginHelper.autoLogin_Online(mContext, new BasicCallBack<UserLoginBean>() {
+                @Override
+                public void onSuccess(UserLoginBean userLoginBean) {
+                    goToMain();
+                }
+                @Override
+                public void onError(String s) {
+
+                    goToLogin();
+
+                }
+            });
+
+//            if (UserLoginHelper.autoLogin_Onlocal(mContext)){
+//                goToMain();
+//
+//            }else {
+//                goToLogin();
+//            }
+
         } else {
             goToGuide();
         }
     }
-
-
 }
