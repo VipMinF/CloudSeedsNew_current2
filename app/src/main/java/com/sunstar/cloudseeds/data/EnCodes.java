@@ -90,4 +90,23 @@ public class EnCodes {
         return bytes;
     }
 
+    /**
+     * 生成固定的的Byte[]作为salt.
+     *
+     */
+    public static byte[] generateSalt() {
+        byte[] bytes = new byte[8];
+        //添加数据
+        bytes[0]=107;
+        bytes[1]=69;
+        bytes[2]=-66;
+        bytes[3]=-96;
+        bytes[4]=-62;
+        bytes[5]=83;
+        bytes[6]=22;
+        bytes[7]=88;
+        return bytes;
+    }
+
+
 }

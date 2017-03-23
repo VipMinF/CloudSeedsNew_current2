@@ -1,16 +1,13 @@
 package com.sunstar.cloudseeds.logic.login;
 
 import android.content.Context;
+
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.extend.ACache;
-import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.data.EnCodes;
+import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.logic.login.model.LoginModelImpl;
-
-import static com.sunstar.cloudseeds.data.EnCodes.decodeHex;
-import static com.sunstar.cloudseeds.data.EnCodes.digest;
-import static com.sunstar.cloudseeds.data.EnCodes.unescapeHtml;
 
 
 /**
@@ -81,11 +78,11 @@ public class UserLoginHelper {
 
 
     /**
-     * 生成加密的密码，生成随机的16位salt并经过1024次 sha-1 hash
+     * 明文密码加密
      */
     public static String entryptionPassword(String plainPassword) {
-        String plain = unescapeHtml(plainPassword);
-        byte[] salt = EnCodes.generateSalt(SALT_SIZE);
+        String plain =  EnCodes.unescapeHtml(plainPassword);
+        byte[] salt = EnCodes.generateSalt();
         byte[] hashPassword = EnCodes.digest(plain.getBytes(), SHA1,salt, HASH_INTERATIONS);
         return  EnCodes.encodeHex(salt)+ EnCodes.encodeHex(hashPassword);
     }
@@ -96,9 +93,9 @@ public class UserLoginHelper {
      */
     public static Boolean validatePassWord(String psw,String entryptedPsw){
 
-        String pain= unescapeHtml(psw);
-        byte[] salt =decodeHex(entryptedPsw.substring(0,16));
-        byte[] hashPassword =digest(pain.getBytes(), SHA1,salt, HASH_INTERATIONS);
+        String pain=  EnCodes.unescapeHtml(psw);
+        byte[] salt = EnCodes.decodeHex(entryptedPsw.substring(0,16));
+        byte[] hashPassword = EnCodes.digest(pain.getBytes(), SHA1,salt, HASH_INTERATIONS);
         String psssword =  EnCodes.encodeHex(salt)  +  EnCodes.encodeHex(hashPassword);
         return entryptedPsw.equals(psssword);
     }

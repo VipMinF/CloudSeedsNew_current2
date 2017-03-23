@@ -4,7 +4,6 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
-import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.usercenter.bean.SimpleBean;
 import com.sunstar.cloudseeds.logic.usercenter.contract.ChangePassWordContract;
 
@@ -23,8 +22,7 @@ public class ChangePassWordImpl implements ChangePassWordContract.Model<SimpleBe
         paramsMap.put("password",psw);
         paramsMap.put("password2",psw_again);
         paramsMap.put("passwordOld",psw_old);
-
-        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url,null, paramsMap,
                 new GsonHttpRequestCallback<BasicBean<SimpleBean>>() {
                     @Override
                     public BasicBean<SimpleBean> OnSuccess(String result) {
@@ -35,7 +33,11 @@ public class ChangePassWordImpl implements ChangePassWordContract.Model<SimpleBe
                     public void OnSuccessOnUI(BasicBean<SimpleBean> basicBean) {
                         SimpleBean simpleBean=basicBean.getInfo().get(0);
                         if ("1".equals(basicBean.getCode())){
-                            basicCallBack.onSuccess(simpleBean);
+                            if (simpleBean.getShow_code().equals("1")){
+                                basicCallBack.onSuccess(simpleBean);
+                            }else{
+                                basicCallBack.onError(simpleBean.getShow_msg());
+                            }
                         }else{
                             basicCallBack.onError(basicBean.getMessage());
                         }
@@ -51,5 +53,8 @@ public class ChangePassWordImpl implements ChangePassWordContract.Model<SimpleBe
     public void loadData(String s, int i, int i1, String s1, BasicCallBack<SimpleBean> basicCallBack) {
 
     }
+
+
+
 
 }

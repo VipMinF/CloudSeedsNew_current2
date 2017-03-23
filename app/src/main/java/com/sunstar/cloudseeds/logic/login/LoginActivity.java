@@ -176,6 +176,7 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
 
             //执行登录
             String entrytedPsw = UserLoginHelper.entryptionPassword(password);
+            Boolean bb=UserLoginHelper.validatePassWord(password,entrytedPsw);
             LoginPresenterImpl loginperenter= new LoginPresenterImpl(this);
             loginperenter.gainData(username,entrytedPsw);
 

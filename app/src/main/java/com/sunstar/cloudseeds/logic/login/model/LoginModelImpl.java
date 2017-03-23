@@ -5,7 +5,6 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
-import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.logic.login.contract.LoginContract;
 
@@ -23,7 +22,7 @@ public class LoginModelImpl implements LoginContract.Model<UserLoginBean>{
         HashMap<String,String> paramsMap=new HashMap<>();
         paramsMap.put("username",username);
         paramsMap.put("password",psw);
-        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url,null,paramsMap,
                 new GsonHttpRequestCallback<BasicBean<UserLoginBean>>() {
                     @Override
                     public BasicBean<UserLoginBean> OnSuccess(String result) {
@@ -34,8 +33,14 @@ public class LoginModelImpl implements LoginContract.Model<UserLoginBean>{
                     public void OnSuccessOnUI(BasicBean<UserLoginBean> basicBean) {
                         UserLoginBean userloginBean=basicBean.getInfo().get(0);
                         if ("1".equals(basicBean.getCode())){
-                            userloginBean.setPassword(psw);
-                            basicCallBack.onSuccess(userloginBean);
+
+                            if (userloginBean.getShow_code().equals("1")){
+                                userloginBean.setPassword(psw);
+                                basicCallBack.onSuccess(userloginBean);
+
+                            }else{
+                                basicCallBack.onError(userloginBean.getShow_msg());
+                            }
                         }else{
                             basicCallBack.onError(basicBean.getMessage());
                         }
