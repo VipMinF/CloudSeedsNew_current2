@@ -13,6 +13,7 @@ import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
+import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
@@ -129,7 +130,10 @@ public class YZTZAddFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
                     @Override
                     public void OnSuccessOnUI(BasicBean<InfoBean> infoBeanBasicBean) {
                         if ("1".equals(infoBeanBasicBean.getCode())) {
-                            showMessage(infoBeanBasicBean.getInfo().get(0).getShow_msg());
+                            ToastTool.showShort(infoBeanBasicBean.getInfo().get(0).getShow_msg());
+                            //
+                            getActivity().onBackPressed();
+
                         } else {
                             showMessage(infoBeanBasicBean.getInfo().get(0).getShow_msg());
                         }

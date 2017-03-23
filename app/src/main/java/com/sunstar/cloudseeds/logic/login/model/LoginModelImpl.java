@@ -34,7 +34,7 @@ public class LoginModelImpl implements LoginContract.Model<UserLoginBean>{
                         UserLoginBean userloginBean=basicBean.getInfo().get(0);
                         if ("1".equals(basicBean.getCode())){
 
-                            if (userloginBean.getShow_code().equals("1")){
+                            if ("1".equals(userloginBean.getShow_code())){
                                 userloginBean.setPassword(psw);
                                 basicCallBack.onSuccess(userloginBean);
 

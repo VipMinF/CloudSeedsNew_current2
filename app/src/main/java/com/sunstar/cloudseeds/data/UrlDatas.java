@@ -39,16 +39,16 @@ public class UrlDatas {
             SECONDARY_SAVE=String.format("%s%s",BASE_URL_Local,"api/project/secondary/save");
     //
     public  static  final String
-            TERTIARY_LIST=String.format("%s%s",BASE_URL,"api/project/tertiary/list");
+            TERTIARY_LIST=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/list");
 
     public  static  final String
-            TERTIARY_DETAIL=String.format("%s%s",BASE_URL,"api/project/tertiary/detail");
+            TERTIARY_DETAIL=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/detail");
 
     public  static  final String
-            TERTIARY_EDIT=String.format("%s%s",BASE_URL,"api/project/tertiary/edit");
+            TERTIARY_EDIT=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/edit");
 
     public  static  final String
-            TERTIARY_SAVE=String.format("%s%s",BASE_URL,"api/project/tertiary/save");
+            TERTIARY_SAVE=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/save");
 
     /**
      * 用户相关

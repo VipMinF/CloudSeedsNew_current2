@@ -35,7 +35,7 @@ dependencies {
     compile 'com.github.classichu:ClassicDropSelectView:1.0.5'
     compile 'com.github.classichu:ClassicLinesEditView:1.0.4'
     compile 'com.github.classichu:ClassicDateSelectView:1.0.4'
-    compile 'com.github.classichu:Classichu:1.1.7'
+    compile 'com.github.classichu:Classichu:1.1.8'
     compile 'com.github.classichu:ClassicItemSelector:1.0.8'
     compile 'com.github.classichu:ClassicPhotoSelector:1.0.1'
     compile 'com.makeramen:roundedimageview:2.3.0'

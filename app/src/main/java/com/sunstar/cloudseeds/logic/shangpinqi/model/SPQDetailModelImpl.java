@@ -23,7 +23,7 @@ public class SPQDetailModelImpl implements SPQDetailContract.Model<SPQDetailBean
     @Override
     public void loadData(String url, final BasicCallBack<SPQDetailBean> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
-        paramsMap.put("userid","21");
+        paramsMap.put("id","f275ce6d5ed343449d65fe2d9f3ad313");
 
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<SPQDetailBean>>() {
@@ -35,10 +35,8 @@ public class SPQDetailModelImpl implements SPQDetailContract.Model<SPQDetailBean
 
                     @Override
                     public void OnSuccessOnUI(BasicBean<SPQDetailBean> basicBean) {
-
-                        SPQDetailBean yztzDetailBean=basicBean.getInfo().get(0);
-
                         if ("1".equals(basicBean.getCode())){
+                            SPQDetailBean yztzDetailBean=basicBean.getInfo().get(0);
                             basicCallBack.onSuccess(yztzDetailBean);
                         }else{
                             basicCallBack.onError(basicBean.getMessage());

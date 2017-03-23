@@ -36,6 +36,6 @@ public class XuanZhuActivity extends ClassicActivity {
 
     @Override
     protected void initListener() {
-
+       // OkHttpSingleton.getInstance().doGet();
     }
 }

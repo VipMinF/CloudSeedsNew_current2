@@ -79,6 +79,14 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
+        //// FIXME: 2017/3/23
+        mUsernameSignInButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                startAty(MainActivity.class);
+                return true;
+            }
+        });
     }
 
     @Override
