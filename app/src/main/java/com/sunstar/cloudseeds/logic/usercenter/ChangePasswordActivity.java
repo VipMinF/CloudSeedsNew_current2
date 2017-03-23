@@ -1,6 +1,7 @@
 package com.sunstar.cloudseeds.logic.usercenter;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
@@ -72,32 +73,6 @@ public class ChangePasswordActivity extends ClassicActivity {
 
     }
 
-    private void subMitNewPassWord() {
-
-        if (!checkPassWordInfo()) return;
-
-        DialogManager.showLoadingDialog(this);
-        String old_paw = old_password.getText().toString();
-        String psw = password.getText().toString();
-        String psw_again = password_again.getText().toString();
-        UserLoginBean userloginben = UserLoginHelper.userLoginBean(this);
-        ChangePassWordImpl changepswImpl = new ChangePassWordImpl();
-        changepswImpl.loadData(UrlDatas.ChangePassWord_URL,userloginben.getUserid(), old_paw, psw, psw_again, new BasicCallBack<SimpleBean>() {
-            @Override
-            public void onSuccess(SimpleBean simpleBean) {
-
-                DialogManager.hideLoadingDialog();
-                UserLoginHelper.loginOut(mContext);
-                goBack();
-            }
-            @Override
-            public void onError(String s) {
-                ToastTool.showShort(s);
-            }
-
-        });
-    }
-
 
     private Boolean checkPassWordInfo(){
 
@@ -155,6 +130,48 @@ public class ChangePasswordActivity extends ClassicActivity {
 
         return true;
     }
+
+    private void subMitNewPassWord() {
+
+        if (!checkPassWordInfo()) return;
+
+        DialogManager.showLoadingDialog(this);
+        String old_paw =UserLoginHelper.entryptionPassword(old_password.getText().toString());
+        String psw =UserLoginHelper.entryptionPassword(password.getText().toString());
+        String psw_again =UserLoginHelper.entryptionPassword(password_again.getText().toString());
+        UserLoginBean userloginben = UserLoginHelper.userLoginBean(this);
+        ChangePassWordImpl changepswImpl = new ChangePassWordImpl();
+        changepswImpl.loadData(UrlDatas.ChangePassWord_URL,userloginben.getUserid(), old_paw, psw, psw_again, new BasicCallBack<SimpleBean>() {
+            @Override
+            public void onSuccess(SimpleBean simpleBean) {
+
+                DialogManager.hideLoadingDialog();
+                ToastTool.showShortCenter(simpleBean.getShow_msg());
+                UserLoginHelper.loginOut(mContext);
+                delayJump(1000);
+            }
+            @Override
+            public void onError(String s) {
+                DialogManager.hideLoadingDialog();
+                ToastTool.showShortCenter(s);
+            }
+
+        });
+    }
+
+    /**
+     * 延迟x毫秒进入
+     */
+    private void delayJump(long delayMilliseconds) {
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                goBack();
+            }
+        }, delayMilliseconds);
+    }
+
 
     private void  goBack(){
 

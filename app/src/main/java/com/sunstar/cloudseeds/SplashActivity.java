@@ -91,21 +91,21 @@ public class SplashActivity extends ClassicActivity {
                 }
                 @Override
                 public void onError(String s) {
-
+                    //Handler handler= new Handler();
+                    //handler.post(runnableUi);
                     goToLogin();
-
                 }
             });
-
-//            if (UserLoginHelper.autoLogin_Onlocal(mContext)){
-//                goToMain();
-//
-//            }else {
-//                goToLogin();
-//            }
-
         } else {
             goToGuide();
         }
     }
+
+    Runnable  runnableUi=new  Runnable(){
+        @Override
+        public void run() {
+            goToLogin();
+        }
+    };
+
 }

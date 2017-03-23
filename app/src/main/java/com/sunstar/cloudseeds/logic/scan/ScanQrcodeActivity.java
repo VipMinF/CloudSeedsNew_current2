@@ -31,6 +31,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
     private QRCodeView mQRCodeView;
     private Context mcontext;
     private String bindId;
+    private String qrcode;
     @Override
     protected int setupLayoutResId() {
         return R.layout.activity_scan_qrcode;
@@ -40,6 +41,9 @@ public class ScanQrcodeActivity extends ClassicActivity  {
     protected void initView() {
         setAppBarTitle("扫一扫");
         mcontext=this;
+        String key=getResources().getString(R.string.scanqrcode_bundleextrakey_bindId);
+        bindId=this.getBundleExtra().getString(key);
+
         mQRCodeView = (ZBarView) findViewById(R.id.id_zbarview);
         mQRCodeView.setDelegate(new QRCodeView.Delegate() {
             @Override
@@ -52,10 +56,11 @@ public class ScanQrcodeActivity extends ClassicActivity  {
                 Vibrator vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
                 vibrator.vibrate(200);
                 //停止识别
-                mQRCodeView.startSpot();
-                ToastTool.showLong(result);
+                //mQRCodeView.startSpot();
+                pauseScan();
+                qrcode=result;
                 //校验二维码或者绑定二维码
-                checkOrBindQrcode(result);
+                checkOrBindQrcode(qrcode);
             }
 
             @Override
@@ -131,24 +136,22 @@ public class ScanQrcodeActivity extends ClassicActivity  {
     }
 
 
-    private void checkOrBindQrcode(String qrcode ){
+    private void checkOrBindQrcode(String qrcode){
 
-        //DialogManager.showCustomLoadingDialog(this);
-        String key=getResources().getString(R.string.scanqrcode_bundleextrakey_bindId);
-        bindId=this.getBundleExtra().getString(key);
+        DialogManager.showCustomLoadingDialog(this);
 
         final QrcodeModelImpl qrcodemodelImpl = new QrcodeModelImpl();
         qrcodemodelImpl.loadData(UrlDatas.CheckOrBindQrCode_URL ,qrcode,bindId,new BasicCallBack<QrcodeBean>(){
             @Override
             public void onSuccess(QrcodeBean qrcodeBean) {
-                //DialogManager.hideLoadingDialog();
-                ToastTool.showShort(qrcodeBean.getShow_msg().toString());
+                DialogManager.hideLoadingDialog();
                 handelWithResult(qrcodeBean);
             }
             @Override
             public void onError(String s) {
-                //DialogManager.hideLoadingDialog();
+                DialogManager.hideLoadingDialog();
                 ToastTool.showShort(s);
+                continueScan();
             }
         });
     }
@@ -157,22 +160,40 @@ public class ScanQrcodeActivity extends ClassicActivity  {
     private  void  handelWithResult(QrcodeBean qrcodeBean){
 
         int scanqrcodeType=getBundleExtraInt1();
+        ToastTool.showShort(qrcodeBean.getShow_msg().toString());
+
         switch (scanqrcodeType)
         {
             case  ScanQrCodeType.bind_zuqun:
-
+                //绑定失败
+                if (!qrcodeBean.getShow_code().equals("1")){
+                    DialogManager.showTipDialog(this,"绑定失败!","请重新扫描绑定",null);
+                    continueScan();
+                    return;
+                }
                 this.finish();
 
                 break;
 
             case  ScanQrCodeType.bind_xuanzhu:
-
+                //绑定失败
+                if (!qrcodeBean.getShow_code().equals("1")){
+                    DialogManager.showTipDialog(this,"绑定失败!","请重新扫描绑定",null);
+                    continueScan();
+                    return;
+                }
                 this.finish();
 
                 break;
 
             case  ScanQrCodeType.select:
 
+
+                //没有绑定，手动输入绑定Id
+                if (!qrcodeBean.getShow_code().equals("1")){
+                    editBindId();
+                    return;
+                }
                 UserLoginBean userloginbean= UserLoginHelper.userLoginBean(mcontext);
                 if (qrcodeBean.getSecondary_id()!=null && qrcodeBean.getSecondary_id().length()>0) {
 
@@ -182,12 +203,33 @@ public class ScanQrcodeActivity extends ClassicActivity  {
 
                     goToSPQDetailFragment(userloginbean.getUserid(),qrcodeBean.getTertiary_id().toString());
                 }
-
                 mQRCodeView.stopCamera();
                 mQRCodeView.setVisibility(View.GONE);
-
                 break;
         }
+
+    }
+
+
+    private void editBindId(){
+
+        DialogManager.showEditDialog(this, "该二维码未绑定", "是否进行绑定？", new DialogManager.OnEditDialogBtnClickListener() {
+            @Override
+            public void onBtnClickOk(DialogInterface dialogInterface, String inputText) {
+                super.onBtnClickOk(dialogInterface, inputText);
+                if (inputText.length()>0){
+                    bindId=inputText;
+                    checkOrBindQrcode(qrcode);
+                }else {
+                    continueScan();
+                }
+            }
+            @Override
+            public void onBtnClickCancel(DialogInterface dialogInterface) {
+
+                continueScan();
+            }
+        });
 
     }
 

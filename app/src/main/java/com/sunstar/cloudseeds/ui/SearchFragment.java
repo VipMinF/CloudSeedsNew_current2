@@ -6,9 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.classic.ClassicFragment;
@@ -34,11 +34,12 @@ import io.reactivex.functions.Consumer;
  */
 public class SearchFragment extends ClassicFragment implements OnRecentbuttonClickListener{
 
-    private  SearchView searchView;
+    private SearchView searchView;
     private String mQueryText;
-    private  RecyclerView recyclerView;
-    private  SearchRecentAdapter searchrecentAdapter;
+    private RecyclerView recyclerView;
+    private SearchRecentAdapter searchrecentAdapter;
     private Fragment searchResultFragment;
+    private int row_size=4;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -149,7 +150,7 @@ public class SearchFragment extends ClassicFragment implements OnRecentbuttonCli
         if (recyclerView == null){
             recyclerView = findById(R.id.id_recylerview_search);
             recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(row_size, StaggeredGridLayoutManager.VERTICAL));
             recyclerView.setAdapter(searchrecentAdapter = new SearchRecentAdapter());
             searchrecentAdapter.setOnItemClickListener(this);
         }
@@ -185,8 +186,8 @@ public class SearchFragment extends ClassicFragment implements OnRecentbuttonCli
 
     @Override
     public void onRecentButtonClick(View v){
-        Button btn=(Button)v;
-        searchView.setQuery(btn.getText().toString(),true);
+        TextView textV=(TextView) v;
+        searchView.setQuery(textV.getText().toString(),true);
     }
 
 

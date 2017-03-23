@@ -34,7 +34,9 @@ public class QrcodeModelImpl implements ScanQrCodeContract.Model<QrcodeBean>{
                         QrcodeBean qrcodeBean=basicBean.getInfo().get(0);
 
                         if ("1".equals(basicBean.getCode())){
+
                             basicCallBack.onSuccess(qrcodeBean);
+
                         }else{
                             basicCallBack.onError(basicBean.getMessage());
                         }

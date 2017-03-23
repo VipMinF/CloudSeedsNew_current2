@@ -105,7 +105,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
             case "preference_password":
                 //Toast.makeText(getActivity(), "preference_password", Toast.LENGTH_SHORT).show();
                 //startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
-                startActivityForResult(new Intent(getActivity(), ChangePasswordActivity.class),RESULT_FIRST_USER);
+                startActivityForResult(new Intent(getActivity(), ChangePasswordActivity.class),0);
 
                 break;
             case "preference_clear":
@@ -161,7 +161,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESULT_FIRST_USER){
+        if(requestCode == 0 && resultCode== RESULT_FIRST_USER){
             showDialog();
         }
     }

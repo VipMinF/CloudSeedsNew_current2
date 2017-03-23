@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class SearchRecentHelper {
 
     private static final  String cacheKey="recentsearchlist";
-    private static int max_listsize=10;
+    private static int max_listsize=20;
 
     public static void setRecentSearchkey(Context context,String key){
 
