@@ -17,6 +17,8 @@ import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.usercenter.AboutActivity;
 import com.sunstar.cloudseeds.logic.usercenter.ChangePasswordActivity;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by louisgeek on 2017/3/8.
  */
@@ -102,7 +104,9 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
                     break;*/
             case "preference_password":
                 //Toast.makeText(getActivity(), "preference_password", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
+                //startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
+                startActivityForResult(new Intent(getActivity(), ChangePasswordActivity.class),RESULT_OK);
+
                 break;
             case "preference_clear":
                 // startActivity(new Intent(getActivity(), GuideActivity.class));
@@ -129,6 +133,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
             case "preference_about":
                 // Toast.makeText(getActivity(), "preference_about", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getActivity(), AboutActivity.class));
+
                 break;
 
             case  "preference_exit":
@@ -150,4 +155,15 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
         return true;
         // return false;
     }
+
+    //add by lzy --2017.3.23  修改密码成功->finish MainActivity->退回登录页
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RESULT_OK){
+            getActivity().finish();
+        }
+    }
+
 }
