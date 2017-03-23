@@ -6,6 +6,7 @@ import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicPresenter;
 import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.helper.CommPresenterHelper;
 import com.sunstar.cloudseeds.logic.xuanzhu.bean.XuanZhuListBean;
 import com.sunstar.cloudseeds.logic.xuanzhu.contract.XuanZhuListContract;
 import com.sunstar.cloudseeds.logic.xuanzhu.model.XuanZhuListModelImpl;
@@ -25,6 +26,9 @@ public class XuanZhuListPresenterImpl extends ClassicPresenter<XuanZhuListContra
 
     @Override
     public void gainCountData(int pageCount) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
         mView.showProgress();
         mModel.loadData(UrlDatas.TERTIARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
             @Override
@@ -43,6 +47,9 @@ public class XuanZhuListPresenterImpl extends ClassicPresenter<XuanZhuListContra
 
     @Override
     public void gainMoreData(int pageNum) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
         mModel.loadData(UrlDatas.TERTIARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
             @Override
             public void onSuccess(final List<XuanZhuListBean.ListBean> data) {
@@ -63,41 +70,47 @@ public class XuanZhuListPresenterImpl extends ClassicPresenter<XuanZhuListContra
 
     @Override
     public void gainCountData(int pageCount, String keyword) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
         mView.showProgress();
         mModel.loadData(UrlDatas.TERTIARY_LIST,
                 ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, keyword, new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
-            @Override
-            public void onSuccess(List<XuanZhuListBean.ListBean> data) {
-                mView.hideProgress();
-                mView.setupData(data);
-            }
+                    @Override
+                    public void onSuccess(List<XuanZhuListBean.ListBean> data) {
+                        mView.hideProgress();
+                        mView.setupData(data);
+                    }
 
-            @Override
-            public void onError(String s) {
-                mView.hideProgress();
-                mView.showMessage(s);
-            }
-        });
+                    @Override
+                    public void onError(String s) {
+                        mView.hideProgress();
+                        mView.showMessage(s);
+                    }
+                });
     }
 
     @Override
     public void gainMoreData(int pageNum, String keyword) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
         mModel.loadData(UrlDatas.TERTIARY_LIST, pageNum,
-                ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT,keyword, new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
-            @Override
-            public void onSuccess(final List<XuanZhuListBean.ListBean> data) {
-                new Handler().postDelayed(new Runnable() {
+                ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, keyword, new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
                     @Override
-                    public void run() {
-                        mView.setupMoreData(data);
+                    public void onSuccess(final List<XuanZhuListBean.ListBean> data) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mView.setupMoreData(data);
+                            }
+                        }, 2 * 1000);
                     }
-                }, 2 * 1000);
-            }
 
-            @Override
-            public void onError(String msg) {
-                mView.showMessage(msg);
-            }
-        });
+                    @Override
+                    public void onError(String msg) {
+                        mView.showMessage(msg);
+                    }
+                });
     }
 }

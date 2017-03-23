@@ -4,6 +4,7 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
@@ -35,12 +36,21 @@ public class SPQDetailModelImpl implements SPQDetailContract.Model<SPQDetailBean
 
                     @Override
                     public void OnSuccessOnUI(BasicBean<SPQDetailBean> basicBean) {
-                        if ("1".equals(basicBean.getCode())){
-                            SPQDetailBean yztzDetailBean=basicBean.getInfo().get(0);
-                            basicCallBack.onSuccess(yztzDetailBean);
-                        }else{
+
+                        if (basicBean == null) {
+                            basicCallBack.onError(CommDatas.SERVER_ERROR);
+                            return;
+                        }
+                        if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                            if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+                                basicCallBack.onSuccess(basicBean.getInfo().get(0));
+                            } else {
+                                basicCallBack.onError(basicBean.getMessage());
+                            }
+                        } else {
                             basicCallBack.onError(basicBean.getMessage());
                         }
+
                     }
 
                     @Override

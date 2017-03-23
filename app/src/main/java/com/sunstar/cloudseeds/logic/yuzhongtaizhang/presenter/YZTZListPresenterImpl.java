@@ -6,6 +6,7 @@ import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicPresenter;
 import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.helper.CommPresenterHelper;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZListBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZListContract;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.model.YZTZListModelImpl;
@@ -25,26 +26,38 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
         super(view, new YZTZListModelImpl());
     }
 
+
     @Override
     public void gainCountData(int pageCount) {
-            mView.showProgress();
-            mModel.loadData(UrlDatas.SECONDARY_LIST,ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT,pageCount, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
-                @Override
-                public void onSuccess(List<YZTZListBean.ListBean> data) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
+        mView.showProgress();
+
+        mModel.loadData(UrlDatas.SECONDARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
+            @Override
+            public void onSuccess(List<YZTZListBean.ListBean> data) {
+                if (mView != null) {
                     mView.hideProgress();
                     mView.setupData(data);
                 }
+            }
 
-                @Override
-                public void onError(String s) {
+            @Override
+            public void onError(String s) {
+                if (mView != null) {
                     mView.hideProgress();
                     mView.showMessage(s);
                 }
-            });
+            }
+        });
     }
 
     @Override
     public void gainMoreData(int pageNum) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
         mModel.loadData(UrlDatas.SECONDARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(final List<YZTZListBean.ListBean> data) {
@@ -53,7 +66,7 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
                     public void run() {
                         mView.setupMoreData(data);
                     }
-                },2*1000);
+                }, 2 * 1000);
             }
 
             @Override
@@ -65,8 +78,11 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
 
     @Override
     public void gainCountData(int pageCount, String keyword) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
         mView.showProgress();
-        mModel.loadData(UrlDatas.SECONDARY_LIST,ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT,pageCount, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
+        mModel.loadData(UrlDatas.SECONDARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(List<YZTZListBean.ListBean> data) {
                 mView.hideProgress();
@@ -83,6 +99,9 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
 
     @Override
     public void gainMoreData(int pageNum, String keyword) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
         mModel.loadData(UrlDatas.SECONDARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(final List<YZTZListBean.ListBean> data) {
@@ -91,7 +110,7 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
                     public void run() {
                         mView.setupMoreData(data);
                     }
-                },2*1000);
+                }, 2 * 1000);
             }
 
             @Override

@@ -4,6 +4,7 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.scan.bean.QrcodeBean;
 import com.sunstar.cloudseeds.logic.scan.contract.ScanQrCodeContract;
@@ -30,12 +31,17 @@ public class QrcodeModelImpl implements ScanQrCodeContract.Model<QrcodeBean>{
                     }
                     @Override
                     public void OnSuccessOnUI(BasicBean<QrcodeBean> basicBean) {
-
-                        QrcodeBean qrcodeBean=basicBean.getInfo().get(0);
-
-                        if ("1".equals(basicBean.getCode())){
-                            basicCallBack.onSuccess(qrcodeBean);
-                        }else{
+                        if (basicBean == null) {
+                            basicCallBack.onError(CommDatas.SERVER_ERROR);
+                            return;
+                        }
+                        if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                            if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+                                basicCallBack.onSuccess(basicBean.getInfo().get(0));
+                            } else {
+                                basicCallBack.onError(basicBean.getMessage());
+                            }
+                        } else {
                             basicCallBack.onError(basicBean.getMessage());
                         }
                     }

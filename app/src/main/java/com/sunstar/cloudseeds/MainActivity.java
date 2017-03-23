@@ -138,8 +138,10 @@ public class MainActivity extends ClassicActivity{
         if (mClassicTitleBar!=null){
             //update by lzy -2017.3.21
             UserLoginBean userloginbean = UserLoginHelper.userLoginBean(this);
-            String company=userloginbean.getCompany();
-            if (company==null) company="";
+            String company="";
+            if (userloginbean!=null&&userloginbean.getCompany()!=null){
+
+            }
             mClassicTitleBar.setRightText(company)
                     .setLeftAndRightTextSize(SizeTool.dp2px(this,12))
                     .setRightMaxWidth(SizeTool.dp2px(this,210));

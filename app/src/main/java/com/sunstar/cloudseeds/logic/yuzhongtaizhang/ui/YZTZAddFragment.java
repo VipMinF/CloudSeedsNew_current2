@@ -20,6 +20,7 @@ import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.bean.InfoBean;
+import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
@@ -128,14 +129,22 @@ public class YZTZAddFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
                     }
 
                     @Override
-                    public void OnSuccessOnUI(BasicBean<InfoBean> infoBeanBasicBean) {
-                        if ("1".equals(infoBeanBasicBean.getCode())) {
-                            ToastTool.showShort(infoBeanBasicBean.getInfo().get(0).getShow_msg());
-                            //
-                            getActivity().onBackPressed();
-
+                    public void OnSuccessOnUI(BasicBean<InfoBean> basicBean) {
+                        if (basicBean == null) {
+                            showMessage(CommDatas.SERVER_ERROR);
+                            return;
+                        }
+                        if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                            if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+                                //
+                                ToastTool.showShort(basicBean.getInfo().get(0).getShow_msg());
+                                //
+                                getActivity().onBackPressed();
+                            } else {
+                                showMessage(basicBean.getMessage());
+                            }
                         } else {
-                            showMessage(infoBeanBasicBean.getInfo().get(0).getShow_msg());
+                            showMessage(basicBean.getMessage());
                         }
                     }
 

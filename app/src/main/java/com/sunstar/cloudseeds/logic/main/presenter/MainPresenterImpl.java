@@ -6,6 +6,7 @@ import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicPresenter;
 import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.helper.CommPresenterHelper;
 import com.sunstar.cloudseeds.logic.main.bean.TaiZhangBean;
 import com.sunstar.cloudseeds.logic.main.contract.MainContract;
 import com.sunstar.cloudseeds.logic.main.model.MainModelImpl;
@@ -25,6 +26,9 @@ public class MainPresenterImpl extends ClassicPresenter<MainContract.View,MainCo
 
     @Override
     public void gainCountData(int pageCount) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
             mView.showProgress();
             mModel.loadData(UrlDatas.PRIMARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<TaiZhangBean.ListBean>>() {
                 @Override
@@ -43,6 +47,9 @@ public class MainPresenterImpl extends ClassicPresenter<MainContract.View,MainCo
 
     @Override
     public void gainMoreData(int pageNum) {
+        if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
+            return;
+        }
         mModel.loadData(UrlDatas.PRIMARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<TaiZhangBean.ListBean>>() {
             @Override
             public void onSuccess(final List<TaiZhangBean.ListBean> data) {

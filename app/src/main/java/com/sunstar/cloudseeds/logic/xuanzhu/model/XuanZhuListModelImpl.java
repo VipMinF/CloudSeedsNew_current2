@@ -4,11 +4,11 @@ import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.xuanzhu.bean.XuanZhuListBean;
 import com.sunstar.cloudseeds.logic.xuanzhu.contract.XuanZhuListContract;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,20 +36,17 @@ public  class XuanZhuListModelImpl implements XuanZhuListContract.Model<List<Xua
 
                     @Override
                     public void OnSuccessOnUI(BasicBean<XuanZhuListBean> basicBean) {
-                        List<XuanZhuListBean.ListBean> lbL=new ArrayList<>();
-                        for (int i = 0; i < pageSize; i++) {
-                            XuanZhuListBean.ListBean lb=new XuanZhuListBean.ListBean();
-                            lb.setName("xuanzhu测"+keyword+i+"===页码"+pageNum+"===每页显示"+pageSize);
-                            lb.setSelected_code("212"+keyword+i);
-                            lbL.add(lb);
+                        if (basicBean == null) {
+                            basicCallBack.onError(CommDatas.SERVER_ERROR);
+                            return;
                         }
-                        //##  basicBean.getInfo().get(0).setList(lbL);
-                        if (pageNum>2){
-                            lbL.clear();
-                        }
-                        if ("1".equals(basicBean.getCode())){
-                            basicCallBack.onSuccess(lbL);
-                        }else{
+                        if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                            if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+                                basicCallBack.onSuccess(basicBean.getInfo().get(0).getList());
+                            } else {
+                                basicCallBack.onError(basicBean.getMessage());
+                            }
+                        } else {
                             basicCallBack.onError(basicBean.getMessage());
                         }
                     }
