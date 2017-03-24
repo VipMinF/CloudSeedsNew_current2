@@ -48,7 +48,7 @@ import io.reactivex.functions.Consumer;
  * Use the {@link YZTZListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> implements YZTZListContract.View<List<YZTZListBean.ListBean>>{
+public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> implements YZTZListContract.View<List<YZTZListBean.ListBean>> {
 
     public Boolean from_searchFragment;
 
@@ -84,18 +84,20 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     }
 
     @Override
-    protected int setupLayoutResId() { return R.layout.fragment_yztz_list; }
+    protected int setupLayoutResId() {
+        return R.layout.fragment_yztz_list;
+    }
 
     @Override
     protected void initView(View view) {
         initSearchView();
         //-- add by lzy -2017.3.20
         //隐藏搜索框
-        from_searchFragment=false;
-        Fragment searchFragment= getParentFragment();
-        if(searchFragment !=null && searchFragment instanceof SearchFragment){
-            from_searchFragment=true;
-            SearchView searchV=findById(R.id.id_search_view);
+        from_searchFragment = false;
+        Fragment searchFragment = getParentFragment();
+        if (searchFragment != null && searchFragment instanceof SearchFragment) {
+            from_searchFragment = true;
+            SearchView searchV = findById(R.id.id_search_view);
             searchV.setVisibility(View.GONE);
         }
         toRefreshData();
@@ -105,7 +107,9 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     protected void initListener() {
 
     }
+
     private String mQueryText;
+
     private void initSearchView() {
         final SearchView searchView = findById(R.id.id_search_view);
         //设置搜索图标是否显示在搜索框内
@@ -156,7 +160,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     }
 
     private void toSearchData() {
-        mPresenter.gainCountData(mClassicRVHeaderFooterAdapter.getNowPageCount(),mQueryText);
+        mPresenter.gainCountData(mClassicRVHeaderFooterAdapter.getNowPageCount(), mQueryText);
     }
 
     @Override
@@ -193,13 +197,13 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
 
     @Override
     public void hideProgress() {
-         hideSwipeRefreshLayout();
+        hideSwipeRefreshLayout();
     }
 
     @Override
     public void showMessage(String msg) {
-     //###   ToastTool.showShortCenter(msg);
-        DialogManager.showTipDialog(getActivity(),"提示",msg,null);
+        //###   ToastTool.showShortCenter(msg);
+        DialogManager.showTipDialog(getActivity(), "提示", msg, null);
     }
 
     @Override
@@ -210,8 +214,8 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
 
         //-- add by lzy -2017.3.20
         //如果是搜索界面进来->保存搜索关键词
-        if(yztzBeanList!=null && from_searchFragment){
-            SearchRecentHelper.setRecentSearchkey(mContext,mParam2);
+        if (yztzBeanList != null && from_searchFragment) {
+            SearchRecentHelper.setRecentSearchkey(mContext, mParam2);
         }
     }
 
@@ -232,7 +236,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     protected ClassicRVHeaderFooterAdapter configClassicRVHeaderFooterAdapter() {
         List<YZTZListBean.ListBean> listBeanList = new ArrayList<>();
         YZTZListAdapter adapter
-                = new YZTZListAdapter(mContext,listBeanList, R.layout.item_list_yztz);
+                = new YZTZListAdapter(mContext, listBeanList, R.layout.item_list_yztz);
         ClassicEmptyView classicEmptyView = new ClassicEmptyView(getContext());
         classicEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         adapter.setEmptyView(classicEmptyView);
@@ -251,7 +255,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 //
                 //
                 startAty(XuanZhuActivity.class);
-               //2017年3月23日15:31:28 暂时不需要族群详细页 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
+                //2017年3月23日15:31:28 暂时不需要族群详细页 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
             }
 
             @Override
@@ -260,24 +264,24 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 //##ToastTool.showShortCenter("选株"+position);
                 DialogManager.showClassicDialog(getActivity(), "选株新增",
                         "是否新增一个选株", new ClassicDialogFragment.OnBtnClickListener() {
-                    @Override
-                    public void onBtnClickOk(DialogInterface dialogInterface) {
-                        super.onBtnClickOk(dialogInterface);
+                            @Override
+                            public void onBtnClickOk(DialogInterface dialogInterface) {
+                                super.onBtnClickOk(dialogInterface);
 
-                        goAddSelectBeads();
-                    }
-                });
+                                goAddSelectBeads();
+                            }
+                        });
             }
 
             @Override
             public void onItemShowQrcode(int position) {
                 super.onItemShowQrcode(position);
                 //ToastTool.showShortCenter("绑定二维码"+position);
-                YZTZListBean.ListBean listBean= (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                YZTZListBean.ListBean listBean = (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
 
                 Bundle bundle = createBundleExtraInt1(ScanQrCodeType.bind_zuqun);
                 bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), listBean.getSecondary_id());
-                startAty(ScanQrcodeActivity.class,bundle);
+                startAty(ScanQrcodeActivity.class, bundle);
             }
         });
         mRecyclerView.setVisibility(View.GONE);//初始化 不显示
@@ -285,7 +289,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     }
 
     private void goAddSelectBeads() {
-        DialogManager.showLoadingDialog(getActivity(),"请稍候...");
+        DialogManager.showLoadingDialog(getActivity(), "请稍候...");
         Map<String, String> paramsMap = new HashMap<>();
         paramsMap.put("id", "0e9e0bfda93249f0b95bcc9f5dc5f7e4");
         HttpRequestManagerFactory.getRequestManager()
@@ -294,7 +298,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                         new GsonHttpRequestCallback<BasicBean<InfoBean>>() {
                             @Override
                             public BasicBean<InfoBean> OnSuccess(String s) {
-                                return BasicBean.fromJson(s,InfoBean.class);
+                                return BasicBean.fromJson(s, InfoBean.class);
                             }
 
                             @Override
@@ -305,16 +309,17 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                                 }
                                 if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
                                     if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
-                                       // showMessage(basicBean.getInfo().get(0).getShow_msg());
+                                        // showMessage(basicBean.getInfo().get(0).getShow_msg());
                                         //选择新增成功
                                         DialogManager.hideLoadingDialogAutoAfterTip(
-                                                basicBean.getInfo().get(0).getShow_msg(), new DialogManager.AutoHideCallback() {
-                                            @Override
-                                            public void callback() {
-                                                //跳转
-                                                startAty(XuanZhuActivity.class);
-                                            }
-                                        });
+                                                basicBean.getInfo().get(0).getShow_msg(),
+                                                new DialogManager.OnAutoHide() {
+                                                    @Override
+                                                    public void autoHide() {
+                                                        //跳转
+                                                        startAty(XuanZhuActivity.class);
+                                                    }
+                                                });
 
                                     } else {
                                         showMessage(basicBean.getMessage());

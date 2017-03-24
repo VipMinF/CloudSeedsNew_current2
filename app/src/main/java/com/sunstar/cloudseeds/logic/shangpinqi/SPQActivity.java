@@ -22,6 +22,10 @@ public class SPQActivity extends ClassicActivity {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.id_frame_layout_content, YZTZListFragment.newInstance("",""))
                         .commitAllowingStateLoss();*/
+                setAppBarTitle("商品期调查记录dsadasd");
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.id_frame_layout_content, SPQAddFragment.newInstance("",""))
+                        .commitAllowingStateLoss();
                 break;
             case AtyGoToWhere.DETAIL:
                 setAppBarTitle("商品期调查");

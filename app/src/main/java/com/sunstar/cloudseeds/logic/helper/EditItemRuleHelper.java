@@ -148,11 +148,11 @@ public class EditItemRuleHelper {
         leftTitle.setLayoutParams(commTableRowLayoutParams4UI);
         leftTitle.setGravity(Gravity.CENTER_VERTICAL);
         leftTitle.setText(leftTitleStr);
-           /* 在TableRow中left和right无效 */
-        leftTitle.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),
-                SizeTool.dp2px(padding), SizeTool.dp2px(padding));
         leftTitle.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
-        //
+        /*setBackgroundResource之前  有问题 */
+        leftTitle.setPadding(SizeTool.dp2px(padding), 0,
+                0, 0);
+
         TextView rightImage = null;
         if (needRight) {
             //
@@ -161,8 +161,6 @@ public class EditItemRuleHelper {
             rightImage.setLayoutParams(commTableRowLayoutParams4UI);
             rightImage.setGravity(Gravity.CENTER_VERTICAL);
             // rightImage.setText("");
-           /*在TableRow中left和right无效 rightImage.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),
-                    SizeTool.dp2px(padding), SizeTool.dp2px(padding));*/
             rightImage.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
             if (imageCommmBeanList != null && imageCommmBeanList.size() > 0) {
                 final List<ImageShowBean> imageShowBeanList = new ArrayList<>();
@@ -203,9 +201,7 @@ public class EditItemRuleHelper {
             case ITEM_TYPE_TEXT:
                 TableRow tableRow = new TableRow(context);
                 tableRow.setBackgroundColor(Color.WHITE);
-                 /* 弥补【ui在TableRow中padding left和right无效】问题 */
-                tableRow.setPadding(SizeTool.dp2px(padding), 0,
-                        SizeTool.dp2px(padding), 0);
+
                 tableRow.addView(leftTitle);
                 //
                 TextView rightTitle = new TextView(context);
@@ -216,8 +212,8 @@ public class EditItemRuleHelper {
                 rightTitle.setTag(R.id.hold_view_key, rightKey);
                 rightTitle.setTag(R.id.hold_view_input_type_text, "true");
                 rightTitle.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                /* 在TableRow中left和right无效 */
-                rightTitle.setPadding(0, SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
+                /* 文本框 padding */
+                rightTitle.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
                 tableRow.addView(rightTitle);
                 //
                 if (needRight) {
@@ -227,10 +223,6 @@ public class EditItemRuleHelper {
                 break;
             case ITEM_TYPE_EDIT:
                 TableRow tableRow2 = new TableRow(context);
-                 /* 弥补【ui在TableRow中padding left和right无效】问题 */
-                tableRow2.setPadding(SizeTool.dp2px(padding), 0,
-                        SizeTool.dp2px(padding), 0);
-
                 tableRow2.addView(leftTitle);
                 //
                 EditText rightEdit = new EditText(context);
@@ -244,8 +236,8 @@ public class EditItemRuleHelper {
                 rightEdit.setLayoutParams(commTableRowLayoutParams4UI);
                 rightEdit.setTag(R.id.hold_view_key, rightKey);
                 rightEdit.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-              /* 在TableRow中left和right无效 */
-                rightEdit.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding));
+                /* 输入框 padding */
+                rightEdit.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
                 tableRow2.addView(rightEdit);
                 //
                 if (rightImage != null) {
@@ -256,11 +248,6 @@ public class EditItemRuleHelper {
                 break;
             case ITEM_TYPE_INTEGER:
                 TableRow tableRow6 = new TableRow(context);
-                 /* 弥补【ui在TableRow中padding left和right无效】问题 */
-                tableRow6.setPadding(SizeTool.dp2px(padding), 0,
-                        SizeTool.dp2px(padding), 0);
-                leftTitle.setPadding(SizeTool.dp2px(padding), 0,
-                        SizeTool.dp2px(padding), 0);
                 tableRow6.addView(leftTitle);
                 //
                 EditText rightEditInteger = new EditText(context);
@@ -275,8 +262,8 @@ public class EditItemRuleHelper {
                 rightEditInteger.setLayoutParams(commTableRowLayoutParams4UI);
                 rightEditInteger.setTag(R.id.hold_view_key, rightKey);
                 rightEditInteger.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-
-                rightEditInteger.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding));
+                  /* 输入框 padding */
+                rightEditInteger.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
                 tableRow6.addView(rightEditInteger);
                 //
 
@@ -304,8 +291,8 @@ public class EditItemRuleHelper {
                 rightEditDouble.setLayoutParams(commTableRowLayoutParams4UI);
                 rightEditDouble.setTag(R.id.hold_view_key, rightKey);
                 rightEditDouble.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-
-                rightEditDouble.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding));
+                  /* 输入框 padding */
+                rightEditDouble.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
                 tableRow7.addView(rightEditDouble);
                 //
 
@@ -343,7 +330,11 @@ public class EditItemRuleHelper {
                     }
                 }
                 if ("".equals(startData) && "".equals(endData)) {
-                    rightDate.setupDateText(showData);
+                    try {
+                        rightDate.setupDateText(showData);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     rightDate.setupDateText(showData, startData, endData);
                 }
@@ -352,10 +343,6 @@ public class EditItemRuleHelper {
                 rightDate.setGravity(Gravity.CENTER_VERTICAL);
                 rightDate.setLayoutParams(commTableRowLayoutParams4UI);
                 rightDate.setTag(R.id.hold_view_key, rightKey);
-                    /* 在TableRow中left和right无效 */
-
-                rightDate.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),SizeTool.dp2px(padding), SizeTool.dp2px(padding));
-
                 tableRow3.addView(rightDate);
                 //
                 if (rightImage != null) {
@@ -398,7 +385,6 @@ public class EditItemRuleHelper {
                 rightLines.setContentText(rightValue);
                 rightLines.setTag(R.id.hold_view_key, rightKey);
                 rightLines.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-               //#### rightLines.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),SizeTool.dp2px(padding), SizeTool.dp2px(padding));
                 tableRow4.addView(rightLines);
                 //
                 if (rightImage != null) {
@@ -446,9 +432,8 @@ public class EditItemRuleHelper {
                 rightSelect.setCompoundDrawablesWithIntrinsicBounds(null, null,
                         VectorOrImageResHelper.getDrawable(R.drawable.ic_keyboard_arrow_right_black_24dp), null);
                 rightSelect.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-
-                rightSelect.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),SizeTool.dp2px(padding), SizeTool.dp2px(padding));
-
+                  /* select padding */
+                rightSelect.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
                 tableRow5.addView(rightSelect);
                 //
                 if (rightImage != null) {

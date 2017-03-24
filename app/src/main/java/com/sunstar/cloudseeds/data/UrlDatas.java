@@ -9,6 +9,8 @@ public class UrlDatas {
             BASE_URL="http://192.168.1.80:8080/yunzhong/";
     private   static  final String
             BASE_URL_Local="http://192.168.1.67:8085/";
+    private   static  final String
+            BASE_URL_OLD="https://git.oschina.net/louisgeek/Demo/raw/master/";
 
     /**
      * 首页分类相关
@@ -47,8 +49,10 @@ public class UrlDatas {
     public  static  final String
             TERTIARY_DETAIL=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/detail");
 
+    /*public  static  final String
+            TERTIARY_EDIT=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/edit");*/
     public  static  final String
-            TERTIARY_EDIT=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/edit");
+            TERTIARY_EDIT=String.format("%s%s",BASE_URL_OLD,"api/project/tertiary/edit.json");
 
     public  static  final String
             TERTIARY_SAVE=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/save");
