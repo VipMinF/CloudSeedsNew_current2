@@ -433,7 +433,7 @@ public class EditItemRuleHelper {
                         VectorOrImageResHelper.getDrawable(R.drawable.ic_keyboard_arrow_right_black_24dp), null);
                 rightSelect.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
                   /* select padding */
-                rightSelect.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
+                rightSelect.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(6), 0, SizeTool.dp2px(6));
                 tableRow5.addView(rightSelect);
                 //
                 if (rightImage != null) {
