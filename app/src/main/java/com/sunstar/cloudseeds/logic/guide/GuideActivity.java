@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
+import android.os.Handler;
 
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.data.FinalData;
@@ -104,6 +105,9 @@ public class GuideActivity extends ClassicActivity {
         finish();
     }
 
+
+    private Handler handler= new Handler();
+
     private void goToMain() {
 
        UserLoginHelper.autoLogin_Online(mContext, new BasicCallBack<UserLoginBean>() {
@@ -116,9 +120,8 @@ public class GuideActivity extends ClassicActivity {
             @Override
             public void onError(String s) {
 
-                //Handler handler= new Handler();
-                //handler.post(runnableUi);
-                goToLogin();
+                handler.post(runnableUi);
+                //goToLogin();
             }
         });
 

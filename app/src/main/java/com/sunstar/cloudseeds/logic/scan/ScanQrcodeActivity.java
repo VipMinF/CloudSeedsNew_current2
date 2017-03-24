@@ -139,7 +139,6 @@ public class ScanQrcodeActivity extends ClassicActivity  {
     private void checkOrBindQrcode(String qrcode){
 
         DialogManager.showCustomLoadingDialog(this);
-
         final QrcodeModelImpl qrcodemodelImpl = new QrcodeModelImpl();
         qrcodemodelImpl.loadData(UrlDatas.CheckOrBindQrCode_URL ,qrcode,bindId,new BasicCallBack<QrcodeBean>(){
             @Override
@@ -160,15 +159,14 @@ public class ScanQrcodeActivity extends ClassicActivity  {
     private  void  handelWithResult(QrcodeBean qrcodeBean){
 
         int scanqrcodeType=getBundleExtraInt1();
-        ToastTool.showShort(qrcodeBean.getShow_msg().toString());
+        ToastTool.showLong(qrcodeBean.getShow_msg().toString());
 
         switch (scanqrcodeType)
         {
             case  ScanQrCodeType.bind_zuqun:
                 //绑定失败
                 if (!qrcodeBean.getShow_code().equals("1")){
-                    DialogManager.showTipDialog(this,"绑定失败!","请重新扫描绑定",null);
-                    continueScan();
+                    bindError(qrcodeBean.getShow_msg().toString());
                     return;
                 }
                 this.finish();
@@ -178,8 +176,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
             case  ScanQrCodeType.bind_xuanzhu:
                 //绑定失败
                 if (!qrcodeBean.getShow_code().equals("1")){
-                    DialogManager.showTipDialog(this,"绑定失败!","请重新扫描绑定",null);
-                    continueScan();
+                    bindError(qrcodeBean.getShow_msg().toString());
                     return;
                 }
                 this.finish();
@@ -188,23 +185,32 @@ public class ScanQrcodeActivity extends ClassicActivity  {
 
             case  ScanQrCodeType.select:
 
-
                 //没有绑定，手动输入绑定Id
-                if (!qrcodeBean.getShow_code().equals("1")){
+                if (qrcodeBean.getShow_code().equals("4")){
                     editBindId();
-                    return;
+
+                }else if(qrcodeBean.getShow_code().equals("1")){
+
+
+                    UserLoginBean userloginbean= UserLoginHelper.userLoginBean(mcontext);
+                    if (qrcodeBean.getTertiary_id()!=null && qrcodeBean.getTertiary_id().length()>0){
+                        goToSPQDetailFragment(userloginbean.getUserid(),qrcodeBean.getTertiary_id().toString());
+                        mQRCodeView.stopCamera();
+                        mQRCodeView.setVisibility(View.GONE);
+
+                    } else if (qrcodeBean.getSecondary_id()!=null && qrcodeBean.getSecondary_id().length()>0) {
+                        goToYZTZDetailFragment(userloginbean.getUserid(),qrcodeBean.getSecondary_id().toString());
+                        mQRCodeView.stopCamera();
+                        mQRCodeView.setVisibility(View.GONE);
+
+                    }else {
+                        bindError("查询失败了");
+                    }
+
+                }else {
+
+                    bindError(qrcodeBean.getShow_msg().toString());
                 }
-                UserLoginBean userloginbean= UserLoginHelper.userLoginBean(mcontext);
-                if (qrcodeBean.getSecondary_id()!=null && qrcodeBean.getSecondary_id().length()>0) {
-
-                    goToYZTZDetailFragment(userloginbean.getUserid(),qrcodeBean.getSecondary_id().toString());
-
-                } else if (qrcodeBean.getTertiary_id()!=null && qrcodeBean.getTertiary_id().length()>0){
-
-                    goToSPQDetailFragment(userloginbean.getUserid(),qrcodeBean.getTertiary_id().toString());
-                }
-                mQRCodeView.stopCamera();
-                mQRCodeView.setVisibility(View.GONE);
                 break;
         }
 
@@ -219,6 +225,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
                 super.onBtnClickOk(dialogInterface, inputText);
                 if (inputText.length()>0){
                     bindId=inputText;
+
                     checkOrBindQrcode(qrcode);
                 }else {
                     continueScan();
@@ -232,6 +239,18 @@ public class ScanQrcodeActivity extends ClassicActivity  {
         });
 
     }
+
+   private void bindError(String error){
+
+       DialogManager.showTipDialog(this, error, "请重新操作", new ClassicDialogFragment.OnBtnClickListener() {
+           @Override
+           public void onBtnClickOk(DialogInterface dialogInterface) {
+               super.onBtnClickOk(dialogInterface);
+               continueScan();
+           }
+       });
+
+   }
 
 
     private void  goToYZTZDetailFragment(String param1,String param2 ){

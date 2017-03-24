@@ -74,6 +74,8 @@ public class SplashActivity extends ClassicActivity {
         finish();
     }
 
+
+    private Handler handler= new Handler();
     /**
      *
      */
@@ -91,9 +93,9 @@ public class SplashActivity extends ClassicActivity {
                 }
                 @Override
                 public void onError(String s) {
-                    //Handler handler= new Handler();
-                    //handler.post(runnableUi);
-                    goToLogin();
+
+                    handler.post(runnableUi);
+                    //goToLogin();
                 }
             });
         } else {

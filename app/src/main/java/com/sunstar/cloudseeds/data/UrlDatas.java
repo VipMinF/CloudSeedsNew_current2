@@ -24,7 +24,7 @@ public class UrlDatas {
      * 列表相关
      */
     public  static  final String
-            PRIMARY_LIST=String.format("%s%s",BASE_URL,"api/project/primary/list");
+            PRIMARY_LIST=String.format("%s%s",BASE_URL_Local,"api/project/primary/list");
 
     //
     public  static  final String
@@ -60,7 +60,6 @@ public class UrlDatas {
             ChangePassWord_URL=String.format("%s%s",BASE_URL,"api/user/changepass");
 
     public  static  final String
-            CheckOrBindQrCode_URL=String.format("%s%s",BASE_URL,"api/qrcode/query");
-
+            CheckOrBindQrCode_URL=String.format("%s%s",BASE_URL_Local,"api/qrcode/query");
 
 }
