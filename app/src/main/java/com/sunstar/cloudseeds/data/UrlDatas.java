@@ -49,10 +49,10 @@ public class UrlDatas {
     public  static  final String
             TERTIARY_DETAIL=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/detail");
 
-    /*public  static  final String
-            TERTIARY_EDIT=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/edit");*/
     public  static  final String
-            TERTIARY_EDIT=String.format("%s%s",BASE_URL_OLD,"api/project/tertiary/edit.json");
+            TERTIARY_EDIT=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/edit");
+    /*public  static  final String
+            TERTIARY_EDIT=String.format("%s%s",BASE_URL_OLD,"api/project/tertiary/edit.json");*/
 
     public  static  final String
             TERTIARY_SAVE=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/save");
