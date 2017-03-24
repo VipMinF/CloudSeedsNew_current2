@@ -84,7 +84,7 @@ public class ChangePasswordActivity extends ClassicActivity {
         String old_paw = old_password.getText().toString();
         String psw = password.getText().toString();
         String psw_again = password_again.getText().toString();
-        UserLoginBean userloginben = UserLoginHelper.userLoginBean(this);
+        UserLoginBean userloginben = UserLoginHelper.userLoginBean();
         ChangePassWordImpl changepswImpl = new ChangePassWordImpl();
         changepswImpl.loadData(UrlDatas.ChangePassWord_URL,userloginben.getUserid(), old_paw, psw, psw_again, new BasicCallBack<SimpleBean>() {
             @Override
@@ -92,7 +92,7 @@ public class ChangePasswordActivity extends ClassicActivity {
 
                 DialogManager.hideLoadingDialog();
                 //ToastTool.showShortCenter(simpleBean.getShow_msg());
-                UserLoginHelper.loginOut(mContext);
+                UserLoginHelper.loginOut();
                 showDialog();
             }
             @Override

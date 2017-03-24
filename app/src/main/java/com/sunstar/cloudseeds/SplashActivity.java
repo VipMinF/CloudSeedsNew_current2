@@ -80,7 +80,7 @@ public class SplashActivity extends ClassicActivity {
         CLog.d("hasOpenedGuide DD:" + hasOpenedGuide);
         if (hasOpenedGuide) {
 
-            UserLoginHelper.autoLogin_Online(mContext, new BasicCallBack<UserLoginBean>() {
+            UserLoginHelper.autoLogin_Online( new BasicCallBack<UserLoginBean>() {
                 @Override
                 public void onSuccess(UserLoginBean userLoginBean) {
                     goToMain();

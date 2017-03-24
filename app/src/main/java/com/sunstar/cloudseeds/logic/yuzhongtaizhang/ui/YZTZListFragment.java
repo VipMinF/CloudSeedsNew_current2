@@ -11,11 +11,18 @@ import android.widget.SearchView;
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
 import com.classichu.classichu.app.CLog;
+import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
+import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
 import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.bean.InfoBean;
+import com.sunstar.cloudseeds.data.CommDatas;
+import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
 import com.sunstar.cloudseeds.logic.search.SearchRecentHelper;
@@ -27,7 +34,9 @@ import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZListPresenterI
 import com.sunstar.cloudseeds.ui.SearchFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -249,12 +258,13 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             public void onItemShowXuanZhu(int position) {
                 super.onItemShowXuanZhu(position);
                 //##ToastTool.showShortCenter("选株"+position);
-                DialogManager.showClassicDialog(getActivity(), "选株新增", "是否新增编号为001-1的选株", new ClassicDialogFragment.OnBtnClickListener() {
+                DialogManager.showClassicDialog(getActivity(), "选株新增",
+                        "是否新增一个选株", new ClassicDialogFragment.OnBtnClickListener() {
                     @Override
                     public void onBtnClickOk(DialogInterface dialogInterface) {
                         super.onBtnClickOk(dialogInterface);
-                        //
-                        startAty(XuanZhuActivity.class);
+
+                        goAddSelectBeads();
                     }
                 });
             }
@@ -272,6 +282,54 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
         });
         mRecyclerView.setVisibility(View.GONE);//初始化 不显示
         return adapter;
+    }
+
+    private void goAddSelectBeads() {
+        DialogManager.showLoadingDialog(getActivity(),"请稍候...");
+        Map<String, String> paramsMap = new HashMap<>();
+        paramsMap.put("id", "0e9e0bfda93249f0b95bcc9f5dc5f7e4");
+        HttpRequestManagerFactory.getRequestManager()
+                .postUrlBackStr(UrlDatas.SECONDARY_ADD_SELECT_BEADS,
+                        HeadsParamsHelper.setupDefaultHeaders(), paramsMap,
+                        new GsonHttpRequestCallback<BasicBean<InfoBean>>() {
+                            @Override
+                            public BasicBean<InfoBean> OnSuccess(String s) {
+                                return BasicBean.fromJson(s,InfoBean.class);
+                            }
+
+                            @Override
+                            public void OnSuccessOnUI(BasicBean<InfoBean> basicBean) {
+                                if (basicBean == null) {
+                                    showMessage(CommDatas.SERVER_ERROR);
+                                    return;
+                                }
+                                if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                                    if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+                                       // showMessage(basicBean.getInfo().get(0).getShow_msg());
+                                        //选择新增成功
+                                        DialogManager.hideLoadingDialogAutoAfterTip(
+                                                basicBean.getInfo().get(0).getShow_msg(), new DialogManager.AutoHideCallback() {
+                                            @Override
+                                            public void callback() {
+                                                //跳转
+                                                startAty(XuanZhuActivity.class);
+                                            }
+                                        });
+
+                                    } else {
+                                        showMessage(basicBean.getMessage());
+                                    }
+                                } else {
+                                    showMessage(basicBean.getMessage());
+                                }
+                            }
+
+                            @Override
+                            public void OnError(String s) {
+                                showMessage(s);
+                            }
+                        });
+
     }
 
 }

@@ -143,7 +143,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
                     @Override
                     public void onBtnClickOk(DialogInterface dialogInterface) {
                         super.onBtnClickOk(dialogInterface);
-                       if( UserLoginHelper.loginOut(getActivity())){
+                       if( UserLoginHelper.loginOut()){
 
                            startActivity(new Intent(getActivity(), LoginActivity.class));
                            getActivity().finish();

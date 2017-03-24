@@ -89,9 +89,11 @@ public class MainActivity extends ClassicActivity{
             //
            transaction.hide(mCurrentFragment);
            if (!fragment.isAdded()) {
-                transaction.add(containerViewId, fragment).show(fragment).commitAllowingStateLoss();
+               // transaction.add(containerViewId, fragment).show(fragment).commitAllowingStateLoss();
+                transaction.add(containerViewId, fragment).show(fragment).commit();
             } else {
-                transaction.show(fragment).commitAllowingStateLoss();
+               // transaction.show(fragment).commitAllowingStateLoss();
+                transaction.show(fragment).commit();
             }
        mCurrentFragment = fragment;
  }
@@ -137,7 +139,7 @@ public class MainActivity extends ClassicActivity{
         //
         if (mClassicTitleBar!=null){
             //update by lzy -2017.3.21
-            UserLoginBean userloginbean = UserLoginHelper.userLoginBean(this);
+            UserLoginBean userloginbean = UserLoginHelper.userLoginBean();
             String company="";
             if (userloginbean!=null&&userloginbean.getCompany()!=null){
 

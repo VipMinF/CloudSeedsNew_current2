@@ -6,6 +6,7 @@ import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpReque
 import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
+import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZListBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZListContract;
 
@@ -23,9 +24,9 @@ public class YZTZListModelImpl implements YZTZListContract.Model<List<YZTZListBe
     public void loadData(String url, final int pageNum, final int pageSize, final String keyword,
                          final BasicCallBack<List<YZTZListBean.ListBean>> basicCallBack) {
         HashMap<String, String> paramsMap = new HashMap<>();
-        paramsMap.put("userid", "21");
-        paramsMap.put("pagenum", String.valueOf(pageNum));
-        paramsMap.put("pagesize", String.valueOf(pageSize));
+        paramsMap.put("userid", UserLoginHelper.getUserid());
+        paramsMap.put("pageNo", String.valueOf(pageNum));
+        paramsMap.put("pageSize", String.valueOf(pageSize));
         paramsMap.put("search_keyword", keyword);
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(), paramsMap,
                 new GsonHttpRequestCallback<BasicBean<YZTZListBean>>() {

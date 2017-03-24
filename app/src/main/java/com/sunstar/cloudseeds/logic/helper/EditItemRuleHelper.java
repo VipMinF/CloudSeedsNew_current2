@@ -2,6 +2,7 @@ package com.sunstar.cloudseeds.logic.helper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
@@ -32,6 +33,7 @@ import com.sunstar.cloudseeds.bean.KeyAndValueBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,9 +75,9 @@ public class EditItemRuleHelper {
                 TextView tv = (TextView) view;
                 value = tv.getText().toString();
             }
-            if (view.getTag(R.id.hold_view_input_type_text)!=null&&"true".equals(view.getTag(R.id.hold_view_input_type_text))) {//
-              //do nothing
-            }else {
+            if (view.getTag(R.id.hold_view_input_type_text) != null && "true".equals(view.getTag(R.id.hold_view_input_type_text))) {//
+                //do nothing
+            } else {
                 sb.append(value);
                 sb.append(",");
             }
@@ -131,18 +133,22 @@ public class EditItemRuleHelper {
                                           final String leftTitleStr, String rightValue, String rightKey, String rightCode,
                                           List<KeyAndValueBean> options, List<KeyAndValueBean> configs,
                                           List<ImageCommmBean> imageCommmBeanList, boolean needRight, boolean isAdd) {
-        Context context = fragmentActivity;
+        WeakReference<FragmentActivity> weakReferenceAty = new WeakReference<>(fragmentActivity);
+        Context context = weakReferenceAty.get();
         //
-        int padding = 12;
-        int paddingCustomTopBottom = 10;
-        int paddingCustomLeftRight = padding;
+        // tableLayout.setPadding(10,10,10,10);
+        //
+        int padding = 10;
         //
         TextView leftTitle = new TextView(fragmentActivity);
-        //高 填充副本  宽永远都是MATCH_PARENT
-        leftTitle.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                TableRow.LayoutParams.MATCH_PARENT));
+        //高 填充副本  宽永远都是MATCH_PARENT 作用在子控件
+        TableRow.LayoutParams commTableRowLayoutParams4UI = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.MATCH_PARENT);
+        //##commTableRowLayoutParams4UI.setMargins(SizeTool.dp2px(10),SizeTool.dp2px(10),SizeTool.dp2px(10),SizeTool.dp2px(10));
+        leftTitle.setLayoutParams(commTableRowLayoutParams4UI);
         leftTitle.setGravity(Gravity.CENTER_VERTICAL);
         leftTitle.setText(leftTitleStr);
+           /* 在TableRow中left和right无效 */
         leftTitle.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),
                 SizeTool.dp2px(padding), SizeTool.dp2px(padding));
         leftTitle.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
@@ -152,12 +158,11 @@ public class EditItemRuleHelper {
             //
             rightImage = new TextView(fragmentActivity);
             //高 填充副本  宽永远都是MATCH_PARENT
-            rightImage.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.MATCH_PARENT));
+            rightImage.setLayoutParams(commTableRowLayoutParams4UI);
             rightImage.setGravity(Gravity.CENTER_VERTICAL);
             // rightImage.setText("");
-            rightImage.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),
-                    SizeTool.dp2px(padding), SizeTool.dp2px(padding));
+           /*在TableRow中left和right无效 rightImage.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),
+                    SizeTool.dp2px(padding), SizeTool.dp2px(padding));*/
             rightImage.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
             if (imageCommmBeanList != null && imageCommmBeanList.size() > 0) {
                 final List<ImageShowBean> imageShowBeanList = new ArrayList<>();
@@ -181,7 +186,7 @@ public class EditItemRuleHelper {
                             VectorOrImageResHelper.getDrawable(R.drawable.ic_image_black_24dp), null);
                 } else {
                     rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                            VectorOrImageResHelper.getDrawable( R.drawable.ic_add_box_black_24dp), null);
+                            VectorOrImageResHelper.getDrawable(R.drawable.ic_add_box_black_24dp), null);
 
                     rightImage.setOnClickListener(new OnNotFastClickListener() {
                         @Override
@@ -197,19 +202,22 @@ public class EditItemRuleHelper {
         switch (inputType) {
             case ITEM_TYPE_TEXT:
                 TableRow tableRow = new TableRow(context);
+                tableRow.setBackgroundColor(Color.WHITE);
+                 /* 弥补【ui在TableRow中padding left和right无效】问题 */
+                tableRow.setPadding(SizeTool.dp2px(padding), 0,
+                        SizeTool.dp2px(padding), 0);
                 tableRow.addView(leftTitle);
                 //
                 TextView rightTitle = new TextView(context);
                 rightTitle.setText(rightValue);
                 rightTitle.setLines(1);
                 rightTitle.setGravity(Gravity.CENTER_VERTICAL);
-                rightTitle.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.MATCH_PARENT));
+                rightTitle.setLayoutParams(commTableRowLayoutParams4UI);
                 rightTitle.setTag(R.id.hold_view_key, rightKey);
                 rightTitle.setTag(R.id.hold_view_input_type_text, "true");
                 rightTitle.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightTitle.setPadding(SizeTool.dp2px( padding), SizeTool.dp2px( padding),
-                        SizeTool.dp2px( padding), SizeTool.dp2px( padding));
+                /* 在TableRow中left和right无效 */
+                rightTitle.setPadding(0, SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
                 tableRow.addView(rightTitle);
                 //
                 if (needRight) {
@@ -219,6 +227,10 @@ public class EditItemRuleHelper {
                 break;
             case ITEM_TYPE_EDIT:
                 TableRow tableRow2 = new TableRow(context);
+                 /* 弥补【ui在TableRow中padding left和right无效】问题 */
+                tableRow2.setPadding(SizeTool.dp2px(padding), 0,
+                        SizeTool.dp2px(padding), 0);
+
                 tableRow2.addView(leftTitle);
                 //
                 EditText rightEdit = new EditText(context);
@@ -229,15 +241,13 @@ public class EditItemRuleHelper {
                 rightEdit.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 rightEdit.setLines(1);
                 rightEdit.setGravity(Gravity.CENTER_VERTICAL);
-                rightEdit.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.MATCH_PARENT));
+                rightEdit.setLayoutParams(commTableRowLayoutParams4UI);
                 rightEdit.setTag(R.id.hold_view_key, rightKey);
                 rightEdit.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightEdit.setPadding(SizeTool.dp2px( padding), SizeTool.dp2px( padding),
-                        SizeTool.dp2px( padding), SizeTool.dp2px( padding));
+              /* 在TableRow中left和right无效 */
+                rightEdit.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding));
                 tableRow2.addView(rightEdit);
                 //
-
                 if (rightImage != null) {
                     tableRow2.addView(rightImage);
                 }
@@ -246,6 +256,11 @@ public class EditItemRuleHelper {
                 break;
             case ITEM_TYPE_INTEGER:
                 TableRow tableRow6 = new TableRow(context);
+                 /* 弥补【ui在TableRow中padding left和right无效】问题 */
+                tableRow6.setPadding(SizeTool.dp2px(padding), 0,
+                        SizeTool.dp2px(padding), 0);
+                leftTitle.setPadding(SizeTool.dp2px(padding), 0,
+                        SizeTool.dp2px(padding), 0);
                 tableRow6.addView(leftTitle);
                 //
                 EditText rightEditInteger = new EditText(context);
@@ -257,12 +272,11 @@ public class EditItemRuleHelper {
                 rightEditInteger.setLines(1);
                 rightEditInteger.setInputType(InputType.TYPE_CLASS_NUMBER);
                 rightEditInteger.setGravity(Gravity.CENTER_VERTICAL);
-                rightEditInteger.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.MATCH_PARENT));
+                rightEditInteger.setLayoutParams(commTableRowLayoutParams4UI);
                 rightEditInteger.setTag(R.id.hold_view_key, rightKey);
                 rightEditInteger.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightEditInteger.setPadding(SizeTool.dp2px( padding), SizeTool.dp2px( padding),
-                        SizeTool.dp2px( padding), SizeTool.dp2px( padding));
+
+                rightEditInteger.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding));
                 tableRow6.addView(rightEditInteger);
                 //
 
@@ -274,6 +288,7 @@ public class EditItemRuleHelper {
                 break;
             case ITEM_TYPE_DOUBLE:
                 TableRow tableRow7 = new TableRow(context);
+
                 tableRow7.addView(leftTitle);
                 //
                 EditText rightEditDouble = new EditText(context);
@@ -286,12 +301,11 @@ public class EditItemRuleHelper {
                 //##  rightEditDouble.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 rightEditDouble.setInputType(8194);//http://www.cnblogs.com/janehlp/p/6129053.html
                 rightEditDouble.setGravity(Gravity.CENTER_VERTICAL);
-                rightEditDouble.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.MATCH_PARENT));
+                rightEditDouble.setLayoutParams(commTableRowLayoutParams4UI);
                 rightEditDouble.setTag(R.id.hold_view_key, rightKey);
                 rightEditDouble.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightEditDouble.setPadding(SizeTool.dp2px( padding), SizeTool.dp2px( padding),
-                        SizeTool.dp2px( padding), SizeTool.dp2px( padding));
+
+                rightEditDouble.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding), SizeTool.dp2px(padding));
                 tableRow7.addView(rightEditDouble);
                 //
 
@@ -336,11 +350,12 @@ public class EditItemRuleHelper {
                 /**=====================================*/
                 rightDate.setLines(1);
                 rightDate.setGravity(Gravity.CENTER_VERTICAL);
-                rightDate.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.MATCH_PARENT));
+                rightDate.setLayoutParams(commTableRowLayoutParams4UI);
                 rightDate.setTag(R.id.hold_view_key, rightKey);
-                rightDate.setPadding(SizeTool.dp2px( paddingCustomLeftRight), SizeTool.dp2px( paddingCustomTopBottom),
-                        SizeTool.dp2px( paddingCustomLeftRight), SizeTool.dp2px( paddingCustomTopBottom));
+                    /* 在TableRow中left和right无效 */
+
+                rightDate.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),SizeTool.dp2px(padding), SizeTool.dp2px(padding));
+
                 tableRow3.addView(rightDate);
                 //
                 if (rightImage != null) {
@@ -383,6 +398,7 @@ public class EditItemRuleHelper {
                 rightLines.setContentText(rightValue);
                 rightLines.setTag(R.id.hold_view_key, rightKey);
                 rightLines.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
+               //#### rightLines.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),SizeTool.dp2px(padding), SizeTool.dp2px(padding));
                 tableRow4.addView(rightLines);
                 //
                 if (rightImage != null) {
@@ -412,8 +428,7 @@ public class EditItemRuleHelper {
                 rightSelect.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
                 rightSelect.setLines(1);
                 rightSelect.setGravity(Gravity.CENTER_VERTICAL);
-                rightSelect.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.MATCH_PARENT));
+                rightSelect.setLayoutParams(commTableRowLayoutParams4UI);
                 rightSelect.setTag(R.id.hold_view_key, rightKey);
                 rightSelect.setTag(R.id.hold_view_code, rightCode);
                 rightSelect.setTag(R.id.hold_view_list, itemSelectBeanList);
@@ -429,10 +444,11 @@ public class EditItemRuleHelper {
                     }
                 });
                 rightSelect.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                        VectorOrImageResHelper.getDrawable( R.drawable.ic_keyboard_arrow_right_black_24dp), null);
+                        VectorOrImageResHelper.getDrawable(R.drawable.ic_keyboard_arrow_right_black_24dp), null);
                 rightSelect.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
-                rightSelect.setPadding(SizeTool.dp2px( paddingCustomLeftRight), SizeTool.dp2px( paddingCustomTopBottom),
-                        SizeTool.dp2px( paddingCustomLeftRight), SizeTool.dp2px( paddingCustomTopBottom));
+
+                rightSelect.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding),SizeTool.dp2px(padding), SizeTool.dp2px(padding));
+
                 tableRow5.addView(rightSelect);
                 //
                 if (rightImage != null) {

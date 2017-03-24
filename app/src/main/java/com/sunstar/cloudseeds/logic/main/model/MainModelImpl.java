@@ -22,9 +22,9 @@ public class MainModelImpl implements MainContract.Model<List<TaiZhangBean.ListB
     @Override
     public void loadData(String url, final int pageNum, final int pageSize, String queryKey, final BasicCallBack<List<TaiZhangBean.ListBean>> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
-        paramsMap.put("userid","21");
-        paramsMap.put("pagenum",String.valueOf(pageNum));
-        paramsMap.put("pagesize",String.valueOf(pageSize));
+        paramsMap.put("userid", "80735c93090f4dce9ef3afabc22a33e6");
+        paramsMap.put("pageNo", String.valueOf(pageNum));
+        paramsMap.put("pageSize", String.valueOf(pageSize));
         paramsMap.put("search_keyword","");
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<TaiZhangBean>>() {

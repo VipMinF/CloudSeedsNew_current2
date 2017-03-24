@@ -37,6 +37,9 @@ public class UrlDatas {
             SECONDARY_EDIT=String.format("%s%s",BASE_URL_Local,"api/project/secondary/edit");
     public  static  final String
             SECONDARY_SAVE=String.format("%s%s",BASE_URL_Local,"api/project/secondary/save");
+
+    public  static  final String
+    SECONDARY_ADD_SELECT_BEADS=String.format("%s%s",BASE_URL_Local,"api/project/secondary/addselectbeads");
     //
     public  static  final String
             TERTIARY_LIST=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/list");

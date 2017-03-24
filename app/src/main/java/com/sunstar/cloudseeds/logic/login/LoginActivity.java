@@ -123,7 +123,7 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
     @Override
     public void setupData(UserLoginBean userloginbean) {
 
-        UserLoginHelper.saveUserLoginBean_ToAcahe(mcontext,userloginbean);
+        UserLoginHelper.saveUserLoginBean_ToAcahe(userloginbean);
         startAty(MainActivity.class);
         finish();
     }

@@ -103,7 +103,7 @@ public class GuideActivity extends ClassicActivity {
 
     private void goToMain() {
 
-       UserLoginHelper.autoLogin_Online(mContext, new BasicCallBack<UserLoginBean>() {
+       UserLoginHelper.autoLogin_Online(new BasicCallBack<UserLoginBean>() {
             @Override
             public void onSuccess(UserLoginBean userLoginBean) {
                 goToMain();

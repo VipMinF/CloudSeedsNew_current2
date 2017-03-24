@@ -63,7 +63,7 @@ public class UserCenterFragment extends ClassicFragment {
                 .replace(R.id.id_frame_layout_content,new SettingPreferenceFragmentCompat())
                 .commitAllowingStateLoss();
 
-        UserLoginBean userloginbean= UserLoginHelper.userLoginBean(getActivity());
+        UserLoginBean userloginbean= UserLoginHelper.userLoginBean();
         //UserLoginBean userloginbean = UserLoginBean.getUserLoginBean();
 
         TextView user_account = (TextView)findById(R.id.usercenter_account);

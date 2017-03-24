@@ -65,7 +65,7 @@ public class ScanFragment extends ClassicFragment {
     @Override
     protected void initView(View view) {
 
-        PermissionsHelper.initDangerousPermissionOperation(new PermissionsHelper.DangerousPermissionOperation() {
+        PermissionsHelper.registerDangerousPermissionOperation(new PermissionsHelper.DangerousPermissionOperation() {
             @Override
             public void doDangerousOperation(FragmentActivity fragmentActivity, String... strings) {
                goScanContinue();
@@ -120,5 +120,9 @@ public class ScanFragment extends ClassicFragment {
     }
 
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        PermissionsHelper.unRegisterDangerousPermissionOperation();
+    }
 }
