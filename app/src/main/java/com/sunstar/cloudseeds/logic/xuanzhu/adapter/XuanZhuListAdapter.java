@@ -46,6 +46,10 @@ public class XuanZhuListAdapter extends ClassicRVHeaderFooterAdapter<XuanZhuList
 
         Button id_btn_item_show_qrcode= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_qrcode);
         if ("1".equals(mDataList.get(pos).getStatus())){
+            //已绑定
+            id_btn_item_show_qrcode.setText("已绑二维码");
+            id_btn_item_show_qrcode.setEnabled(false);
+        }else {
             //未绑定
             id_btn_item_show_qrcode.setOnClickListener(new OnNotFastClickListener() {
                 @Override
@@ -56,10 +60,6 @@ public class XuanZhuListAdapter extends ClassicRVHeaderFooterAdapter<XuanZhuList
                 }
             });
             id_btn_item_show_qrcode.setEnabled(true);
-        }else {
-            //已绑定
-            id_btn_item_show_qrcode.setText("已绑二维码");
-            id_btn_item_show_qrcode.setEnabled(false);
         }
 
         Button id_btn_item_show_detail= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_detail);

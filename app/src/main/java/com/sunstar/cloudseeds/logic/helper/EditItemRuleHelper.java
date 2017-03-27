@@ -151,7 +151,7 @@ public class EditItemRuleHelper {
         leftTitle.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
         /*setBackgroundResource之前  有问题 */
         leftTitle.setPadding(SizeTool.dp2px(padding), 0,
-                0, 0);
+                SizeTool.dp2px(padding), 0);
 
         TextView rightImage = null;
         if (needRight) {

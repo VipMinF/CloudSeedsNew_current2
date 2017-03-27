@@ -13,6 +13,7 @@ import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
+import com.classichu.classichu.basic.tool.ThreadTool;
 import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.itemselector.bean.ItemSelectBean;
@@ -199,8 +200,13 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     }
 
     @Override
-    public void showMessage(String s) {
-        ToastTool.showShort(s);
+    public void showMessage(final String s) {
+        ThreadTool.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ToastTool.showShort(s);
+            }
+        });
     }
 
     @Override
