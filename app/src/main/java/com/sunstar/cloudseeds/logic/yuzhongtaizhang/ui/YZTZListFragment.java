@@ -11,18 +11,13 @@ import android.widget.SearchView;
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
 import com.classichu.classichu.app.CLog;
-import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
-import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
+import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
 import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.bean.InfoBean;
-import com.sunstar.cloudseeds.data.CommDatas;
-import com.sunstar.cloudseeds.data.UrlDatas;
-import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
 import com.sunstar.cloudseeds.logic.search.SearchRecentHelper;
@@ -30,13 +25,12 @@ import com.sunstar.cloudseeds.logic.xuanzhu.XuanZhuActivity;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.adapter.YZTZListAdapter;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZListBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZListContract;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.model.AddSelectBeadsModel;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZListPresenterImpl;
 import com.sunstar.cloudseeds.ui.SearchFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -262,15 +256,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             public void onItemShowXuanZhu(int position) {
                 super.onItemShowXuanZhu(position);
                 //##ToastTool.showShortCenter("选株"+position);
-                DialogManager.showClassicDialog(getActivity(), "选株新增",
-                        "是否新增一个选株", new ClassicDialogFragment.OnBtnClickListener() {
-                            @Override
-                            public void onBtnClickOk(DialogInterface dialogInterface) {
-                                super.onBtnClickOk(dialogInterface);
-
-                                goAddSelectBeads();
-                            }
-                        });
+                goAddSelectBeads();
             }
 
             @Override
@@ -288,53 +274,36 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
         return adapter;
     }
 
+
     private void goAddSelectBeads() {
-        DialogManager.showLoadingDialog(getActivity(), "请稍候...");
-        Map<String, String> paramsMap = new HashMap<>();
-        paramsMap.put("id", "0e9e0bfda93249f0b95bcc9f5dc5f7e4");
-        HttpRequestManagerFactory.getRequestManager()
-                .postUrlBackStr(UrlDatas.SECONDARY_ADD_SELECT_BEADS,
-                        HeadsParamsHelper.setupDefaultHeaders(), paramsMap,
-                        new GsonHttpRequestCallback<BasicBean<InfoBean>>() {
+        DialogManager.showClassicDialog(getActivity(), "选株新增",
+                "是否新增一个选株", new ClassicDialogFragment.OnBtnClickListener() {
+                    @Override
+                    public void onBtnClickOk(DialogInterface dialogInterface) {
+                        super.onBtnClickOk(dialogInterface);
+
+                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(), new BasicCallBack<InfoBean>() {
                             @Override
-                            public BasicBean<InfoBean> OnSuccess(String s) {
-                                return BasicBean.fromJson(s, InfoBean.class);
+                            public void onSuccess(InfoBean infoBean) {
+                                //选择新增成功
+                                DialogManager.hideLoadingDialogAutoAfterTip(
+                                        infoBean.getShow_msg(),
+                                        new DialogManager.OnAutoHide() {
+                                            @Override
+                                            public void autoHide() {
+                                                //跳转
+                                                startAty(XuanZhuActivity.class);
+                                            }
+                                        });
                             }
 
                             @Override
-                            public void OnSuccessOnUI(BasicBean<InfoBean> basicBean) {
-                                if (basicBean == null) {
-                                    showMessage(CommDatas.SERVER_ERROR);
-                                    return;
-                                }
-                                if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
-                                    if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
-                                        // showMessage(basicBean.getInfo().get(0).getShow_msg());
-                                        //选择新增成功
-                                        DialogManager.hideLoadingDialogAutoAfterTip(
-                                                basicBean.getInfo().get(0).getShow_msg(),
-                                                new DialogManager.OnAutoHide() {
-                                                    @Override
-                                                    public void autoHide() {
-                                                        //跳转
-                                                        startAty(XuanZhuActivity.class);
-                                                    }
-                                                });
-
-                                    } else {
-                                        showMessage(basicBean.getMessage());
-                                    }
-                                } else {
-                                    showMessage(basicBean.getMessage());
-                                }
-                            }
-
-                            @Override
-                            public void OnError(String s) {
+                            public void onError(String s) {
                                 showMessage(s);
                             }
                         });
 
+                    }
+                });
     }
-
 }

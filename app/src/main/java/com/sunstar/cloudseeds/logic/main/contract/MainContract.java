@@ -7,5 +7,10 @@ import com.classichu.classichu.basic.BasicContract;
  */
 
 public  interface MainContract extends BasicContract {
-
+     interface View<D> extends BasicContract.View<D> {
+         String setupFilterDateYear();
+         String setupFilterDateMonth();
+         String setupFilterProduct();
+         String setupFilterPlan();
+    }
 }

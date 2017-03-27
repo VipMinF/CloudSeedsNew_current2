@@ -1,6 +1,7 @@
 package com.sunstar.cloudseeds.logic.xuanzhu;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -10,10 +11,13 @@ import android.widget.SearchView;
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
 import com.classichu.classichu.app.CLog;
+import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
+import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.bean.InfoBean;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
 import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
@@ -22,6 +26,7 @@ import com.sunstar.cloudseeds.logic.xuanzhu.adapter.XuanZhuListAdapter;
 import com.sunstar.cloudseeds.logic.xuanzhu.bean.XuanZhuListBean;
 import com.sunstar.cloudseeds.logic.xuanzhu.contract.XuanZhuListContract;
 import com.sunstar.cloudseeds.logic.xuanzhu.presenter.XuanZhuListPresenterImpl;
+import com.sunstar.cloudseeds.logic.yuzhongtaizhang.model.AddSelectBeadsModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -253,5 +258,39 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
                 return false;
             }
         });
+    }
+
+
+    public void goAddSelectBeads4Aty() {
+        DialogManager.showClassicDialog(getActivity(), "选株新增",
+                "是否新增一个选株", new ClassicDialogFragment.OnBtnClickListener() {
+                    @Override
+                    public void onBtnClickOk(DialogInterface dialogInterface) {
+                        super.onBtnClickOk(dialogInterface);
+                        //###
+                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(),
+                                new BasicCallBack<InfoBean>() {
+                                    @Override
+                                    public void onSuccess(InfoBean infoBean) {
+                                        //选择新增成功
+                                        DialogManager.hideLoadingDialogAutoAfterTip(
+                                                infoBean.getShow_msg(),
+                                                new DialogManager.OnAutoHide() {
+                                                    @Override
+                                                    public void autoHide() {
+                                                        //刷新
+                                                        toRefreshData();
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void onError(String s) {
+                                        showMessage(s);
+                                    }
+                                });
+
+                    }
+                });
     }
 }

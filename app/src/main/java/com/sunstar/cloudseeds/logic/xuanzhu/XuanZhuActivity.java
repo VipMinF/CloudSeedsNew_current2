@@ -1,7 +1,6 @@
 package com.sunstar.cloudseeds.logic.xuanzhu;
 
 import android.view.View;
-import android.widget.Toast;
 
 import com.classichu.classichu.classic.ClassicActivity;
 import com.classichu.titlebar.widget.ClassicTitleBar;
@@ -19,23 +18,26 @@ public class XuanZhuActivity extends ClassicActivity {
         return AppBarStyle.ClassicTitleBar;
     }
 
+    private XuanZhuListFragment mXuanZhuListFragment;
+
     @Override
     protected void initView() {
-
+        mXuanZhuListFragment = XuanZhuListFragment.newInstance("", "");
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.id_frame_layout_content, XuanZhuListFragment.newInstance("",""))
+                .replace(R.id.id_frame_layout_content, mXuanZhuListFragment)
                 .commitAllowingStateLoss();
         // setAppBarTitle("选株列表");
         mClassicTitleBar.setCenterText("选株列表").setRightText("新增选株").setOnTitleBarRightItemClickListener(new ClassicTitleBar.OnTitleBarRightItemClickListener() {
             @Override
             public void onRightClick(View view) {
-                Toast.makeText(mContext, "新增选株", Toast.LENGTH_SHORT).show();
+                mXuanZhuListFragment.goAddSelectBeads4Aty();
             }
         });
     }
 
+
     @Override
     protected void initListener() {
-       // OkHttpSingleton.getInstance().doGet();
+        // OkHttpSingleton.getInstance().doGet();
     }
 }

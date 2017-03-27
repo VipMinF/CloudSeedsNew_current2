@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
+import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.tool.ScreenTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
@@ -71,10 +72,12 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
     protected int setupLayoutResId() {
         return R.layout.fragment_main;
     }
+
     ClassicMaskFrameLayout mMaskFrameLayout;
     ClassicSelectView id_csv;
     ClassicSelectView id_csv2;
     ClassicSelectView id_csv3;
+
     @Override
     protected void initView(View view) {
 
@@ -85,13 +88,13 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
                 mMaskFrameLayout.toggleMask();
             }
         });*/
-         id_csv=findById(R.id.id_csv);
-         id_csv2=findById(R.id.id_csv2);
-         id_csv3=findById(R.id.id_csv3);
-        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight()*0.6));
-        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight()*0.6));
-        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight()*0.6));
-        mMaskFrameLayout= findById(R.id.id_mfl);
+        id_csv = findById(R.id.id_csv);
+        id_csv2 = findById(R.id.id_csv2);
+        id_csv3 = findById(R.id.id_csv3);
+        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight() * 0.6));
+        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight() * 0.6));
+        id_csv.setSelectViewContentMaxHeight((int) (ScreenTool.getScreenHeight() * 0.6));
+        mMaskFrameLayout = findById(R.id.id_mfl);
 
 
         id_csv.setOnSelectViewStatusChangeListener(new ClassicSelectView.OnSelectViewStatusChangeListener() {
@@ -110,6 +113,28 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
             @Override
             public void onItemSelected(String key, String keyWithOutFix, String name) {
                 super.onItemSelected(key, keyWithOutFix, name);
+                String backDataParent = "";
+                String backDataChild = "";
+                if (key.contains("tuc")) {
+                    String[] backDatas = key.split("tuc");
+                    if (backDatas != null && backDatas.length > 0) {
+                        backDataParent = backDatas[0];
+                    }
+                    if (backDatas != null && backDatas.length > 1) {
+                        backDataChild = backDatas[1];
+                        if (backDataChild.equals("-1")) {
+                            backDataChild = "";
+                        }
+                    }
+                }else{
+                    backDataParent=key;
+                }
+                mFilterDateYear = backDataParent;
+                mFilterDateMonth = backDataChild;
+                CLog.d("塞选：xx mFilterDateYear"+mFilterDateYear);
+                CLog.d("塞选：xx mFilterDateMonth"+mFilterDateMonth);
+                //刷新
+                toRefreshData();
             }
         });
 
@@ -129,6 +154,26 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
             @Override
             public void onItemSelected(String key, String keyWithOutFix, String name) {
                 super.onItemSelected(key, keyWithOutFix, name);
+                String backDataParent = "";
+                String backDataChild = "";
+                if (key.contains("tuc")) {
+                    String[] backDatas = key.split("tuc");
+                    if (backDatas != null && backDatas.length > 0) {
+                        backDataParent = backDatas[0];
+                    }
+                    if (backDatas != null && backDatas.length > 1) {
+                        backDataChild = backDatas[1];
+                        if (backDataChild.equals("-1")) {
+                            backDataChild = "";
+                        }
+                    }
+                }else{
+                    backDataParent=key;
+                }
+                mFilterProduct = backDataChild.equals("") ? backDataParent : backDataChild;
+                CLog.d("塞选：xx mFilterProduct"+mFilterProduct);
+                //刷新
+                toRefreshData();
             }
         });
 
@@ -149,23 +194,41 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
             @Override
             public void onItemSelected(String key, String keyWithOutFix, String name) {
                 super.onItemSelected(key, keyWithOutFix, name);
+                String backDataParent = "";
+                String backDataChild = "";
+                if (key.contains("tuc")) {
+                    String[] backDatas = key.split("tuc");
+                    if (backDatas != null && backDatas.length > 0) {
+                        backDataParent = backDatas[0];
+                    }
+                    if (backDatas != null && backDatas.length > 1) {
+                        backDataChild = backDatas[1];
+                        if (backDataChild.equals("-1")) {
+                            backDataChild = "";
+                        }
+                    }
+                }else{
+                    backDataParent=key;
+                }
+                mFilterPlan = backDataChild.equals("") ? backDataParent : backDataChild;
+                CLog.d("塞选：xx mFilterPlan"+mFilterPlan);
+                //刷新
+                toRefreshData();
             }
         });
 
-        //
 
+        //刷新
         toRefreshData();
-
-
     }
 
     private void initClassifyData() {
-        ClassifyModel classifyModel=new ClassifyModel();
-        classifyModel.gainClassifyData(UrlDatas.MAIN_DATE_CLASSIFY,new BasicCallBack<List<ClassifyDataBean.ListBean>>() {
+        ClassifyModel classifyModel = new ClassifyModel();
+        classifyModel.gainClassifyData(UrlDatas.MAIN_DATE_CLASSIFY, new BasicCallBack<List<ClassifyDataBean.ListBean>>() {
             @Override
             public void onSuccess(List<ClassifyDataBean.ListBean> classifyDataBeen) {
 
-                List<ClassfiyBean> re= parseData(classifyDataBeen);
+                List<ClassfiyBean> re = parseData(classifyDataBeen);
 
                 id_csv.setupClassfiyBeanList(re);
             }
@@ -176,11 +239,11 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
             }
         });
 
-        classifyModel.gainClassifyData(UrlDatas.MAIN_PRODUCT_CLASSIFY,new BasicCallBack<List<ClassifyDataBean.ListBean>>() {
+        classifyModel.gainClassifyData(UrlDatas.MAIN_PRODUCT_CLASSIFY, new BasicCallBack<List<ClassifyDataBean.ListBean>>() {
             @Override
             public void onSuccess(List<ClassifyDataBean.ListBean> classifyDataBeen) {
 
-                List<ClassfiyBean> re= parseData(classifyDataBeen);
+                List<ClassfiyBean> re = parseData(classifyDataBeen);
 
                 id_csv2.setupClassfiyBeanList(re);
             }
@@ -191,11 +254,11 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
             }
         });
 
-        classifyModel.gainClassifyData(UrlDatas.MAIN_PLAN_CLASSIFY,new BasicCallBack<List<ClassifyDataBean.ListBean>>() {
+        classifyModel.gainClassifyData(UrlDatas.MAIN_PLAN_CLASSIFY, new BasicCallBack<List<ClassifyDataBean.ListBean>>() {
             @Override
             public void onSuccess(List<ClassifyDataBean.ListBean> classifyDataBeen) {
 
-                List<ClassfiyBean> re= parseData(classifyDataBeen);
+                List<ClassfiyBean> re = parseData(classifyDataBeen);
 
                 id_csv3.setupClassfiyBeanList(re);
             }
@@ -208,21 +271,21 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
     }
 
     private List<ClassfiyBean> parseData(List<ClassifyDataBean.ListBean> classifyDataBeen) {
-        List<ClassfiyBean> classfiyBeanList=new ArrayList<>();
+        List<ClassfiyBean> classfiyBeanList = new ArrayList<>();
 
         for (int i = 0; i < classifyDataBeen.size(); i++) {
 
-            ClassfiyBean cb=new ClassfiyBean();
+            ClassfiyBean cb = new ClassfiyBean();
             cb.setBeanID(classifyDataBeen.get(i).getCode());
             cb.setID(i);
             cb.setName(classifyDataBeen.get(i).getName());
 
-            List<ClassifyDataBean.ListBean.ChildBean>  CBCB=classifyDataBeen.get(i).getChild();
+            List<ClassifyDataBean.ListBean.ChildBean> CBCB = classifyDataBeen.get(i).getChild();
 
-            List<ClassfiyBean.ChildClassfiyBean>  childClassfiyBeanList =new ArrayList<>();
-            if (CBCB!=null&&CBCB.size()>0) {
-                for (int j = 0; j <CBCB.size(); j++) {
-                    ClassfiyBean.ChildClassfiyBean cbc=new ClassfiyBean.ChildClassfiyBean();
+            List<ClassfiyBean.ChildClassfiyBean> childClassfiyBeanList = new ArrayList<>();
+            if (CBCB != null && CBCB.size() > 0) {
+                for (int j = 0; j < CBCB.size(); j++) {
+                    ClassfiyBean.ChildClassfiyBean cbc = new ClassfiyBean.ChildClassfiyBean();
                     cbc.setID(j);
                     cbc.setBeanID(CBCB.get(j).getCode());
                     cbc.setName(CBCB.get(j).getName());
@@ -234,7 +297,7 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
             //
             classfiyBeanList.add(cb);
         }
-        return  classfiyBeanList;
+        return classfiyBeanList;
     }
 
     @Override
@@ -328,5 +391,30 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
     protected void toLoadMoreData() {
         super.toLoadMoreData();
         mPresenter.gainMoreData(mClassicRVHeaderFooterAdapter.getNextPageNum());
+    }
+
+    private String mFilterDateYear = "";
+    private String mFilterDateMonth = "";
+    private String mFilterProduct = "";
+    private String mFilterPlan = "";
+
+    @Override
+    public String setupFilterDateYear() {
+        return mFilterDateYear;
+    }
+
+    @Override
+    public String setupFilterDateMonth() {
+        return mFilterDateMonth;
+    }
+
+    @Override
+    public String setupFilterProduct() {
+        return mFilterProduct;
+    }
+
+    @Override
+    public String setupFilterPlan() {
+        return mFilterPlan;
     }
 }
