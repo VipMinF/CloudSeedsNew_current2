@@ -22,7 +22,8 @@ public class XuanZhuActivity extends ClassicActivity {
 
     @Override
     protected void initView() {
-        mXuanZhuListFragment = XuanZhuListFragment.newInstance("", "");
+        String secondary_id=getBundleExtraStr1();
+        mXuanZhuListFragment = XuanZhuListFragment.newInstance(secondary_id, "");
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.id_frame_layout_content, mXuanZhuListFragment)
                 .commitAllowingStateLoss();

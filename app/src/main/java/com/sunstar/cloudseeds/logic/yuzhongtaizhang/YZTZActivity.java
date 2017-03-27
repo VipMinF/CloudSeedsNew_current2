@@ -29,8 +29,9 @@ public class YZTZActivity extends ClassicActivity {
         switch (goToWhere){
             case AtyGoToWhere.LIST:
                 setAppBarTitle("育种台账计划");
+                String primary_id=getBundleExtraStr1();
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.id_frame_layout_content, YZTZListFragment.newInstance("",""))
+                        .replace(R.id.id_frame_layout_content, YZTZListFragment.newInstance(primary_id,""))
                         .commitAllowingStateLoss();
                 break;
             case AtyGoToWhere.DETAIL:

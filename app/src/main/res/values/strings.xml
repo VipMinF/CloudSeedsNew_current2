@@ -24,7 +24,7 @@
     <!-- 登录页面 -->
     <string name="prompt_email">请输入账号</string>
     <string name="prompt_password">请输入密码</string>
-    <string name="action_sign_in">登录(长按跳过)</string>
+    <string name="action_sign_in">登录</string>
     <string name="action_sign_in_short">登录中</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>

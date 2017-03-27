@@ -7,10 +7,10 @@ package com.sunstar.cloudseeds.data;
 public class UrlDatas {
     private   static  final String
             BASE_URL="http://192.168.1.80:8080/yunzhong/";
-    private   static  final String
+    /*private   static  final String
             BASE_URL_Local="http://192.168.1.67:8085/";
     private   static  final String
-            BASE_URL_OLD="https://git.oschina.net/louisgeek/Demo/raw/master/";
+            BASE_URL_OLD="https://git.oschina.net/louisgeek/Demo/raw/master/";*/
 
     /**
      * 首页分类相关
@@ -30,32 +30,32 @@ public class UrlDatas {
 
     //
     public  static  final String
-            SECONDARY_LIST=String.format("%s%s",BASE_URL_Local,"api/project/secondary/list");
+            SECONDARY_LIST=String.format("%s%s",BASE_URL,"api/project/secondary/list");
 
     public  static  final String
-            SECONDARY_DETAIL=String.format("%s%s",BASE_URL_Local,"api/project/secondary/detail");
+            SECONDARY_DETAIL=String.format("%s%s",BASE_URL,"api/project/secondary/detail");
 
     public  static  final String
-            SECONDARY_EDIT=String.format("%s%s",BASE_URL_Local,"api/project/secondary/edit");
+            SECONDARY_EDIT=String.format("%s%s",BASE_URL,"api/project/secondary/edit");
     public  static  final String
-            SECONDARY_SAVE=String.format("%s%s",BASE_URL_Local,"api/project/secondary/save");
+            SECONDARY_SAVE=String.format("%s%s",BASE_URL,"api/project/secondary/save");
 
     public  static  final String
-    SECONDARY_ADD_SELECT_BEADS=String.format("%s%s",BASE_URL_Local,"api/project/secondary/addselectbeads");
+    SECONDARY_ADD_SELECT_BEADS=String.format("%s%s",BASE_URL,"api/project/secondary/addselectbeads");
     //
     public  static  final String
-            TERTIARY_LIST=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/list");
+            TERTIARY_LIST=String.format("%s%s",BASE_URL,"api/project/tertiary/list");
 
     public  static  final String
-            TERTIARY_DETAIL=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/detail");
+            TERTIARY_DETAIL=String.format("%s%s",BASE_URL,"api/project/tertiary/detail");
 
     public  static  final String
-            TERTIARY_EDIT=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/edit");
+            TERTIARY_EDIT=String.format("%s%s",BASE_URL,"api/project/tertiary/edit");
     /*public  static  final String
             TERTIARY_EDIT=String.format("%s%s",BASE_URL_OLD,"api/project/tertiary/edit.json");*/
 
     public  static  final String
-            TERTIARY_SAVE=String.format("%s%s",BASE_URL_Local,"api/project/tertiary/save");
+            TERTIARY_SAVE=String.format("%s%s",BASE_URL,"api/project/tertiary/save");
 
     /**
      * 用户相关

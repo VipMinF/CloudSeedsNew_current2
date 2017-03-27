@@ -45,7 +45,7 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
         implements XuanZhuListContract.View<List<XuanZhuListBean.ListBean>>{
 
 
-
+    private String secondary_id;
     public XuanZhuListFragment() {
         // Required empty public constructor
     }
@@ -75,6 +75,7 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        secondary_id=mParam1;
     }
 
 
@@ -112,6 +113,25 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
                 = new XuanZhuListAdapter(mContext,listBeanList, R.layout.item_list_xuan_zhu);
         ClassicEmptyView classicEmptyView = new ClassicEmptyView(getContext());
         classicEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        classicEmptyView.setOnEmptyViewClickListener(new ClassicEmptyView.OnEmptyViewClickListener() {
+            @Override
+            public void onClickTextView(View view) {
+                super.onClickTextView(view);
+                toRefreshData();
+            }
+
+            @Override
+            public void onClickImageView(View view) {
+                super.onClickImageView(view);
+                toRefreshData();
+            }
+
+            @Override
+            public void onClickEmptyView(View view) {
+                super.onClickEmptyView(view);
+                toRefreshData();
+            }
+        });
         adapter.setEmptyView(classicEmptyView);
         adapter.setOnItemClickListener(new ClassicRVHeaderFooterAdapter.OnItemClickListener() {
             @Override
@@ -143,7 +163,10 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
             public void onItemShowSpqDc(int position) {
                 super.onItemShowSpqDc(position);
               //##  ToastTool.showShortCenter("onItemShowSpqDc" + position);
-                startAty(SPQActivity.class,createBundleExtraInt1(AtyGoToWhere.ADD));
+                XuanZhuListBean.ListBean listBean= (XuanZhuListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                Bundle bundle=createBundleExtraInt1(AtyGoToWhere.ADD);
+                bundle.putString("Tertiary_id",listBean.getTertiary_id());
+                startAty(SPQActivity.class,bundle);
             }
         });
         mRecyclerView.setVisibility(View.GONE);//初始化 不显示
@@ -168,6 +191,11 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
     public void showMessage(String msg) {
       //##  ToastTool.showShortCenter(msg);
         DialogManager.showTipDialog(getActivity(),"提示",msg,null);
+    }
+
+    @Override
+    public String setupGainDataSecondaryId(){
+        return  secondary_id;
     }
 
     @Override
@@ -268,7 +296,7 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
                     public void onBtnClickOk(DialogInterface dialogInterface) {
                         super.onBtnClickOk(dialogInterface);
                         //###
-                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(),
+                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(),setupGainDataSecondaryId(),
                                 new BasicCallBack<InfoBean>() {
                                     @Override
                                     public void onSuccess(InfoBean infoBean) {

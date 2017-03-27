@@ -346,21 +346,41 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
     @Override
     protected ClassicRVHeaderFooterAdapter configClassicRVHeaderFooterAdapter() {
         List<TaiZhangBean.ListBean> listBeanList = new ArrayList<>();
-        ClassicRVHeaderFooterAdapter classicRVHeaderFooterAdapter
+        MainAdapter adapter
                 = new MainAdapter(mContext, listBeanList, R.layout.item_list_tai_zhang);
         ClassicEmptyView classicEmptyView = new ClassicEmptyView(getContext());
         classicEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        classicRVHeaderFooterAdapter.setEmptyView(classicEmptyView);
-        classicRVHeaderFooterAdapter.setOnItemClickListener(new ClassicRVHeaderFooterAdapter.OnItemClickListener() {
+        classicEmptyView.setOnEmptyViewClickListener(new ClassicEmptyView.OnEmptyViewClickListener() {
+            @Override
+            public void onClickTextView(View view) {
+                super.onClickTextView(view);
+                toRefreshData();
+            }
+
+            @Override
+            public void onClickImageView(View view) {
+                super.onClickImageView(view);
+                toRefreshData();
+            }
+
+            @Override
+            public void onClickEmptyView(View view) {
+                super.onClickEmptyView(view);
+                toRefreshData();
+            }
+        });
+        adapter.setEmptyView(classicEmptyView);
+        adapter.setOnItemClickListener(new ClassicRVHeaderFooterAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 super.onItemClick(itemView, position);
                 // ToastTool.showShortCenter("sda" + position);
-                startAty(YZTZActivity.class);
+                TaiZhangBean.ListBean listBean= (TaiZhangBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                startAty(YZTZActivity.class, createBundleExtraStr1(listBean.getPrimary_id()));
             }
         });
         mRecyclerView.setVisibility(View.GONE);//初始化 不显示
-        return classicRVHeaderFooterAdapter;
+        return adapter;
     }
 
     @Override

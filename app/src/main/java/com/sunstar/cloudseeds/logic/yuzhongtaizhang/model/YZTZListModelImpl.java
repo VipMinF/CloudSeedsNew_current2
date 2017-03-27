@@ -21,12 +21,13 @@ import java.util.List;
 public class YZTZListModelImpl implements YZTZListContract.Model<List<YZTZListBean.ListBean>> {
 
     @Override
-    public void loadData(String url, final int pageNum, final int pageSize, final String keyword,
+    public void loadData(String url,String primary_id , int pageNum,  int pageSize, final String keyword,
                          final BasicCallBack<List<YZTZListBean.ListBean>> basicCallBack) {
         HashMap<String, String> paramsMap = new HashMap<>();
         paramsMap.put("userid", UserLoginHelper.getUserid());
         paramsMap.put("pageNo", String.valueOf(pageNum));
         paramsMap.put("pageSize", String.valueOf(pageSize));
+        paramsMap.put("primary_id", primary_id);
         paramsMap.put("search_keyword", keyword);
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(), paramsMap,
                 new GsonHttpRequestCallback<BasicBean<YZTZListBean>>() {
@@ -77,5 +78,11 @@ public class YZTZListModelImpl implements YZTZListContract.Model<List<YZTZListBe
                         basicCallBack.onError(errorMsg);
                     }
                 });
+
+    }
+    @Override
+    public void loadData(String url, final int pageNum, final int pageSize, final String keyword,
+                         final BasicCallBack<List<YZTZListBean.ListBean>> basicCallBack) {
+        loadData(url,"", pageNum, pageSize, keyword, basicCallBack);
     }
 }

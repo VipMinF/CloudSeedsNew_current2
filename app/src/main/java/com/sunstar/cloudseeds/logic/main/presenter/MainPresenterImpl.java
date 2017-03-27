@@ -28,7 +28,12 @@ public class MainPresenterImpl extends ClassicPresenter<MainContract.View,MainCo
             return;
         }
             mView.showProgress();
-            mModel.loadData(UrlDatas.PRIMARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<TaiZhangBean.ListBean>>() {
+            mModel.loadData(UrlDatas.PRIMARY_LIST,
+                    mView.setupFilterDateYear(),
+                    mView.setupFilterDateMonth(),
+                    mView.setupFilterProduct(),
+                    mView.setupFilterPlan(),
+                    ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<TaiZhangBean.ListBean>>() {
                 @Override
                 public void onSuccess(List<TaiZhangBean.ListBean> data) {
                     if (mView != null) {

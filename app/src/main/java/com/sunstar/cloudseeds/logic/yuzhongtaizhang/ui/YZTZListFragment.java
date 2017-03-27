@@ -49,7 +49,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     public YZTZListFragment() {
         // Required empty public constructor
     }
-
+    private  String primary_id;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -75,6 +75,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        primary_id=mParam1;
     }
 
     @Override
@@ -201,6 +202,11 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     }
 
     @Override
+    public String setupGainDataPrimaryId() {
+        return primary_id;
+    }
+
+    @Override
     public void setupData(List<YZTZListBean.ListBean> yztzBeanList) {
         mClassicRVHeaderFooterAdapter.refreshDataList(yztzBeanList);
         //
@@ -233,13 +239,32 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 = new YZTZListAdapter(mContext, listBeanList, R.layout.item_list_yztz);
         ClassicEmptyView classicEmptyView = new ClassicEmptyView(getContext());
         classicEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        classicEmptyView.setOnEmptyViewClickListener(new ClassicEmptyView.OnEmptyViewClickListener() {
+            @Override
+            public void onClickTextView(View view) {
+                super.onClickTextView(view);
+                toRefreshData();
+            }
+
+            @Override
+            public void onClickImageView(View view) {
+                super.onClickImageView(view);
+                toRefreshData();
+            }
+
+            @Override
+            public void onClickEmptyView(View view) {
+                super.onClickEmptyView(view);
+                toRefreshData();
+            }
+        });
         adapter.setEmptyView(classicEmptyView);
         adapter.setOnItemClickListener(new ClassicRVHeaderFooterAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 super.onItemClick(itemView, position);
                 //
-                startAty(XuanZhuActivity.class);
+
             }
         });
         adapter.setOnItemOperationListener(new YZTZListAdapter.OnItemOperationListener() {
@@ -247,8 +272,8 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             public void onItemShowDetail(int position) {
                 super.onItemShowDetail(position);
                 //
-                //
-                startAty(XuanZhuActivity.class);
+                YZTZListBean.ListBean listBean= (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                startAty(XuanZhuActivity.class,createBundleExtraStr1(listBean.getSecondary_id()));
                 //2017年3月23日15:31:28 暂时不需要族群详细页 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
             }
 
@@ -256,7 +281,8 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             public void onItemShowXuanZhu(int position) {
                 super.onItemShowXuanZhu(position);
                 //##ToastTool.showShortCenter("选株"+position);
-                goAddSelectBeads();
+                YZTZListBean.ListBean listBean= (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                goAddSelectBeads(listBean.getSecondary_id());
             }
 
             @Override
@@ -275,14 +301,14 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     }
 
 
-    private void goAddSelectBeads() {
+    private void goAddSelectBeads(final String secondary_id) {
         DialogManager.showClassicDialog(getActivity(), "选株新增",
                 "是否新增一个选株", new ClassicDialogFragment.OnBtnClickListener() {
                     @Override
                     public void onBtnClickOk(DialogInterface dialogInterface) {
                         super.onBtnClickOk(dialogInterface);
 
-                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(), new BasicCallBack<InfoBean>() {
+                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(),secondary_id, new BasicCallBack<InfoBean>() {
                             @Override
                             public void onSuccess(InfoBean infoBean) {
                                 //选择新增成功
@@ -292,7 +318,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                                             @Override
                                             public void autoHide() {
                                                 //跳转
-                                                startAty(XuanZhuActivity.class);
+                                                startAty(XuanZhuActivity.class,createBundleExtraStr1(secondary_id));
                                             }
                                         });
                             }

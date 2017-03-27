@@ -21,10 +21,10 @@ import java.util.Map;
 
 public class AddSelectBeadsModel {
 
-    public void goAddSelectBeads(FragmentActivity fragmentActivity, final BasicCallBack<InfoBean> basicCallBack) {
+    public void goAddSelectBeads(FragmentActivity fragmentActivity,String id, final BasicCallBack<InfoBean> basicCallBack) {
         DialogManager.showLoadingDialog(fragmentActivity, "请稍候...");
         Map<String, String> paramsMap = new HashMap<>();
-        paramsMap.put("id", "0e9e0bfda93249f0b95bcc9f5dc5f7e4");
+        paramsMap.put("id",id);
         HttpRequestManagerFactory.getRequestManager()
                 .postUrlBackStr(UrlDatas.SECONDARY_ADD_SELECT_BEADS,
                         HeadsParamsHelper.setupDefaultHeaders(), paramsMap,

@@ -41,8 +41,13 @@ public class MainAdapter extends ClassicRVHeaderFooterAdapter<TaiZhangBean.ListB
     public void findBindView(int pos, ClassicRVHeaderFooterViewHolder classicRVHeaderFooterViewHolder) {
        TextView id_tv_item_title= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_title);
        TextView id_tv_item_more= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_more);
-        //if (mDataList!=null&&mDataList.size()>0) {
-            id_tv_item_title.setText(mDataList.get(pos).getName());
-       // }
+       TextView id_tv_item_plan= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_plan);
+       TextView id_tv_item_product= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_tv_item_product);
+
+      id_tv_item_title.setText(mDataList.get(pos).getName());
+        id_tv_item_more.setText(mDataList.get(pos).getTime());
+        id_tv_item_product.setText(mDataList.get(pos).getProt_ype());
+        id_tv_item_plan.setText(mDataList.get(pos).getPlan_type());
+
     }
 }

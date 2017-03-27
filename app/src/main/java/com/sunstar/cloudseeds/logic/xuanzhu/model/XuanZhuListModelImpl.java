@@ -20,12 +20,13 @@ import java.util.List;
 public  class XuanZhuListModelImpl implements XuanZhuListContract.Model<List<XuanZhuListBean.ListBean>>{
 
     @Override
-    public void loadData(String url, final int pageNum, final int pageSize, final String keyword,
+    public void loadData(String url,String secondary_id, final int pageNum, final int pageSize, final String keyword,
                          final BasicCallBack<List<XuanZhuListBean.ListBean>> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
         paramsMap.put("userid", UserLoginHelper.getUserid());
         paramsMap.put("pageNo", String.valueOf(pageNum));
         paramsMap.put("pageSize", String.valueOf(pageSize));
+        paramsMap.put("secondary_id", secondary_id);
         paramsMap.put("search_keyword",keyword);
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<XuanZhuListBean>>() {
@@ -57,5 +58,11 @@ public  class XuanZhuListModelImpl implements XuanZhuListContract.Model<List<Xua
                         basicCallBack.onError(errorMsg);
                     }
                 });
+    }
+
+    @Override
+    public void loadData(String url,  int pageNum,  int pageSize,  String keyword,
+                          BasicCallBack<List<XuanZhuListBean.ListBean>> basicCallBack) {
+      loadData(url,"", pageNum, pageSize, keyword, basicCallBack);
     }
 }

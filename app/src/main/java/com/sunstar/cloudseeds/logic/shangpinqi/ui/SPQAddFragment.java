@@ -8,21 +8,29 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.classichu.classichu.app.CLog;
+import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
+import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
+import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.bean.InfoBean;
+import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
 import com.sunstar.cloudseeds.logic.shangpinqi.presenter.SPQDetailPresenterImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +41,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     public SPQAddFragment() {
         // Required empty public constructor
     }
-
+    private  String mNowTertiary_id;
     @Override
     protected SPQDetailPresenterImpl setupPresenter() {
         return new SPQDetailPresenterImpl(this);
@@ -64,6 +72,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mNowTertiary_id=mParam1;
     }
 
 
@@ -93,11 +102,50 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     }
 
     private void submitData() {
-      String json=  EditItemRuleHelper.generateViewBackJson(id_tl_item_container);
-      CLog.d("zzqqff:"+json);
-        //
-        Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
-        getActivity().onBackPressed();
+
+            String result = EditItemRuleHelper.generateViewBackString(id_tl_item_container);
+            //CLog.d("zzqqff:" + result);
+            Map<String, String> stringMap = new HashMap<>();
+            stringMap.put("id", mNowTertiary_id);
+            stringMap.put("itemvalue", result);
+            //
+            HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.TERTIARY_SAVE,
+                    HeadsParamsHelper.setupDefaultHeaders(), stringMap,
+                    new GsonHttpRequestCallback<BasicBean<InfoBean>>() {
+
+                        @Override
+                        public BasicBean<InfoBean> OnSuccess(String s) {
+                            return BasicBean.fromJson(s, InfoBean.class);
+                        }
+
+                        @Override
+                        public void OnSuccessOnUI(BasicBean<InfoBean> basicBean) {
+                            if (basicBean == null) {
+                                showMessage(CommDatas.SERVER_ERROR);
+                                return;
+                            }
+                            if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                                if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+                                    //
+                                    ToastTool.showShort(basicBean.getInfo().get(0).getShow_msg());
+                                    //
+                                    getActivity().onBackPressed();
+                                } else {
+                                    showMessage(basicBean.getMessage());
+                                }
+                            } else {
+                                showMessage(basicBean.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void OnError(String s) {
+                            showMessage(s);
+                        }
+                    }
+
+            );
+
     }
 
     @Override

@@ -28,7 +28,7 @@ public class XuanZhuListPresenterImpl extends ClassicPresenter<XuanZhuListContra
             return;
         }
         mView.showProgress();
-        mModel.loadData(UrlDatas.TERTIARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
+        mModel.loadData(UrlDatas.TERTIARY_LIST,mView.setupGainDataSecondaryId(), ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
             @Override
             public void onSuccess(List<XuanZhuListBean.ListBean> data) {
                 if (mView != null) {
@@ -49,7 +49,7 @@ public class XuanZhuListPresenterImpl extends ClassicPresenter<XuanZhuListContra
         if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
             return;
         }
-        mModel.loadData(UrlDatas.TERTIARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
+        mModel.loadData(UrlDatas.TERTIARY_LIST,mView.setupGainDataSecondaryId(), pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
             @Override
             public void onSuccess(final List<XuanZhuListBean.ListBean> data) {
                 mView.setupMoreData(data);
@@ -68,7 +68,7 @@ public class XuanZhuListPresenterImpl extends ClassicPresenter<XuanZhuListContra
             return;
         }
         mView.showProgress();
-        mModel.loadData(UrlDatas.TERTIARY_LIST,
+        mModel.loadData(UrlDatas.TERTIARY_LIST,mView.setupGainDataSecondaryId(),
                 ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, keyword, new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
                     @Override
                     public void onSuccess(List<XuanZhuListBean.ListBean> data) {
@@ -90,7 +90,7 @@ public class XuanZhuListPresenterImpl extends ClassicPresenter<XuanZhuListContra
         if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
             return;
         }
-        mModel.loadData(UrlDatas.TERTIARY_LIST, pageNum,
+        mModel.loadData(UrlDatas.TERTIARY_LIST,mView.setupGainDataSecondaryId(), pageNum,
                 ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, keyword, new BasicCallBack<List<XuanZhuListBean.ListBean>>() {
                     @Override
                     public void onSuccess(final List<XuanZhuListBean.ListBean> data) {

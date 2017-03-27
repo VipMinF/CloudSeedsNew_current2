@@ -27,7 +27,7 @@ import java.util.List;
 public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> implements SPQDetailContract.View<SPQDetailBean> {
 
 
-
+    private  String mNowTertiary_id;
     public SPQDetailFragment() {
         // Required empty public constructor
     }
@@ -62,6 +62,7 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mNowTertiary_id=mParam1;
     }
 
     @Override
@@ -82,7 +83,9 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         setOnNotFastClickListener(findById(R.id.id_btn_show_add), new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
-                startAty(SPQActivity.class,createBundleExtraInt1(AtyGoToWhere.ADD));
+                Bundle bundle=createBundleExtraInt1(AtyGoToWhere.ADD);
+                bundle.putString("Tertiary_id",mNowTertiary_id);
+                startAty(SPQActivity.class,bundle);
             }
         });
     }

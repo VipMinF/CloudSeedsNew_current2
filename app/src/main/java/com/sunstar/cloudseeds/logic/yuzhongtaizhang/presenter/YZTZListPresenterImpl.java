@@ -32,7 +32,7 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
         }
         mView.showProgress();
 
-        mModel.loadData(UrlDatas.SECONDARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
+        mModel.loadData(UrlDatas.SECONDARY_LIST,mView.setupGainDataPrimaryId(), ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(List<YZTZListBean.ListBean> data) {
                 if (mView != null) {
@@ -53,7 +53,7 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
         if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
             return;
         }
-        mModel.loadData(UrlDatas.SECONDARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
+        mModel.loadData(UrlDatas.SECONDARY_LIST,mView.setupGainDataPrimaryId(), pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, "", new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(final List<YZTZListBean.ListBean> data) {
                 mView.setupMoreData(data);
@@ -72,7 +72,7 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
             return;
         }
         mView.showProgress();
-        mModel.loadData(UrlDatas.SECONDARY_LIST, ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
+        mModel.loadData(UrlDatas.SECONDARY_LIST,mView.setupGainDataPrimaryId(), ClassicRVHeaderFooterAdapter.PAGE_NUM_DEFAULT, pageCount, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(List<YZTZListBean.ListBean> data) {
                 if (mView != null) {
@@ -93,7 +93,7 @@ public class YZTZListPresenterImpl extends ClassicPresenter<YZTZListContract.Vie
         if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
             return;
         }
-        mModel.loadData(UrlDatas.SECONDARY_LIST, pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
+        mModel.loadData(UrlDatas.SECONDARY_LIST,mView.setupGainDataPrimaryId(), pageNum, ClassicRVHeaderFooterAdapter.PAGE_SIZE_DEFAULT, keyword, new BasicCallBack<List<YZTZListBean.ListBean>>() {
             @Override
             public void onSuccess(final List<YZTZListBean.ListBean> data) {
                 mView.setupMoreData(data);
