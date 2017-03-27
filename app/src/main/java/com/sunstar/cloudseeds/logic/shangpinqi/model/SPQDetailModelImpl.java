@@ -6,7 +6,6 @@ import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpReque
 import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
-import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
 
@@ -30,15 +29,15 @@ public class SPQDetailModelImpl implements SPQDetailContract.Model<SPQDetailBean
     @Override
     public void loadData(String url,String id, final BasicCallBack<SPQDetailBean> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
-        paramsMap.put("userid", UserLoginHelper.getUserid());
-        paramsMap.put("tertiary_id",id);
+      //  paramsMap.put("userid", UserLoginHelper.getUserid());
+        paramsMap.put("id",id);
 
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<SPQDetailBean>>() {
                     @Override
                     public BasicBean<SPQDetailBean> OnSuccess(String result) {
-                        BasicBean<SPQDetailBean> BB= BasicBean.fromJson(result,SPQDetailBean.class);
-                        return BB;
+                        BasicBean<SPQDetailBean> bb= BasicBean.fromJson(result,SPQDetailBean.class);
+                        return bb;
                     }
 
                     @Override

@@ -211,7 +211,7 @@ public class EditItemRuleHelper {
                 rightTitle.setLayoutParams(commTableRowLayoutParams4UI);
                 rightTitle.setTag(R.id.hold_view_key, rightKey);
                 rightTitle.setTag(R.id.hold_view_input_type_text, "true");
-                rightTitle.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
+                rightTitle.setBackgroundResource(R.drawable.shape_form_frame_bottom_text);
                 /* 文本框 padding */
                 rightTitle.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
                 tableRow.addView(rightTitle);

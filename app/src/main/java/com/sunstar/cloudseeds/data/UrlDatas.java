@@ -6,10 +6,11 @@ package com.sunstar.cloudseeds.data;
 
 public class UrlDatas {
     private   static  final String
-            BASE_URL="http://192.168.1.80:8080/yunzhong/";
-    /*private   static  final String
+            BASE_URL="http://192.168.1.67:8085/";
+           // BASE_URL="http://192.168.1.80:8080/yunzhong/";
+   private   static  final String
             BASE_URL_Local="http://192.168.1.67:8085/";
-    private   static  final String
+   /*  private   static  final String
             BASE_URL_OLD="https://git.oschina.net/louisgeek/Demo/raw/master/";*/
 
     /**
@@ -68,6 +69,12 @@ public class UrlDatas {
 
     public  static  final String
             CheckOrBindQrCode_URL=String.format("%s%s",BASE_URL,"api/qrcode/query");
+
+    /**
+     * 图片上传
+     */
+    public  static  final String
+            URL_UPLOAD_IMAGES=String.format("%s%s",BASE_URL_Local,"api/image/noweatheraddimages");
 
 
 }
