@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TableLayout;
 
+import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
+import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
@@ -15,7 +17,11 @@ import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.shangpinqi.SPQActivity;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
+import com.sunstar.cloudseeds.logic.shangpinqi.event.SPQEditSaveEvent;
 import com.sunstar.cloudseeds.logic.shangpinqi.presenter.SPQDetailPresenterImpl;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -24,7 +30,8 @@ import java.util.List;
  * Use the {@link SPQDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> implements SPQDetailContract.View<SPQDetailBean> {
+public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl>
+        implements SPQDetailContract.View<SPQDetailBean> {
 
 
     private  String mNowTertiary_id;
@@ -111,7 +118,7 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
 
     @Override
     public void showMessage(String s) {
-
+        ToastTool.showShort(s);
     }
 
     @Override
@@ -125,5 +132,17 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
     @Override
     public void setupMoreData(SPQDetailBean spqDetailBean) {
 
+    }
+
+    @Override
+    public String setupGainDataTertiaryId() {
+        return mNowTertiary_id;
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(SPQEditSaveEvent event) {
+        CLog.d("SPQEditSaveEvent");
+        toRefreshData();
     }
 }

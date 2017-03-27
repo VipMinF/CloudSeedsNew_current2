@@ -26,7 +26,10 @@ import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
+import com.sunstar.cloudseeds.logic.shangpinqi.event.SPQEditSaveEvent;
 import com.sunstar.cloudseeds.logic.shangpinqi.presenter.SPQDetailPresenterImpl;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -129,7 +132,10 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
                                     //
                                     ToastTool.showShort(basicBean.getInfo().get(0).getShow_msg());
                                     //
+                                    EventBus.getDefault().post(new SPQEditSaveEvent());
+                                    //
                                     getActivity().onBackPressed();
+
                                 } else {
                                     showMessage(basicBean.getMessage());
                                 }
@@ -194,7 +200,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
 
     @Override
     public void showMessage(String s) {
-
+        ToastTool.showShort(s);
     }
 
     @Override
@@ -208,5 +214,10 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     @Override
     public void setupMoreData(SPQDetailBean spqDetailBean) {
 
+    }
+
+    @Override
+    public String setupGainDataTertiaryId() {
+        return mNowTertiary_id;
     }
 }

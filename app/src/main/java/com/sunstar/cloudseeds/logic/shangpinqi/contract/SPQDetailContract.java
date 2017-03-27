@@ -8,6 +8,7 @@ import com.classichu.classichu.basic.BasicContract;
  */
 public class SPQDetailContract {
     public interface View<D> extends BasicContract.View<D> {
+        String setupGainDataTertiaryId();
     }
 
     public interface Presenter {
@@ -16,5 +17,6 @@ public class SPQDetailContract {
 
     public interface Model<D> extends BasicContract.Model<D>{
         void loadData(String url, BasicCallBack<D> basicCallBack);
+        void loadData(String url,String id, BasicCallBack<D> basicCallBack);
     }
 }

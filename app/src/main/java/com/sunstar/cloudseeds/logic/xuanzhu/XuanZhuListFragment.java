@@ -146,7 +146,10 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
             public void onItemShowDetail(int position) {
                 super.onItemShowDetail(position);
               //###  ToastTool.showShortCenter("onItemShowDetail" + position);
-                startAty(SPQActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
+                XuanZhuListBean.ListBean listBean= (XuanZhuListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                Bundle bundle=createBundleExtraInt1(AtyGoToWhere.DETAIL);
+                bundle.putString("Tertiary_id",listBean.getTertiary_id());
+                startAty(SPQActivity.class,bundle);
             }
 
             @Override

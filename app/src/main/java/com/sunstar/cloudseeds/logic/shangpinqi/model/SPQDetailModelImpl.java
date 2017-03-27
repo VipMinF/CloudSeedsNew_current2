@@ -22,9 +22,14 @@ public class SPQDetailModelImpl implements SPQDetailContract.Model<SPQDetailBean
     }
 
     @Override
-    public void loadData(String url, final BasicCallBack<SPQDetailBean> basicCallBack) {
+    public void loadData(String url, BasicCallBack<SPQDetailBean> basicCallBack) {
+        loadData(url,"", basicCallBack);
+    }
+
+    @Override
+    public void loadData(String url,String id, final BasicCallBack<SPQDetailBean> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
-        paramsMap.put("id","f275ce6d5ed343449d65fe2d9f3ad313");
+        paramsMap.put("id",id);
 
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<SPQDetailBean>>() {

@@ -23,7 +23,7 @@ public class SPQDetailPresenterImpl extends ClassicPresenter<SPQDetailContract.V
             return;
         }
         mView.showProgress();
-        mModel.loadData(url, new BasicCallBack<SPQDetailBean>() {
+        mModel.loadData(url,mView.setupGainDataTertiaryId(), new BasicCallBack<SPQDetailBean>() {
             @Override
             public void onSuccess(SPQDetailBean bean) {
                 if (mView != null) {
