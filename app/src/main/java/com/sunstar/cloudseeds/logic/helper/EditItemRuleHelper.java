@@ -15,6 +15,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.helper.VectorOrImageResHelper;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.basic.tool.SizeTool;
@@ -196,6 +197,10 @@ public class EditItemRuleHelper {
                     });
                 }
             }
+        }
+        if(inputType!=null){
+            CLog.e("inputType:"+inputType);
+            return;
         }
         switch (inputType) {
             case ITEM_TYPE_TEXT:

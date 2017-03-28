@@ -18,12 +18,13 @@ import com.sunstar.cloudseeds.ui.ScanFragment;
 import com.sunstar.cloudseeds.ui.SearchFragment;
 import com.sunstar.cloudseeds.ui.UserCenterFragment;
 
-public class MainActivity extends ClassicActivity{
+public class MainActivity extends ClassicActivity {
 
-    private  Fragment mMainFragment;
-    private  Fragment mSearchFragment;
-    private  Fragment mScanFragment;
-    private  Fragment mUserCenterFragment;
+    private Fragment mMainFragment;
+    private Fragment mSearchFragment;
+    private Fragment mScanFragment;
+    private Fragment mUserCenterFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,15 +45,17 @@ public class MainActivity extends ClassicActivity{
         showMainFragment();
     }
 
+    private Fragment mCurrentFragment;
+
     private void initFragmentList() {
-        mMainFragment=MainFragment.newInstance("","");
-        mSearchFragment=SearchFragment.newInstance("","");
-        mScanFragment=ScanFragment.newInstance("","");
-        mUserCenterFragment=UserCenterFragment.newInstance("","");
+        mMainFragment = MainFragment.newInstance("", "");
+        mSearchFragment = SearchFragment.newInstance("", "");
+        mScanFragment = ScanFragment.newInstance("", "");
+        mUserCenterFragment = UserCenterFragment.newInstance("", "");
     }
 
     private void initNavigationView() {
-        BottomNavigationView bottomNavigationView=findById(R.id.id_bottom_navigation_view);
+        BottomNavigationView bottomNavigationView = findById(R.id.id_bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -76,28 +79,28 @@ public class MainActivity extends ClassicActivity{
     }
 
 
-
-    private Fragment mCurrentFragment=new Fragment();
     /**
      * 控制 fragment 来回切换  的显示或隐藏
+     *
      * @param fragment
      * @param containerViewId
      */
-    private void showFragment(Fragment fragment,int containerViewId) {
-   if (mCurrentFragment!=fragment) {
-           FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    private void showFragment(Fragment fragment, int containerViewId) {
+        if (fragment!=mCurrentFragment) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //
-           transaction.hide(mCurrentFragment);
-           if (!fragment.isAdded()) {
-               // transaction.add(containerViewId, fragment).show(fragment).commitAllowingStateLoss();
-                transaction.add(containerViewId, fragment).show(fragment).commit();
+            if (mCurrentFragment!=null){
+            transaction.hide(mCurrentFragment);}
+            if (!fragment.isAdded()) {
+                // transaction.add(containerViewId, fragment).show(fragment).commitAllowingStateLoss();
+                transaction.add(containerViewId, fragment).show(fragment).commitNow();
             } else {
-               // transaction.show(fragment).commitAllowingStateLoss();
-                transaction.show(fragment).commit();
+                // transaction.show(fragment).commitAllowingStateLoss();
+                transaction.show(fragment).commitNow();
             }
-       mCurrentFragment = fragment;
- }
-}
+            mCurrentFragment = fragment;
+        }
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -106,42 +109,46 @@ public class MainActivity extends ClassicActivity{
     }
 
     private void showMainFragment() {
-        if (mMainFragment==null){
-            mMainFragment=MainFragment.newInstance("","");
+        if (mMainFragment == null) {
+            mMainFragment = MainFragment.newInstance("", "");
         }
-        showFragment(mMainFragment,R.id.id_frame_layout_content);
+        showFragment(mMainFragment, R.id.id_frame_layout_content);
     }
+
     private void showSearchFragment() {
-        if (mSearchFragment==null){
-            mSearchFragment=SearchFragment.newInstance("","");
+        if (mSearchFragment == null) {
+            mSearchFragment = SearchFragment.newInstance("", "");
         }
-        showFragment(mSearchFragment,R.id.id_frame_layout_content);
+        showFragment(mSearchFragment, R.id.id_frame_layout_content);
     }
+
     private void showScanFragment() {
-        if (mScanFragment==null){
-            mScanFragment=ScanFragment.newInstance("","");
+        if (mScanFragment == null) {
+            mScanFragment = ScanFragment.newInstance("", "");
         }
-        showFragment(mScanFragment,R.id.id_frame_layout_content);
+        showFragment(mScanFragment, R.id.id_frame_layout_content);
     }
+
     private void showUserCenterFragment() {
-        if (mUserCenterFragment==null){
-            mUserCenterFragment=UserCenterFragment.newInstance("","");
+        if (mUserCenterFragment == null) {
+            mUserCenterFragment = UserCenterFragment.newInstance("", "");
         }
-        showFragment(mUserCenterFragment,R.id.id_frame_layout_content);
+        showFragment(mUserCenterFragment, R.id.id_frame_layout_content);
     }
+
     @Override
     protected void initListener() {
 
     }
 
-    private void initAppBar(){
+    private void initAppBar() {
         setAppBarTitle("首页");
         //
-        if (mClassicTitleBar!=null){
+        if (mClassicTitleBar != null) {
             //update by lzy -2017.3.21
             UserLoginBean userloginbean = UserLoginHelper.userLoginBean();
-            String company="";
-            if (userloginbean!=null&&userloginbean.getCompany()!=null){
+            String company = "";
+            if (userloginbean != null && userloginbean.getCompany() != null) {
 
             }
             mClassicTitleBar.setRightText(company)
@@ -155,10 +162,12 @@ public class MainActivity extends ClassicActivity{
     protected boolean configSwipeBackEnable() {
         return false;
     }
+
     @Override
     protected boolean configBackBtnEnable() {
         return false;
     }
+
     @Override
     protected AppBarStyle configAppBarStyle() {
         return AppBarStyle.ClassicTitleBar;

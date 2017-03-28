@@ -30,7 +30,8 @@ public class SPQDetailModelImpl implements SPQDetailContract.Model<SPQDetailBean
     public void loadData(String url,String id, final BasicCallBack<SPQDetailBean> basicCallBack) {
         HashMap<String,String> paramsMap=new HashMap<>();
       //  paramsMap.put("userid", UserLoginHelper.getUserid());
-        paramsMap.put("id",id);
+       // paramsMap.put("id",id);
+        paramsMap.put("id","0005d477b31643e19916f98b37514afe");
 
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url, HeadsParamsHelper.setupDefaultHeaders(),paramsMap,
                 new GsonHttpRequestCallback<BasicBean<SPQDetailBean>>() {

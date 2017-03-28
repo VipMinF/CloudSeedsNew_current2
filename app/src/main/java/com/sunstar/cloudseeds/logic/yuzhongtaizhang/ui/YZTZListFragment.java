@@ -326,6 +326,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                             @Override
                             public void onError(String s) {
                                 showMessage(s);
+                                DialogManager.hideLoadingDialog();
                             }
                         });
 
