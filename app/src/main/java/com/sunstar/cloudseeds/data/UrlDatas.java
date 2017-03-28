@@ -6,10 +6,10 @@ package com.sunstar.cloudseeds.data;
 
 public class UrlDatas {
     private   static  final String
-                   BASE_URL="http://192.168.1.67:8085/";
+                   BASE_URL="http://192.168.1.67:8086/";
  //BASE_URL="http://192.168.1.80:8080/yunzhong/";
    private   static  final String
-            BASE_URL_Local="http://192.168.1.67:8085/";
+            BASE_URL_Local="http://192.168.1.67:8086/";
    /*  private   static  final String
             BASE_URL_OLD="https://git.oschina.net/louisgeek/Demo/raw/master/";*/
 

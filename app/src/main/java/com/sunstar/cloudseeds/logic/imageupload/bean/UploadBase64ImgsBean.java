@@ -7,6 +7,38 @@ package com.sunstar.cloudseeds.logic.imageupload.bean;
 public class UploadBase64ImgsBean {
 
     private int userID;
+    private String resultid;
+    private String itemid;
+
+    public UploadBase64ImgsBean(int userID, String resultid, String itemid, String companyid, String plantnumber, String oldFileName, String shoottime, String extension, String base64ImgStr) {
+        this.userID = userID;
+        this.resultid = resultid;
+        this.itemid = itemid;
+        this.companyid = companyid;
+        this.plantnumber = plantnumber;
+        this.oldFileName = oldFileName;
+        this.shoottime = shoottime;
+        this.extension = extension;
+        this.base64ImgStr = base64ImgStr;
+    }
+
+    public String getResultid() {
+        return resultid;
+
+    }
+
+    public void setResultid(String resultid) {
+        this.resultid = resultid;
+    }
+
+    public String getItemid() {
+        return itemid;
+    }
+
+    public void setItemid(String itemid) {
+        this.itemid = itemid;
+    }
+
     private String companyid;
     private String plantnumber;
     private String oldFileName;
@@ -14,15 +46,7 @@ public class UploadBase64ImgsBean {
     private String extension;
     private String base64ImgStr;
 
-    public UploadBase64ImgsBean(int userID,String companyid,String plantnumber, String oldFileName, String shoottime, String extension, String base64ImgStr) {
-        this.userID = userID;
-        this.plantnumber = plantnumber;
-        this.companyid = companyid;
-        this.oldFileName = oldFileName;
-        this.shoottime = shoottime;
-        this.extension = extension;
-        this.base64ImgStr = base64ImgStr;
-    }
+
 
     public UploadBase64ImgsBean() {
         super();

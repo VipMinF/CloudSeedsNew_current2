@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.classichu.classichu.basic.extend.DataHolderSingleton;
+import com.classichu.classichu.basic.helper.DialogFragmentShowHelper;
 import com.classichu.classichu.basic.okhttp.GsonOkHttpCallback;
 import com.classichu.classichu.basic.okhttp.OkHttpSingleton;
 import com.classichu.photoselector.imagespicker.ImagePickBean;
-import com.classichu.photoselector.imagespicker.ImagePickRecyclerView;
 import com.google.gson.reflect.TypeToken;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
@@ -37,46 +37,28 @@ public abstract class ImagePickUploadQueueManager {
     private UploadBase64ImgsWithWeatherBean mUploadBase64ImgsWithWeatherBean;
     private int mUserID;
     private boolean mIsHasWeather;
+    private  List<ImagePickBean> mImagePickBeanList;
     /**
      * 传入的 UploadBase64ImgsWithWeatherBean 的子List，内部自动填充   所以只需要传入Bean其本身的数据
      *
      * @param queueNameNotTheSame
      * @param thePreviousDataString
-     * @param imagePickRecyclerView
      * @param v4FragmentManager
      * @param progressDialogName
      * @param isHasWeather
-     * @param uploadBase64ImgsWithWeatherBean
      */
-    public ImagePickUploadQueueManager(
-                                       String queueNameNotTheSame,
-                                       String thePreviousDataString,
-                                       ImagePickRecyclerView imagePickRecyclerView,
-                                       FragmentManager v4FragmentManager,
-                                       String progressDialogName,
-                                       boolean isHasWeather,
-                                       UploadBase64ImgsWithWeatherBean uploadBase64ImgsWithWeatherBean
-    ) {
-
-        mImagePickRecyclerView = imagePickRecyclerView;
-        V4FragmentManager = v4FragmentManager;
-        mQueueNameNoSame = queueNameNotTheSame;
-        mThePreviousDataString = thePreviousDataString;
-        mProgressDialogName = progressDialogName;
-        mIsHasWeather = isHasWeather;
-        mUploadBase64ImgsWithWeatherBean = uploadBase64ImgsWithWeatherBean;
-    }
-
     public ImagePickUploadQueueManager(String queueNameNotTheSame,
                                        String thePreviousDataString,
-                                       ImagePickRecyclerView imagePickRecyclerView,
+                                      // ImagePickRecyclerView imagePickRecyclerView,
+                                       List<ImagePickBean> imagePickBeanList,
                                        FragmentManager v4FragmentManager, String progressDialogName,
                                        int userID,
                                        boolean isHasWeather
     ) {
 
-        mImagePickRecyclerView = imagePickRecyclerView;
+       // mImagePickRecyclerView = imagePickRecyclerView;
         V4FragmentManager = v4FragmentManager;
+        mImagePickBeanList = imagePickBeanList;
         mQueueNameNoSame = queueNameNotTheSame;
         mThePreviousDataString = thePreviousDataString;
         mProgressDialogName = progressDialogName;
@@ -85,7 +67,7 @@ public abstract class ImagePickUploadQueueManager {
     }
 
     // private Activity mActivity;
-    private ImagePickRecyclerView mImagePickRecyclerView;
+ //   private ImagePickRecyclerView mImagePickRecyclerView;
     private MyDialogFragmentProgress mMyDialogFragmentProgress;
     private android.support.v4.app.FragmentManager V4FragmentManager;
     private String mQueueNameNoSame;
@@ -96,13 +78,25 @@ public abstract class ImagePickUploadQueueManager {
      *   String paramsStr="baseid="+jiDiInfoModel.getBaseid()+"&identitycardimages="+webIDS+"&businesslicenceimages=286";
      */
 
+    public int getmNeedUpdateCount() {
+        int needUploadCount = 0;
+        for(int i = 0; i < mImagePickBeanList.size(); ++i) {
+            ImagePickBean imagePickBean = mImagePickBeanList.get(i);
+            String imageWebIdStr = imagePickBean.getImageWebIdStr();
+            if(imageWebIdStr == null || imageWebIdStr.equals("")) {
+                needUploadCount++;
+            }
+        }
+        return needUploadCount;
+    }
 
     /**
      * 【上传图片】1.开始上传
      */
     public void uploadImageQueue_Start() {
         //1.存起来
-        List<ImagePickBean> imagePickBeanList = mImagePickRecyclerView.getImagePickBeanListData();
+        //###List<ImagePickBean> imagePickBeanList = mImagePickRecyclerView.getImagePickBeanListData();
+        List<ImagePickBean> imagePickBeanList = mImagePickBeanList;
         DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_LIST_ + mQueueNameNoSame,
                 imagePickBeanList);
         DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_NEW_WEB_IDS_ + mQueueNameNoSame, "");
@@ -115,7 +109,8 @@ public abstract class ImagePickUploadQueueManager {
             Log.d(TAG, mQueueNameNoSame + "上传开始: imagePickBeanList:" + imagePickBean.getImageWebIdStr());
             Log.d(TAG, mQueueNameNoSame + "上传开始: ==========================" + imagePickBean.getImagePickedTimeAndOrderTag());
         }
-        int needUpdateCount = mImagePickRecyclerView.getNeedUploadImageCount();
+       ///### int needUpdateCount = mImagePickRecyclerView.getNeedUploadImageCount();
+       int needUpdateCount = getmNeedUpdateCount();
         if (needUpdateCount != 0) {
             DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_COUNT_ + mQueueNameNoSame,
                     needUpdateCount);
@@ -125,7 +120,8 @@ public abstract class ImagePickUploadQueueManager {
                 mMyDialogFragmentProgress.dismiss();
             }
             mMyDialogFragmentProgress = MyDialogFragmentProgress.newInstance("", mProgressDialogName);
-            mMyDialogFragmentProgress.show(V4FragmentManager, "mMyDialogFragmentProgress");
+           //## mMyDialogFragmentProgress.show(V4FragmentManager, "mMyDialogFragmentProgress");
+            DialogFragmentShowHelper.show(V4FragmentManager,mMyDialogFragmentProgress,"mMyDialogFragmentProgress");
 
             uploadImageQueue_ExecueQueue();//2.执行上传队列
         } else {
@@ -183,7 +179,11 @@ public abstract class ImagePickUploadQueueManager {
                     OkHttpClientSingleton.getInstance()
                             .doPostAsyncJson(Url.IMAGE_UPDATE_WITH_WEATHER, hasWeatherDataJson, simpleGsonOkHttpCallback);*/
                 } else {
-                    String dataJson = "{\"base64ImgsJsonStr\":" + ImageUploadHelper.getBase64ImgsJsonStr(imagePath,"c82c07b38cc647b3b137c4f863c89481","sx-001-11-32", imageTime, mUserID) + "}";
+                    String dataJson = "{\"base64ImgsJsonStr\":" +
+                            ImageUploadHelper.getBase64ImgsJsonStr("93982e345dac4748989fb3e556b32ccc",
+                                    "e86f90bd80294582adbecd79840eb801",
+                                    "c82c07b38cc647b3b137c4f863c89481",
+                                    "sx-001-11-32",imagePath, "2017-3-28 17:01:59", mUserID) + "}";
                     Log.d(TAG, "uploadxxx dataJson:" + dataJson);
                     OkHttpSingleton.getInstance().doPostJsonString(UrlDatas.URL_UPLOAD_IMAGES,
                             HeadsParamsHelper.setupDefaultHeaders(), null, dataJson,
@@ -271,7 +271,8 @@ public abstract class ImagePickUploadQueueManager {
 
         List<ImagePickBean> imagePickBeanList = null;
         if (imageName != null && !imageName.equals("")) {
-            imagePickBeanList = (List<ImagePickBean>) DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_LIST_ + mQueueNameNoSame);
+            imagePickBeanList = (List<ImagePickBean>)
+                    DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_LIST_ + mQueueNameNoSame);
 
             //更新  instance 内
             for (int i = 0; i < imagePickBeanList.size(); i++) {
@@ -305,7 +306,7 @@ public abstract class ImagePickUploadQueueManager {
                     Log.d(TAG, mQueueNameNoSame + "上传完成: ===============:" + imagePickBean.getImagePickedTimeAndOrderTag());
                 }
                 //更新  RecyclerView 内
-                mImagePickRecyclerView.updateDataList(imagePickBeanList);
+                //####mImagePickRecyclerView.updateDataList(imagePickBeanList);
 
                 //延迟2秒消失
                 new Handler().postDelayed(new Runnable() {

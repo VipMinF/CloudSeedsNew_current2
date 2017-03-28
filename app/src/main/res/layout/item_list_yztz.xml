@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="1"
-                    android:text="栽培代号:"
+                    android:text="栽培编号:"
                     android:textSize="14dp" />
 
                 <TextView
@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="1"
-                    android:text="系统名称:"
+                    android:text="系统编号:"
                     android:textSize="14dp" />
 
                 <TextView
@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="1"
-                    android:text="播种时间:"
+                    android:text="播种日期:"
                     android:textSize="14dp" />
 
                 <TextView
@@ -198,7 +198,7 @@
                 android:layout_height="35dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="选株" />
+                android:text="新增选株" />
 
             <Button
                 android:id="@+id/id_btn_item_show_detail"

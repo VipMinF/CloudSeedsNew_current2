@@ -36,7 +36,7 @@ dependencies {
     compile 'com.github.classichu:ClassicLinesEditView:1.0.4'
     compile 'com.github.classichu:ClassicDateSelectView:1.0.4'
     compile 'com.github.classichu:ClassicItemSelector:1.0.9'
-    compile 'com.github.classichu:ClassicPhotoSelector:1.0.2'
+    compile 'com.github.classichu:ClassicPhotoSelector:1.0.4'
     compile 'com.github.classichu:Classichu:1.2.0'
     compile 'com.makeramen:roundedimageview:2.3.0'
     compile 'com.tencent.bugly:crashreport_upgrade:1.2.3'

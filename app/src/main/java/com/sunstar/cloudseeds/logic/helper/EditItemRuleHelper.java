@@ -1,7 +1,6 @@
 package com.sunstar.cloudseeds.logic.helper;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -20,10 +19,10 @@ import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.basic.tool.SizeTool;
 import com.classichu.dateselectview.widget.DateSelectView;
 import com.classichu.imageshow.bean.ImageShowBean;
+import com.classichu.imageshow.helper.ImageShowDataHelper;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
 import com.classichu.lineseditview.LinesEditView;
-import com.classichu.photoselector.customselector.ClassicPhotoSelectorActivity;
 import com.classichu.photoselector.helper.ClassicPhotoUploaderDataHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -32,7 +31,6 @@ import com.sunstar.cloudseeds.bean.ImageCommBean;
 import com.sunstar.cloudseeds.bean.ImageUploadCommBean;
 import com.sunstar.cloudseeds.bean.KeyAndValueBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
-import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 
 import java.lang.ref.WeakReference;
@@ -135,8 +133,8 @@ public class EditItemRuleHelper {
                                           final String leftTitleStr, String rightValue, String rightKey, String rightCode,
                                           List<KeyAndValueBean> options, List<KeyAndValueBean> configs,
                                           List<ImageCommBean> imageCommmBeanList,
-                                          ImageUploadCommBean imageUploadCommBean,
-                                          SPQAddFragment.OnGoSelectImgOpear onGoSelectImg) {
+                                          ImageUploadCommBean imageUploadCommBean
+                                          ) {
         WeakReference<FragmentActivity> weakReferenceAty = new WeakReference<>(fragmentActivity);
         Context context = weakReferenceAty.get();
 
@@ -182,10 +180,7 @@ public class EditItemRuleHelper {
                 rightImage.setOnClickListener(new OnNotFastClickListener() {
                     @Override
                     protected void onNotFastClick(View view) {
-                        //
-                        ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(fragmentActivity, "", 5);
-                       //## view.getContext().startActivity(new Intent(view.getContext(), ClassicPhotoSelectorActivity.class));
-                        //ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
+                           ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
                     }
                 });
 
@@ -203,8 +198,9 @@ public class EditItemRuleHelper {
             rightImage.setOnClickListener(new OnNotFastClickListener() {
                 @Override
                 protected void onNotFastClick(View view) {
-                    //
-                    fragmentActivity.startActivity(new Intent(fragmentActivity, ClassicPhotoSelectorActivity.class));
+
+                    ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(fragmentActivity, "ssss", 5);
+                    //fragmentActivity.startActivity(new Intent(fragmentActivity, ClassicPhotoSelectorActivity.class));
                     // ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
                 }
             });
@@ -466,7 +462,7 @@ public class EditItemRuleHelper {
 
 
     public static void generateSPQChildView(final FragmentActivity fragmentActivity, TableLayout tableLayout,
-                                            List<SPQDetailBean.KeyValueBean> keyValueBeanList,SPQAddFragment.OnGoSelectImgOpear onGoSelectImg) {
+                                            List<SPQDetailBean.KeyValueBean> keyValueBeanList) {
         tableLayout.removeAllViews();
         for (int i = 0; i < keyValueBeanList.size(); i++) {
             String inputType = keyValueBeanList.get(i).getInput_type();
@@ -503,9 +499,9 @@ public class EditItemRuleHelper {
             if (images != null && images.size() > 0) {
                 for (SPQDetailBean.KeyValueBean.ImagesBean image : images) {
                     ImageCommBean bean = new ImageCommBean();
-                    bean.setImg_title(image.getImg_title());
-                    bean.setSmall_img_url(image.getSmall_img_url());
-                    bean.setImg_url(image.getImg_url());
+                    bean.setImg_title("dadsa");
+                    bean.setSmall_img_url(image.getWsmallImage250_250Name());
+                    bean.setImg_url(image.getBigImageName());
                     imageCommmBeanList.add(bean);
                 }
             }
@@ -516,7 +512,7 @@ public class EditItemRuleHelper {
             imageUploadCommBean.setImg_upload_title(img_upload_options.getImg_upload_title());
 
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
-                    kvList_options, kvList_configs, imageCommmBeanList, imageUploadCommBean,onGoSelectImg);
+                    kvList_options, kvList_configs, imageCommmBeanList, imageUploadCommBean);
         }
     }
 
@@ -555,7 +551,7 @@ public class EditItemRuleHelper {
 
 
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
-                    kvList_options, kvList_configs, null, null,null);
+                    kvList_options, kvList_configs, null, null);
         }
     }
 }

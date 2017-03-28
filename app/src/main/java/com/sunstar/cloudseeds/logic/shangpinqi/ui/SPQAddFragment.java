@@ -28,6 +28,7 @@ import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
+import com.sunstar.cloudseeds.logic.imageupload.ImagePickUploadQueueManager;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
 import com.sunstar.cloudseeds.logic.shangpinqi.event.SPQEditSaveEvent;
@@ -198,8 +199,26 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
                     public void backData(List<ImagePickBean> imagePickBeanList) {
                         Log.d("DSAD", "backData: "+imagePickBeanList);
 
+
+
+                        uploadImages(imagePickBeanList);
+
                     }
+
+
                 });
+    }
+
+    private void uploadImages(List<ImagePickBean> imagePickBeanList) {
+        ImagePickUploadQueueManager imagePickUploadQueueManager=new ImagePickUploadQueueManager("sdas","",
+                imagePickBeanList, getChildFragmentManager(),"rewrwe",0,false) {
+            @Override
+            protected void uploadImageQueue_Complete(String thePreviousData, String webIDS) {
+                        CLog.d("thePreviousData:"+thePreviousData);
+                        CLog.d("webIDS:"+webIDS);
+            }
+        };
+        imagePickUploadQueueManager.uploadImageQueue_Start();
     }
 
 
@@ -228,13 +247,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         //
         List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
         //
-        EditItemRuleHelper.generateSPQChildView(getActivity(), id_tl_item_container, kvbList, new OnGoSelectImgOpear() {
-            @Override
-            public void selectImgOpear() {
-                //###
-                ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(getActivity(), "ssss", 5);
-            }
-        });
+        EditItemRuleHelper.generateSPQChildView(getActivity(), id_tl_item_container, kvbList);
     }
 
     @Override
@@ -248,8 +261,4 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     }
 
 
-
-    public  interface OnGoSelectImgOpear{
-      void selectImgOpear();
-    }
 }

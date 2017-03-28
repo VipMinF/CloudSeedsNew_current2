@@ -1,10 +1,8 @@
 package com.sunstar.cloudseeds.logic.shangpinqi.ui;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.TableLayout;
 
@@ -13,8 +11,6 @@ import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.basic.tool.ThreadTool;
 import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
-import com.classichu.photoselector.helper.ClassicPhotoUploaderDataHelper;
-import com.classichu.photoselector.imagespicker.ImagePickBean;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
 import com.sunstar.cloudseeds.data.UrlDatas;
@@ -136,7 +132,7 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         //
         List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
         //
-        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList,null);
+        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList);
     }
 
     @Override
@@ -156,16 +152,5 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         toRefreshData();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //
-        ClassicPhotoUploaderDataHelper.callAtOnActivityResult(requestCode, resultCode, data,
-                new ClassicPhotoUploaderDataHelper.PhotoSelectorBackData() {
-                    @Override
-                    public void backData(List<ImagePickBean> imagePickBeanList) {
-                        Log.d("DSAD21", "backData21212: "+imagePickBeanList);
-                    }
-                });
-    }
+
 }

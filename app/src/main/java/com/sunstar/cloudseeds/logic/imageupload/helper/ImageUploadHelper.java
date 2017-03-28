@@ -60,7 +60,7 @@ public class ImageUploadHelper {
         //
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
-    public static String getBase64ImgsJsonStr(String companyid,String plantnumber,String filePath, String fileTime, int nowUserID) {
+    public static String getBase64ImgsJsonStr(String resultid,String itemid,String companyid,String plantnumber,String filePath, String fileTime, int nowUserID) {
 
         File file=new File(filePath);
         String fileName=file.getName();
@@ -73,7 +73,8 @@ public class ImageUploadHelper {
         System.out.println(prefix);
         //用String的endsWith(".java")方法判断是否问指定文件类型。
         String prefixHasDot="."+prefix;
-        UploadBase64ImgsBean imgs1=new UploadBase64ImgsBean(nowUserID,companyid,plantnumber, fileName,fileTime, prefixHasDot, Base64Str);
+        UploadBase64ImgsBean imgs1=new UploadBase64ImgsBean(nowUserID, resultid, itemid,
+                companyid,plantnumber, fileName,fileTime, prefixHasDot, Base64Str);
         // UploadImgs imgs2=new UploadImgs(NowUserID, "120.jpg", ".jpg", Base64Str);
         list.add(imgs1);
         // list.add(imgs2);
