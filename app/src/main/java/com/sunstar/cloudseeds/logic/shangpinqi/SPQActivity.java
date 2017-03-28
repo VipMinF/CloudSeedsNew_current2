@@ -58,4 +58,5 @@ public class SPQActivity extends ClassicActivity {
         return AppBarStyle.ClassicTitleBar;
     }
 
+
 }

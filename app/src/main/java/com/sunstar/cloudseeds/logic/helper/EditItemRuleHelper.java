@@ -15,23 +15,24 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.helper.VectorOrImageResHelper;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.basic.tool.SizeTool;
 import com.classichu.dateselectview.widget.DateSelectView;
 import com.classichu.imageshow.bean.ImageShowBean;
-import com.classichu.imageshow.helper.ImageShowDataHelper;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
 import com.classichu.lineseditview.LinesEditView;
 import com.classichu.photoselector.customselector.ClassicPhotoSelectorActivity;
+import com.classichu.photoselector.helper.ClassicPhotoUploaderDataHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.bean.ImageCommmBean;
+import com.sunstar.cloudseeds.bean.ImageCommBean;
+import com.sunstar.cloudseeds.bean.ImageUploadCommBean;
 import com.sunstar.cloudseeds.bean.KeyAndValueBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
+import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 
 import java.lang.ref.WeakReference;
@@ -133,10 +134,12 @@ public class EditItemRuleHelper {
     private static void generateChildView(String inputType, TableLayout tableLayout, final FragmentActivity fragmentActivity,
                                           final String leftTitleStr, String rightValue, String rightKey, String rightCode,
                                           List<KeyAndValueBean> options, List<KeyAndValueBean> configs,
-                                          List<ImageCommmBean> imageCommmBeanList, boolean needRight, boolean isAdd) {
+                                          List<ImageCommBean> imageCommmBeanList,
+                                          ImageUploadCommBean imageUploadCommBean,
+                                          SPQAddFragment.OnGoSelectImgOpear onGoSelectImg) {
         WeakReference<FragmentActivity> weakReferenceAty = new WeakReference<>(fragmentActivity);
         Context context = weakReferenceAty.get();
-        //
+
         // tableLayout.setPadding(10,10,10,10);
         //
         int padding = 10;
@@ -155,15 +158,17 @@ public class EditItemRuleHelper {
                 SizeTool.dp2px(padding), 0);
 
         TextView rightImage = null;
-        if (needRight) {
+        if (imageCommmBeanList != null && imageCommmBeanList.size() > 0) {
             //
             rightImage = new TextView(fragmentActivity);
             //高 填充副本  宽永远都是MATCH_PARENT
             rightImage.setLayoutParams(commTableRowLayoutParams4UI);
-            rightImage.setGravity(Gravity.CENTER_VERTICAL);
-            // rightImage.setText("");
+            //rightImage.setGravity(Gravity.CENTER_VERTICAL);
             rightImage.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
-            if (imageCommmBeanList != null && imageCommmBeanList.size() > 0) {
+              /*setBackgroundResource之前  有问题 */
+            rightImage.setPadding(SizeTool.dp2px(5), 0,
+                    SizeTool.dp2px(5), 0);
+            if (imageCommmBeanList.size() > 0) {
                 final List<ImageShowBean> imageShowBeanList = new ArrayList<>();
                 for (int i = 0; i < imageCommmBeanList.size(); i++) {
                     ImageShowBean bean = new ImageShowBean();
@@ -172,36 +177,42 @@ public class EditItemRuleHelper {
                     imageShowBeanList.add(bean);
                 }
 
-                //
-                if (isAdd) {
-                    rightImage.setOnClickListener(new OnNotFastClickListener() {
-                        @Override
-                        protected void onNotFastClick(View view) {
-                            //
-                            ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
-                        }
-                    });
-                    rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                            VectorOrImageResHelper.getDrawable(R.drawable.ic_image_black_24dp), null);
-                } else {
-                    rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                            VectorOrImageResHelper.getDrawable(R.drawable.ic_add_box_black_24dp), null);
+               rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                        VectorOrImageResHelper.getDrawable(R.drawable.ic_image_black_24dp), null);
+                rightImage.setOnClickListener(new OnNotFastClickListener() {
+                    @Override
+                    protected void onNotFastClick(View view) {
+                        //
+                        ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(fragmentActivity, "", 5);
+                       //## view.getContext().startActivity(new Intent(view.getContext(), ClassicPhotoSelectorActivity.class));
+                        //ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
+                    }
+                });
 
-                    rightImage.setOnClickListener(new OnNotFastClickListener() {
-                        @Override
-                        protected void onNotFastClick(View view) {
-                            //
-                            view.getContext().startActivity(new Intent(view.getContext(), ClassicPhotoSelectorActivity.class));
-                            //ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
-                        }
-                    });
-                }
             }
+        } else if (imageUploadCommBean != null) {
+            //
+            rightImage = new TextView(fragmentActivity);
+            //高 填充副本  宽永远都是MATCH_PARENT
+            rightImage.setLayoutParams(commTableRowLayoutParams4UI);
+            //rightImage.setGravity(Gravity.CENTER_VERTICAL);
+            rightImage.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
+              /*setBackgroundResource之前  有问题 */
+            rightImage.setPadding(SizeTool.dp2px(5), 0,
+                    SizeTool.dp2px(5), 0);
+            rightImage.setOnClickListener(new OnNotFastClickListener() {
+                @Override
+                protected void onNotFastClick(View view) {
+                    //
+                    fragmentActivity.startActivity(new Intent(fragmentActivity, ClassicPhotoSelectorActivity.class));
+                    // ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
+                }
+            });
+            rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                    VectorOrImageResHelper.getDrawable(R.drawable.ic_add_box_black_24dp), null);
         }
-        if(inputType!=null){
-            CLog.e("inputType:"+inputType);
-            return;
-        }
+
+
         switch (inputType) {
             case ITEM_TYPE_TEXT:
                 TableRow tableRow = new TableRow(context);
@@ -221,7 +232,7 @@ public class EditItemRuleHelper {
                 rightTitle.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
                 tableRow.addView(rightTitle);
                 //
-                if (needRight) {
+                if (rightImage != null) {
                     tableRow.addView(rightImage);
                 }
                 tableLayout.addView(tableRow);
@@ -455,7 +466,7 @@ public class EditItemRuleHelper {
 
 
     public static void generateSPQChildView(final FragmentActivity fragmentActivity, TableLayout tableLayout,
-                                            List<SPQDetailBean.KeyValueBean> keyValueBeanList, boolean isAdd) {
+                                            List<SPQDetailBean.KeyValueBean> keyValueBeanList,SPQAddFragment.OnGoSelectImgOpear onGoSelectImg) {
         tableLayout.removeAllViews();
         for (int i = 0; i < keyValueBeanList.size(); i++) {
             String inputType = keyValueBeanList.get(i).getInput_type();
@@ -466,6 +477,7 @@ public class EditItemRuleHelper {
             List<SPQDetailBean.KeyValueBean.InputOptionsBean> options = keyValueBeanList.get(i).getInput_options();
             List<SPQDetailBean.KeyValueBean.InputConfigsBean> configs = keyValueBeanList.get(i).getInput_configs();
             List<SPQDetailBean.KeyValueBean.ImagesBean> images = keyValueBeanList.get(i).getImages();
+            SPQDetailBean.KeyValueBean.ImgUploadOptionsBean img_upload_options = keyValueBeanList.get(i).getImg_upload_options();
             List<KeyAndValueBean> kvList_options = new ArrayList<>();
             if (options != null && options.size() > 0) {
                 for (SPQDetailBean.KeyValueBean.InputOptionsBean option : options) {
@@ -487,10 +499,10 @@ public class EditItemRuleHelper {
             }
 
 
-            List<ImageCommmBean> imageCommmBeanList = new ArrayList<>();
+            List<ImageCommBean> imageCommmBeanList = new ArrayList<>();
             if (images != null && images.size() > 0) {
                 for (SPQDetailBean.KeyValueBean.ImagesBean image : images) {
-                    ImageCommmBean bean = new ImageCommmBean();
+                    ImageCommBean bean = new ImageCommBean();
                     bean.setImg_title(image.getImg_title());
                     bean.setSmall_img_url(image.getSmall_img_url());
                     bean.setImg_url(image.getImg_url());
@@ -498,9 +510,13 @@ public class EditItemRuleHelper {
                 }
             }
 
+            ImageUploadCommBean imageUploadCommBean = new ImageUploadCommBean();
+            imageUploadCommBean.setImg_upload_key(img_upload_options.getImg_upload_key());
+            imageUploadCommBean.setImg_upload_max_count(img_upload_options.getImg_upload_max_count());
+            imageUploadCommBean.setImg_upload_title(img_upload_options.getImg_upload_title());
 
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
-                    kvList_options, kvList_configs, imageCommmBeanList, true, isAdd);
+                    kvList_options, kvList_configs, imageCommmBeanList, imageUploadCommBean,onGoSelectImg);
         }
     }
 
@@ -537,8 +553,9 @@ public class EditItemRuleHelper {
                 }
             }
 
+
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
-                    kvList_options, kvList_configs, null, false, false);
+                    kvList_options, kvList_configs, null, null,null);
         }
     }
 }

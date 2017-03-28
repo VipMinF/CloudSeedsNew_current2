@@ -4,6 +4,7 @@ package com.sunstar.cloudseeds.logic.shangpinqi.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -18,6 +19,8 @@ import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
+import com.classichu.photoselector.helper.ClassicPhotoUploaderDataHelper;
+import com.classichu.photoselector.imagespicker.ImagePickBean;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.bean.InfoBean;
@@ -101,6 +104,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
            @Override
            protected void onNotFastClick(View view) {
                submitData();
+
            }
        });
     }
@@ -186,6 +190,16 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
                         tv.setText(sb.toString());
                     }
                 });
+
+        //图片选择返回
+        ClassicPhotoUploaderDataHelper.callAtOnActivityResult(requestCode, resultCode, data,
+                new ClassicPhotoUploaderDataHelper.PhotoSelectorBackData() {
+                    @Override
+                    public void backData(List<ImagePickBean> imagePickBeanList) {
+                        Log.d("DSAD", "backData: "+imagePickBeanList);
+
+                    }
+                });
     }
 
 
@@ -214,7 +228,13 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         //
         List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
         //
-        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList,true);
+        EditItemRuleHelper.generateSPQChildView(getActivity(), id_tl_item_container, kvbList, new OnGoSelectImgOpear() {
+            @Override
+            public void selectImgOpear() {
+                //###
+                ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(getActivity(), "ssss", 5);
+            }
+        });
     }
 
     @Override
@@ -225,5 +245,11 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     @Override
     public String setupGainDataTertiaryId() {
         return mNowTertiary_id;
+    }
+
+
+
+    public  interface OnGoSelectImgOpear{
+      void selectImgOpear();
     }
 }

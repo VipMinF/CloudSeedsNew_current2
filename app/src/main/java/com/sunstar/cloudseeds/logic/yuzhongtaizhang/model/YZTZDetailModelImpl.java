@@ -22,7 +22,7 @@ public class YZTZDetailModelImpl implements YZTZDetailContract.Model<YZTZDetailB
     @Override
     public void loadData(String url, final BasicCallBack<YZTZDetailBean> basicCallBack) {
         Map<String, String> mapParams = new HashMap<>();
-        mapParams.put("id", "f275ce6d5ed343449d65fe2d9f3ad313");
+       // mapParams.put("id", "f275ce6d5ed343449d65fe2d9f3ad313");
         //
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(url,
                 HeadsParamsHelper.setupDefaultHeaders(),mapParams,

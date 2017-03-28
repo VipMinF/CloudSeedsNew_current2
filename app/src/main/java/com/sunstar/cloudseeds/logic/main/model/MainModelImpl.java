@@ -6,6 +6,7 @@ import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpReque
 import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
+import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.main.bean.TaiZhangBean;
 import com.sunstar.cloudseeds.logic.main.contract.MainContract;
 
@@ -29,7 +30,7 @@ public class MainModelImpl implements MainContract.Model<List<TaiZhangBean.ListB
     @Override
     public void loadData(String url, String year, String month, String product, String plan, int pageNum, int pageSize, String keyword, final BasicCallBack<List<TaiZhangBean.ListBean>> basicCallBack) {
         HashMap<String, String> paramsMap = new HashMap<>();
-        paramsMap.put("userid", "80735c93090f4dce9ef3afabc22a33e6");
+        paramsMap.put("userid",  UserLoginHelper.getUserid());
         paramsMap.put("pageNo", String.valueOf(pageNum));
         paramsMap.put("pageSize", String.valueOf(pageSize));
         paramsMap.put("year", year);

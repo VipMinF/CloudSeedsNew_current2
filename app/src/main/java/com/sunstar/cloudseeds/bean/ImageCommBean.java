@@ -4,7 +4,7 @@ package com.sunstar.cloudseeds.bean;
  * Created by louisgeek on 2017/3/21.
  */
 
-public class ImageCommmBean {
+public class ImageCommBean {
 
 
     private String img_title;
