@@ -3,6 +3,7 @@ package com.sunstar.cloudseeds.logic.guide;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
+import android.os.Handler;
 
 import com.classichu.classichu.basic.BasicCallBack;
 import com.classichu.classichu.basic.data.FinalData;
@@ -101,6 +102,9 @@ public class GuideActivity extends ClassicActivity {
         finish();
     }
 
+
+    private Handler handler= new Handler();
+
     private void goToMain() {
 
        UserLoginHelper.autoLogin_Online(new BasicCallBack<UserLoginBean>() {
@@ -112,19 +116,19 @@ public class GuideActivity extends ClassicActivity {
             }
             @Override
             public void onError(String s) {
-                goToLogin();
+
+                handler.post(runnableUi);
+                //goToLogin();
             }
         });
 
-
-//        if (UserLoginHelper.autoLogin_Onlocal(mContext)){
-//            goToMain();
-//
-//        }else {
-//
-//            goToLogin();
-//        }
-
     }
+
+    Runnable  runnableUi=new  Runnable(){
+        @Override
+        public void run() {
+            goToLogin();
+        }
+    };
 
 }

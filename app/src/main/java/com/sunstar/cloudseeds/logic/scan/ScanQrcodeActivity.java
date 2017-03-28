@@ -26,12 +26,13 @@ import com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZDetailFragment;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zbar.ZBarView;
 
-public class ScanQrcodeActivity extends ClassicActivity {
+public class ScanQrcodeActivity extends ClassicActivity  {
 
     private QRCodeView mQRCodeView;
     private Context mcontext;
     private String bindId;
 
+    private String qrcode;
     @Override
     protected int setupLayoutResId() {
         return R.layout.activity_scan_qrcode;
@@ -40,7 +41,7 @@ public class ScanQrcodeActivity extends ClassicActivity {
     @Override
     protected void initView() {
         setAppBarTitle("扫一扫");
-        mcontext = this;
+        mcontext=this;
         mQRCodeView = (ZBarView) findViewById(R.id.id_zbarview);
         mQRCodeView.setDelegate(new QRCodeView.Delegate() {
             @Override
@@ -53,8 +54,8 @@ public class ScanQrcodeActivity extends ClassicActivity {
                 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                 vibrator.vibrate(200);
                 //继续识别
-                mQRCodeView.startSpot();
-                ToastTool.showLong(result);
+                //mQRCodeView.startSpot();
+                 pauseScan();
                 //校验二维码或者绑定二维码
                 checkOrBindQrcode(result);
             }
@@ -80,8 +81,6 @@ public class ScanQrcodeActivity extends ClassicActivity {
     protected boolean configSwipeBackEnable() {
         return false;
     }
-
-
 
     @Override
     protected void onPause() {
@@ -137,68 +136,136 @@ public class ScanQrcodeActivity extends ClassicActivity {
         }
     }
 
-    private void checkOrBindQrcode(String qrcode) {
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mQRCodeView.stopCamera();
+    }
+
+
+    private void pauseScan(){
+        mQRCodeView.stopCamera();
+    }
+
+    private void continueScan() {
+        mQRCodeView.startCamera();//开始预览
+        mQRCodeView.startSpot();//开始识别
+        mQRCodeView.showScanRect();
+    }
+
+
+    private void checkOrBindQrcode(String qrcode){
 
         //DialogManager.showCustomLoadingDialog(this);
-        String key = getResources().getString(R.string.scanqrcode_bundleextrakey_bindId);
-        bindId = this.getBundleExtra().getString(key);
+        String key=getResources().getString(R.string.scanqrcode_bundleextrakey_bindId);
+        bindId=this.getBundleExtra().getString(key);
 
         final QrcodeModelImpl qrcodemodelImpl = new QrcodeModelImpl();
         qrcodemodelImpl.loadData(UrlDatas.CheckOrBindQrCode_URL, qrcode, bindId, new BasicCallBack<QrcodeBean>() {
             @Override
             public void onSuccess(QrcodeBean qrcodeBean) {
-                //DialogManager.hideLoadingDialog();
-                ToastTool.showShort(qrcodeBean.getShow_msg().toString());
+                DialogManager.hideLoadingDialog();
                 handelWithResult(qrcodeBean);
             }
-
             @Override
             public void onError(String s) {
-                //DialogManager.hideLoadingDialog();
+                DialogManager.hideLoadingDialog();
                 ToastTool.showShort(s);
+                continueScan();
             }
         });
     }
 
 
-    private void handelWithResult(QrcodeBean qrcodeBean) {
+    private  void  handelWithResult(QrcodeBean qrcodeBean){
 
-        int scanqrcodeType = getBundleExtraInt1();
-        switch (scanqrcodeType) {
-            case ScanQrCodeType.bind_zuqun:
-
-                this.finish();
-
-                break;
-
-            case ScanQrCodeType.bind_xuanzhu:
+        int scanqrcodeType=getBundleExtraInt1();
+        switch (scanqrcodeType)
+        {
+            case  ScanQrCodeType.bind_zuqun:
 
                 this.finish();
 
                 break;
 
-            case ScanQrCodeType.select:
+            case  ScanQrCodeType.bind_xuanzhu:
 
-                UserLoginBean userloginbean = UserLoginHelper.userLoginBean();
-                if (qrcodeBean.getSecondary_id() != null && qrcodeBean.getSecondary_id().length() > 0) {
+                this.finish();
 
-                    goToYZTZDetailFragment(userloginbean.getUserid(), qrcodeBean.getSecondary_id().toString());
+                break;
 
-                } else if (qrcodeBean.getTertiary_id() != null && qrcodeBean.getTertiary_id().length() > 0) {
+            case  ScanQrCodeType.select:
 
-                    goToSPQDetailFragment(userloginbean.getUserid(), qrcodeBean.getTertiary_id().toString());
+                //没有绑定，手动输入绑定Id
+                if (qrcodeBean.getShow_code().equals("4")){
+                    editBindId();
+
+                }else if(qrcodeBean.getShow_code().equals("1")){
+
+
+                    UserLoginBean userloginbean= UserLoginHelper.userLoginBean();
+                    if (qrcodeBean.getTertiary_id()!=null && qrcodeBean.getTertiary_id().length()>0){
+                        goToSPQDetailFragment(userloginbean.getUserid(),qrcodeBean.getTertiary_id().toString());
+                        mQRCodeView.stopCamera();
+                        mQRCodeView.setVisibility(View.GONE);
+
+                    } else if (qrcodeBean.getSecondary_id()!=null && qrcodeBean.getSecondary_id().length()>0) {
+                        goToYZTZDetailFragment(userloginbean.getUserid(),qrcodeBean.getSecondary_id().toString());
+                        mQRCodeView.stopCamera();
+                        mQRCodeView.setVisibility(View.GONE);
+
+                    }else {
+                        bindError("查询失败了");
+                    }
+
+                }else {
+
+                    bindError(qrcodeBean.getShow_msg().toString());
                 }
-
-                mQRCodeView.stopCamera();
-                mQRCodeView.setVisibility(View.GONE);
-
                 break;
         }
 
     }
 
 
-    private void goToYZTZDetailFragment(String param1, String param2) {
+    private void editBindId(){
+
+        DialogManager.showEditDialog(this, "该二维码未绑定", "是否进行绑定？", new DialogManager.OnEditDialogBtnClickListener() {
+            @Override
+            public void onBtnClickOk(DialogInterface dialogInterface, String inputText) {
+                super.onBtnClickOk(dialogInterface, inputText);
+                if (inputText.length()>0){
+                    bindId=inputText;
+
+                    checkOrBindQrcode(qrcode);
+                }else {
+                    continueScan();
+                }
+            }
+            @Override
+            public void onBtnClickCancel(DialogInterface dialogInterface) {
+
+                continueScan();
+            }
+        });
+
+    }
+
+   private void bindError(String error){
+
+       DialogManager.showTipDialog(this, error, "请重新操作", new ClassicDialogFragment.OnBtnClickListener() {
+           @Override
+           public void onBtnClickOk(DialogInterface dialogInterface) {
+               super.onBtnClickOk(dialogInterface);
+               continueScan();
+           }
+       });
+
+   }
+
+
+    private void  goToYZTZDetailFragment(String param1,String param2 ){
         setAppBarTitle("族群信息");
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.id_frame_layout_content_scansqcode, YZTZDetailFragment.newInstance(param1, param2))

@@ -70,6 +70,8 @@ public class SplashActivity extends ClassicActivity {
         finish();
     }
 
+
+    private Handler handler= new Handler();
     /**
      *
      */
@@ -85,26 +87,25 @@ public class SplashActivity extends ClassicActivity {
                 public void onSuccess(UserLoginBean userLoginBean) {
                     goToMain();
                 }
-
                 @Override
                 public void onError(String s) {
 
-                    goToLogin();
-
+                    handler.post(runnableUi);
+                    //goToLogin();
                 }
             });
-
-//            if (UserLoginHelper.autoLogin_Onlocal(mContext)){
-//                goToMain();
-//
-//            }else {
-//                goToLogin();
-//            }
-
         } else {
             goToGuide();
         }
     }
+
+    Runnable  runnableUi=new  Runnable(){
+        @Override
+        public void run() {
+            goToLogin();
+        }
+    };
+
 
 
     @Override

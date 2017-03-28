@@ -1,6 +1,6 @@
 package com.sunstar.cloudseeds.logic.usercenter;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TextInputEditText;
@@ -13,10 +13,8 @@ import com.classichu.classichu.basic.tool.PasswordToggleViewTool;
 import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicActivity;
 import com.classichu.dialogview.manager.DialogManager;
-import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.UrlDatas;
-import com.sunstar.cloudseeds.logic.login.LoginActivity;
 import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.logic.usercenter.bean.SimpleBean;
@@ -74,33 +72,6 @@ public class ChangePasswordActivity extends ClassicActivity {
     @Override
     protected void initListener() {
 
-    }
-
-    private void subMitNewPassWord() {
-
-        if (!checkPassWordInfo()) return;
-
-        DialogManager.showLoadingDialog(this);
-        String old_paw = old_password.getText().toString();
-        String psw = password.getText().toString();
-        String psw_again = password_again.getText().toString();
-        UserLoginBean userloginben = UserLoginHelper.userLoginBean();
-        ChangePassWordImpl changepswImpl = new ChangePassWordImpl();
-        changepswImpl.loadData(UrlDatas.ChangePassWord_URL,userloginben.getUserid(), old_paw, psw, psw_again, new BasicCallBack<SimpleBean>() {
-            @Override
-            public void onSuccess(SimpleBean simpleBean) {
-
-                DialogManager.hideLoadingDialog();
-                //ToastTool.showShortCenter(simpleBean.getShow_msg());
-                UserLoginHelper.loginOut();
-                showDialog();
-            }
-            @Override
-            public void onError(String s) {
-                ToastTool.showShort(s);
-            }
-
-        });
     }
 
 
@@ -161,15 +132,31 @@ public class ChangePasswordActivity extends ClassicActivity {
         return true;
     }
 
+    private void subMitNewPassWord() {
 
-    private void showDialog(){
+        if (!checkPassWordInfo()) return;
 
-        DialogManager.showTipDialog(this, "密码修改成功!", "您的密码已修改，请重新登录!", new ClassicDialogFragment.OnBtnClickListener() {
+        DialogManager.showLoadingDialog(this);
+        String old_paw =UserLoginHelper.entryptionPassword(old_password.getText().toString());
+        String psw =UserLoginHelper.entryptionPassword(password.getText().toString());
+        String psw_again =UserLoginHelper.entryptionPassword(password_again.getText().toString());
+        UserLoginBean userloginben = UserLoginHelper.userLoginBean();
+        ChangePassWordImpl changepswImpl = new ChangePassWordImpl();
+        changepswImpl.loadData(UrlDatas.ChangePassWord_URL,userloginben.getUserid(), old_paw, psw, psw_again, new BasicCallBack<SimpleBean>() {
             @Override
-            public void onBtnClickOk(DialogInterface dialogInterface) {
-                super.onBtnClickOk(dialogInterface);
-                goTOLoginActivity();
+            public void onSuccess(SimpleBean simpleBean) {
+
+                DialogManager.hideLoadingDialog();
+                ToastTool.showShortCenter(simpleBean.getShow_msg());
+                UserLoginHelper.loginOut();
+                delayJump(1000);
             }
+            @Override
+            public void onError(String s) {
+                DialogManager.hideLoadingDialog();
+                ToastTool.showShortCenter(s);
+            }
+
         });
     }
 
@@ -181,10 +168,11 @@ public class ChangePasswordActivity extends ClassicActivity {
         mMyHandler.postDelayed(mMyRunnable, delayMilliseconds);
     }
 
-    private void  goTOLoginActivity(){
 
-        startAty(LoginActivity.class);
-        setResult(RESULT_OK);
+    private void  goBack(){
+
+        Intent intent = new Intent();
+        setResult(RESULT_FIRST_USER,intent);
         this.finish();
     }
 
@@ -202,7 +190,7 @@ public class ChangePasswordActivity extends ClassicActivity {
         public void run() {
             super.run();
             //
-            goTOLoginActivity();
+            goBack();
         }
     };
     //静态内部类

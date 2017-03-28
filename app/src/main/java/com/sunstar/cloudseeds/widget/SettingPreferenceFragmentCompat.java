@@ -17,7 +17,7 @@ import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.usercenter.AboutActivity;
 import com.sunstar.cloudseeds.logic.usercenter.ChangePasswordActivity;
 
-import static android.app.Activity.RESULT_OK;
+import static android.app.Activity.RESULT_FIRST_USER;
 
 /**
  * Created by louisgeek on 2017/3/8.
@@ -105,7 +105,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
             case "preference_password":
                 //Toast.makeText(getActivity(), "preference_password", Toast.LENGTH_SHORT).show();
                 //startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
-                startActivityForResult(new Intent(getActivity(), ChangePasswordActivity.class),RESULT_OK);
+                startActivityForResult(new Intent(getActivity(), ChangePasswordActivity.class),0);
 
                 break;
             case "preference_clear":
@@ -145,9 +145,9 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
                         super.onBtnClickOk(dialogInterface);
                        if( UserLoginHelper.loginOut()){
 
-                           startActivity(new Intent(getActivity(), LoginActivity.class));
-                           getActivity().finish();
-                       }
+                            startActivity(new Intent(getActivity(), LoginActivity.class));
+                            getActivity().finish();
+                        }
                     }
                 });
                 break;
@@ -161,9 +161,26 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESULT_OK){
-            getActivity().finish();
+        if(requestCode == 0 && resultCode== RESULT_FIRST_USER){
+            showDialog();
         }
+    }
+
+    private void showDialog(){
+
+        DialogManager.showTipDialog(getActivity(), "密码修改成功!", "您的密码已修改，请重新登录!", new ClassicDialogFragment.OnBtnClickListener() {
+            @Override
+            public void onBtnClickOk(DialogInterface dialogInterface) {
+                super.onBtnClickOk(dialogInterface);
+                goTOLoginActivity();
+            }
+        });
+    }
+
+    private void  goTOLoginActivity(){
+
+        startActivity(new Intent(getActivity(),LoginActivity.class));
+        getActivity().finish();
     }
 
 }
