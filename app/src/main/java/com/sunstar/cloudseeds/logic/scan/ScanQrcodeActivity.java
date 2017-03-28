@@ -16,8 +16,6 @@ import com.classichu.dialogview.manager.DialogManager;
 import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.UrlDatas;
-import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
-import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
 import com.sunstar.cloudseeds.logic.scan.bean.QrcodeBean;
 import com.sunstar.cloudseeds.logic.scan.model.QrcodeModelImpl;
 import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQDetailFragment;
@@ -31,7 +29,6 @@ public class ScanQrcodeActivity extends ClassicActivity  {
     private QRCodeView mQRCodeView;
     private Context mcontext;
     private String bindId;
-
     private String qrcode;
     @Override
     protected int setupLayoutResId() {
@@ -42,6 +39,9 @@ public class ScanQrcodeActivity extends ClassicActivity  {
     protected void initView() {
         setAppBarTitle("扫一扫");
         mcontext=this;
+        String key=getResources().getString(R.string.scanqrcode_bundleextrakey_bindId);
+        bindId=this.getBundleExtra().getString(key);
+
         mQRCodeView = (ZBarView) findViewById(R.id.id_zbarview);
         mQRCodeView.setDelegate(new QRCodeView.Delegate() {
             @Override
@@ -55,7 +55,8 @@ public class ScanQrcodeActivity extends ClassicActivity  {
                 vibrator.vibrate(200);
                 //继续识别
                 //mQRCodeView.startSpot();
-                 pauseScan();
+                pauseScan();
+                qrcode=result;
                 //校验二维码或者绑定二维码
                 checkOrBindQrcode(result);
             }
@@ -157,9 +158,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
 
     private void checkOrBindQrcode(String qrcode){
 
-        //DialogManager.showCustomLoadingDialog(this);
-        String key=getResources().getString(R.string.scanqrcode_bundleextrakey_bindId);
-        bindId=this.getBundleExtra().getString(key);
+        DialogManager.showCustomLoadingDialog(this);
 
         final QrcodeModelImpl qrcodemodelImpl = new QrcodeModelImpl();
         qrcodemodelImpl.loadData(UrlDatas.CheckOrBindQrCode_URL, qrcode, bindId, new BasicCallBack<QrcodeBean>() {
@@ -181,16 +180,26 @@ public class ScanQrcodeActivity extends ClassicActivity  {
     private  void  handelWithResult(QrcodeBean qrcodeBean){
 
         int scanqrcodeType=getBundleExtraInt1();
+        ToastTool.showLong(qrcodeBean.getShow_msg().toString());
+
         switch (scanqrcodeType)
         {
             case  ScanQrCodeType.bind_zuqun:
-
+                //绑定失败
+                if (!qrcodeBean.getShow_code().equals("1")){
+                    bindError(qrcodeBean.getShow_msg().toString());
+                    return;
+                }
                 this.finish();
 
                 break;
 
             case  ScanQrCodeType.bind_xuanzhu:
-
+                //绑定失败
+                if (!qrcodeBean.getShow_code().equals("1")){
+                    bindError(qrcodeBean.getShow_msg().toString());
+                    return;
+                }
                 this.finish();
 
                 break;
@@ -203,15 +212,14 @@ public class ScanQrcodeActivity extends ClassicActivity  {
 
                 }else if(qrcodeBean.getShow_code().equals("1")){
 
-
-                    UserLoginBean userloginbean= UserLoginHelper.userLoginBean();
+                    //UserLoginBean userloginbean= UserLoginHelper.userLoginBean();
                     if (qrcodeBean.getTertiary_id()!=null && qrcodeBean.getTertiary_id().length()>0){
-                        goToSPQDetailFragment(userloginbean.getUserid(),qrcodeBean.getTertiary_id().toString());
+                        goToSPQDetailFragment(qrcodeBean.getTertiary_id().toString(),null);
                         mQRCodeView.stopCamera();
                         mQRCodeView.setVisibility(View.GONE);
 
                     } else if (qrcodeBean.getSecondary_id()!=null && qrcodeBean.getSecondary_id().length()>0) {
-                        goToYZTZDetailFragment(userloginbean.getUserid(),qrcodeBean.getSecondary_id().toString());
+                        goToYZTZDetailFragment(qrcodeBean.getSecondary_id().toString(),null);
                         mQRCodeView.stopCamera();
                         mQRCodeView.setVisibility(View.GONE);
 
@@ -237,7 +245,6 @@ public class ScanQrcodeActivity extends ClassicActivity  {
                 super.onBtnClickOk(dialogInterface, inputText);
                 if (inputText.length()>0){
                     bindId=inputText;
-
                     checkOrBindQrcode(qrcode);
                 }else {
                     continueScan();
