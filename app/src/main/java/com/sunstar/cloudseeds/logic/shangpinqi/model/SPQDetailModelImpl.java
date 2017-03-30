@@ -51,6 +51,8 @@ public class SPQDetailModelImpl implements SPQDetailContract.Model<SPQDetailBean
                         if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
                             if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
                                 basicCallBack.onSuccess(basicBean.getInfo().get(0));
+
+
                             } else {
                                 basicCallBack.onError(basicBean.getMessage());
                             }

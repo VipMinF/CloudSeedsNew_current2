@@ -1,7 +1,6 @@
 package com.sunstar.cloudseeds.app;
 
 import com.classichu.classichu.app.ClassicApplication;
-import com.squareup.leakcanary.LeakCanary;
 import com.sunstar.cloudseeds.data.SdkDatas;
 import com.tencent.bugly.Bugly;
 
@@ -16,12 +15,12 @@ public class AppApplication extends ClassicApplication{
         /**
          *
          */
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+   /*     if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);
+        LeakCanary.install(this);*/
         /**
          * 参数1：上下文对象
          参数2：注册时申请的APPID

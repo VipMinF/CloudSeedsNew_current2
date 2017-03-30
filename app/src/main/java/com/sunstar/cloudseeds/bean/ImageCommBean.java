@@ -9,6 +9,16 @@ public class ImageCommBean {
 
     private String img_title;
 
+    public String getImg_CODE() {
+        return img_CODE;
+    }
+
+    public void setImg_CODE(String img_CODE) {
+        this.img_CODE = img_CODE;
+    }
+
+    private String img_CODE;
+
     public String getImg_title() {
         return img_title;
     }

@@ -6,12 +6,13 @@ package com.sunstar.cloudseeds.data;
 
 public class UrlDatas {
     private   static  final String
-                   BASE_URL="http://192.168.1.67:8086/";
- //BASE_URL="http://192.168.1.80:8080/yunzhong/";
-   private   static  final String
-            BASE_URL_Local="http://192.168.1.67:8086/";
-   /*  private   static  final String
-            BASE_URL_OLD="https://git.oschina.net/louisgeek/Demo/raw/master/";*/
+            //             BASE_URL="http://192.168.1.67:8085/";
+         BASE_URL="http://192.168.1.80:8080/yunzhong/";
+
+    // //BASE_URL="https://115.236.5.187:8080/yunzhong/";
+  /* private   static  final String
+            BASE_URL_Local="http://192.168.1.67:8086/";*/
+
 
     /**
      * 首页分类相关
@@ -74,7 +75,17 @@ public class UrlDatas {
      * 图片上传
      */
     public  static  final String
-            URL_UPLOAD_IMAGES=String.format("%s%s",BASE_URL_Local,"api/image/noweatheraddimages");
+            URL_UPLOAD_IMAGES=String.format("%s%s",BASE_URL,"api/image/noweatheraddimages");
+
+    /**
+     * 获取选株要创建的id
+     */
+    public  static  final String
+            URL_GET_SELECT_BEADS_MAX_NUM=String.format("%s%s",BASE_URL,"api/project/secondary/getselectbeads");
+
+    public  static  final String
+            URL_DELETE_IMAGE=String.format("%s%s",BASE_URL,"api/project/tertiary/deleteimage");
+
 
 
 }

@@ -23,6 +23,16 @@ public class SPQDetailBean {
         private String code;
         private String name;
         private String rule_id;
+
+    public String getPlant_number() {
+        return plant_number;
+    }
+
+    public void setPlant_number(String plant_number) {
+        this.plant_number = plant_number;
+    }
+
+    private String plant_number;
         private List<KeyValueBean> key_value;
 
         public String getShow_code() {

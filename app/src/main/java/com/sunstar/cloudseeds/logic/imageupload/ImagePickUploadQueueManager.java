@@ -3,12 +3,14 @@ package com.sunstar.cloudseeds.logic.imageupload;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.classichu.classichu.basic.extend.DataHolderSingleton;
 import com.classichu.classichu.basic.helper.DialogFragmentShowHelper;
 import com.classichu.classichu.basic.okhttp.GsonOkHttpCallback;
 import com.classichu.classichu.basic.okhttp.OkHttpSingleton;
+import com.classichu.classichu.basic.tool.DateTool;
 import com.classichu.photoselector.imagespicker.ImagePickBean;
 import com.google.gson.reflect.TypeToken;
 import com.sunstar.cloudseeds.data.UrlDatas;
@@ -99,7 +101,7 @@ public abstract class ImagePickUploadQueueManager {
         List<ImagePickBean> imagePickBeanList = mImagePickBeanList;
         DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_LIST_ + mQueueNameNoSame,
                 imagePickBeanList);
-        DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_NEW_WEB_IDS_ + mQueueNameNoSame, "");
+       //## DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_NEW_WEB_IDS_ + mQueueNameNoSame, "");
         //测试用
         for (int i = 0; i < imagePickBeanList.size(); i++) {
             ImagePickBean imagePickBean = imagePickBeanList.get(i);
@@ -153,9 +155,13 @@ public abstract class ImagePickUploadQueueManager {
         if (needImagePickBeanList != null && needImagePickBeanList.size() > 0) {
             for (int i = 0; i < needImagePickBeanList.size(); i++) {
                 ImagePickBean imagePickBean = needImagePickBeanList.get(i);
+
+
+                //
                 //执行
-                uploadImageQueue_UploadLeftImages(imagePickBean.getImageName(), imagePickBean.getImagePathOrUrl(), imagePickBean.getImageTime(), imagePickBean.getImagePickedTimeAndOrderTag());
-                Log.d(TAG, "execueImageQueue: uploadLeftImages:" + imagePickBean.getImageName());
+                uploadImageQueue_UploadLeftImages(imagePickBean.getImagePathOrUrl(),
+                        TextUtils.isEmpty(imagePickBean.getImageTime())? DateTool.getChinaTime():imagePickBean.getImageTime());
+
                 break;//一个就结束
             }
         }
@@ -163,16 +169,20 @@ public abstract class ImagePickUploadQueueManager {
 
     /**
      * 【上传图片】3.上传图片
-     *
-     * @param imageName
      * @param imagePath
      * @param imageTime
-     * @param imagePickedTimeAndOrderTag
      */
-    private void uploadImageQueue_UploadLeftImages(final String imageName, final String imagePath, final String imageTime, final String imagePickedTimeAndOrderTag) {
-        Log.d(TAG, "uploadLeftImages: imageName:" + imageName);
+    private void uploadImageQueue_UploadLeftImages(final String imagePath,
+                                                   String imageTime) {
         Log.d(TAG, "uploadLeftImages: imagePath:" + imagePath);
         Log.d(TAG, "uploadLeftImages: imageTime:" + imageTime);
+
+        //
+        String resultid= (String) DataHolderSingleton.getInstance().getData("spqedit_resultid");
+        String itemid=(String) DataHolderSingleton.getInstance().getData("spqedit_itemid");
+        String companyid=(String) DataHolderSingleton.getInstance().getData("spqedit_companyid");
+        String plant_number=(String) DataHolderSingleton.getInstance().getData("spqedit_plant_number");
+
                 if (mIsHasWeather) {
                    /* String hasWeatherDataJson = "{\"plantimgsjsonstr\":" + ImageUtil.getBase64WithWeatherImgsJsonStr(imagePath, imageTime, mUploadBase64ImgsWithWeatherBean) + "}";
                     Log.d(TAG, "uploadxxx hasWeatherDataJson:" + hasWeatherDataJson);
@@ -180,10 +190,10 @@ public abstract class ImagePickUploadQueueManager {
                             .doPostAsyncJson(Url.IMAGE_UPDATE_WITH_WEATHER, hasWeatherDataJson, simpleGsonOkHttpCallback);*/
                 } else {
                     String dataJson = "{\"base64ImgsJsonStr\":" +
-                            ImageUploadHelper.getBase64ImgsJsonStr("93982e345dac4748989fb3e556b32ccc",
-                                    "e86f90bd80294582adbecd79840eb801",
-                                    "c82c07b38cc647b3b137c4f863c89481",
-                                    "sx-001-11-32",imagePath, "2017-3-28 17:01:59", mUserID) + "}";
+                            ImageUploadHelper.getBase64ImgsJsonStr(resultid,
+                                    itemid,
+                                    companyid,
+                                    plant_number,imagePath, imageTime, mUserID) + "}";
                     Log.d(TAG, "uploadxxx dataJson:" + dataJson);
                     OkHttpSingleton.getInstance().doPostJsonString(UrlDatas.URL_UPLOAD_IMAGES,
                             HeadsParamsHelper.setupDefaultHeaders(), null, dataJson,
@@ -200,13 +210,13 @@ public abstract class ImagePickUploadQueueManager {
 
                                 @Override
                                 public void OnSuccessOnUI(BaseListBean<UploadImageBackBean> uploadImageBackBeanBaseListBean, int code) {
-                                    String idStr = uploadImageBackBeanBaseListBean.getInfo().get(0).getAttachmentid() + "";
+                                  //  String idStr = uploadImageBackBeanBaseListBean.getInfo().get(0).getAttachmentid() + "";
                                     //   String Attname=uploadImageBackModelBaseListBean.getInfo().get(0).getAttname();
                                     //  String path=uploadImageBackModelBaseListBean.getInfo().get(0).getPath()
                                     // String microimagefilename=uploadImageBackModelBaseListBean.getInfo().get(0).getMicroimagefilename();
-                                    Log.d(TAG, "OnSuccessNotifyUI: id:" + idStr);
+                                    //  Log.d(TAG, "OnSuccessNotifyUI: id:" + idStr);
                                     //id_iprv_frsfzImagePickRecyclerView.updateDataList();
-                                    uploadImageQueue_FinishToUpdateData(idStr, imageName, imagePath, imagePickedTimeAndOrderTag);
+                                    uploadImageQueue_FinishToUpdateData(imagePath);
                                 }
                                 @Override
                                     public void OnError(String msg, int code) {
@@ -251,17 +261,17 @@ public abstract class ImagePickUploadQueueManager {
     }
 
 
-    private void uploadImageQueue_FinishToUpdateData(String imagesIdStr, String imageName, String imageUrl, String imagePickedTimeAndOrderTag) {
+    private void uploadImageQueue_FinishToUpdateData(String imageUrl) {
         int allCount = (int) DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_COUNT_ + mQueueNameNoSame);
         int leftCount = (int) DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_LEFT_COUNT_ + mQueueNameNoSame);
         int lefCountNew = leftCount - 1;
         //取出 webIDS
-        String webIDS = (String) DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_NEW_WEB_IDS_ + mQueueNameNoSame);
-        String webIDSNew = webIDS + imagesIdStr + ",";
+      /*  String webIDS = (String) DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_NEW_WEB_IDS_ + mQueueNameNoSame);
+        String webIDSNew = webIDS + imagesIdStr + ",";*/
         //刷新  新的webIDS
-        DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_NEW_WEB_IDS_ + mQueueNameNoSame, webIDSNew);
+    //    DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_NEW_WEB_IDS_ + mQueueNameNoSame, webIDSNew);
         Log.d(TAG, mQueueNameNoSame + "finishToUpdateData: 当前需要上传总数:" + allCount + "，剩余:" + lefCountNew);
-        if (allCount != 0) {
+        if (allCount > 0) {
             int progress = (int) ((allCount - lefCountNew) * 100.0 / allCount);
             Log.d(TAG, "finishToUpdateData: progress：" + progress);
             mMyDialogFragmentProgress.updateProgress(allCount, progress);
@@ -270,17 +280,18 @@ public abstract class ImagePickUploadQueueManager {
         DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_LEFT_COUNT_ + mQueueNameNoSame, lefCountNew);
 
         List<ImagePickBean> imagePickBeanList = null;
-        if (imageName != null && !imageName.equals("")) {
+        if (imageUrl != null && !imageUrl.equals("")) {
             imagePickBeanList = (List<ImagePickBean>)
                     DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_LIST_ + mQueueNameNoSame);
 
             //更新  instance 内
             for (int i = 0; i < imagePickBeanList.size(); i++) {
                 ImagePickBean imagePickBean = imagePickBeanList.get(i);
-                if (imageName.equals(imagePickBean.getImageName()) && imagePickedTimeAndOrderTag.equals(imagePickBean.getImagePickedTimeAndOrderTag())) {
-                    imagePickBeanList.get(i).setImageWebIdStr(imagesIdStr);
-                    imagePickBeanList.get(i).setImagePathOrUrl(imageUrl);
-
+               /* if (imageName.equals(imagePickBean.getImageName()) &&
+                        imagePickedTimeAndOrderTag.equals(imagePickBean.getImagePickedTimeAndOrderTag())) {*/
+                if (imageUrl.equals(imagePickBean.getImagePathOrUrl())) {
+                    imagePickBeanList.get(i).setImageWebIdStr(imageUrl);//imageUrl 标志上传成功
+                    //imagePickBeanList.get(i).setImagePathOrUrl(imageUrl);
                     break;
                 }
             }
@@ -333,13 +344,13 @@ public abstract class ImagePickUploadQueueManager {
     }
 
     private void uploadImageQueue_UpdatePicIntoInformation() {
-        String webIDS = (String) DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_NEW_WEB_IDS_ + mQueueNameNoSame);
+   /*     String webIDS = (String) DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_NEW_WEB_IDS_ + mQueueNameNoSame);
         Log.d("updatePic", "updatePic: 开始 webIDS:" + webIDS);
         if (webIDS.endsWith(",")) {
             webIDS = webIDS.substring(0, webIDS.length() - 1);//去掉最后一个","
-        }
-        Log.d("updatePic", "updatePic: 结束 webIDS:" + webIDS);
-        uploadImageQueue_Complete(mThePreviousDataString, webIDS);
+        }*/
+       // Log.d("updatePic", "updatePic: 结束 webIDS:" + webIDS);
+        uploadImageQueue_Complete(mThePreviousDataString,mImagePickBeanList);
       /*  SimpleGsonOkHttpCallback<BaseListBean> simpleGsonOkHttpCallback=new SimpleGsonOkHttpCallback<BaseListBean>() {
             @Override
             public BaseListBean OnSuccess(String result, int statusCode) {
@@ -365,7 +376,7 @@ public abstract class ImagePickUploadQueueManager {
         OkHttpClientSingleton.getInstance().doPostAsync(Url.BASE_IMAGE_UPDATE_AFTER_UPLOAD,urlParamsStr,simpleGsonOkHttpCallback);*/
     }
 
-    protected abstract void uploadImageQueue_Complete(String thePreviousData, String webIDS);
+    protected abstract void uploadImageQueue_Complete(String thePreviousData,List<ImagePickBean> imagePickBeanList);
 
 
 

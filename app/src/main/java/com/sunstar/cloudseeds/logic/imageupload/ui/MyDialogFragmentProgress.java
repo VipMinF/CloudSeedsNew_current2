@@ -77,7 +77,7 @@ public class MyDialogFragmentProgress extends DialogFragment {
     }
     public void updateAddFinshText(){
         //if (mProgressBar!=null) {
-        mMyCustomTitleView.setText(mCustomTitle+"已完成！");
+        mMyCustomTitleView.setText(mCustomTitle+"上传已完成！");
         // }
     }
 

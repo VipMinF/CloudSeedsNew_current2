@@ -12,24 +12,35 @@ import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.BasicCallBack;
+import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
+import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
+import com.classichu.classichu.basic.tool.ThreadTool;
+import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
 import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.bean.InfoBean;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
+import com.sunstar.cloudseeds.data.CommDatas;
+import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
 import com.sunstar.cloudseeds.logic.shangpinqi.SPQActivity;
 import com.sunstar.cloudseeds.logic.xuanzhu.adapter.XuanZhuListAdapter;
+import com.sunstar.cloudseeds.logic.xuanzhu.bean.AddBeansBean;
 import com.sunstar.cloudseeds.logic.xuanzhu.bean.XuanZhuListBean;
 import com.sunstar.cloudseeds.logic.xuanzhu.contract.XuanZhuListContract;
 import com.sunstar.cloudseeds.logic.xuanzhu.presenter.XuanZhuListPresenterImpl;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.model.AddSelectBeadsModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,10 +53,11 @@ import io.reactivex.functions.Consumer;
  * create an instance of this fragment.
  */
 public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenterImpl>
-        implements XuanZhuListContract.View<List<XuanZhuListBean.ListBean>>{
+        implements XuanZhuListContract.View<List<XuanZhuListBean.ListBean>> {
 
 
     private String secondary_id;
+
     public XuanZhuListFragment() {
         // Required empty public constructor
     }
@@ -75,7 +87,7 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        secondary_id=mParam1;
+        secondary_id = mParam1;
     }
 
 
@@ -110,7 +122,7 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
     protected ClassicRVHeaderFooterAdapter configClassicRVHeaderFooterAdapter() {
         List<XuanZhuListBean.ListBean> listBeanList = new ArrayList<>();
         XuanZhuListAdapter adapter
-                = new XuanZhuListAdapter(mContext,listBeanList, R.layout.item_list_xuan_zhu);
+                = new XuanZhuListAdapter(mContext, listBeanList, R.layout.item_list_xuan_zhu);
         ClassicEmptyView classicEmptyView = new ClassicEmptyView(getContext());
         classicEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         classicEmptyView.setOnEmptyViewClickListener(new ClassicEmptyView.OnEmptyViewClickListener() {
@@ -145,36 +157,37 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
             @Override
             public void onItemShowDetail(int position) {
                 super.onItemShowDetail(position);
-              //###  ToastTool.showShortCenter("onItemShowDetail" + position);
-                XuanZhuListBean.ListBean listBean= (XuanZhuListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
-                Bundle bundle=createBundleExtraInt1(AtyGoToWhere.DETAIL);
-                bundle.putString("Tertiary_id",listBean.getTertiary_id());
-                startAty(SPQActivity.class,bundle);
+                //###  ToastTool.showShortCenter("onItemShowDetail" + position);
+                XuanZhuListBean.ListBean listBean = (XuanZhuListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                Bundle bundle = createBundleExtraInt1(AtyGoToWhere.DETAIL);
+                bundle.putString("Tertiary_id", listBean.getTertiary_id());
+                startAty(SPQActivity.class, bundle);
             }
 
             @Override
             public void onItemShowQrcode(int position) {
                 super.onItemShowQrcode(position);
                 //ToastTool.showShortCenter("onItemShowQrcode" + position);
-                XuanZhuListBean.ListBean listBean= (XuanZhuListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                XuanZhuListBean.ListBean listBean = (XuanZhuListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
                 Bundle bundle = createBundleExtraInt1(ScanQrCodeType.bind_xuanzhu);
-                bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId),listBean.getTertiary_id());
-                startAty(ScanQrcodeActivity.class,bundle);
+                bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), listBean.getTertiary_id());
+                startAty(ScanQrcodeActivity.class, bundle);
             }
 
             @Override
             public void onItemShowSpqDc(int position) {
                 super.onItemShowSpqDc(position);
-              //##  ToastTool.showShortCenter("onItemShowSpqDc" + position);
-                XuanZhuListBean.ListBean listBean= (XuanZhuListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
-                Bundle bundle=createBundleExtraInt1(AtyGoToWhere.ADD);
-                bundle.putString("Tertiary_id",listBean.getTertiary_id());
-                startAty(SPQActivity.class,bundle);
+                //##  ToastTool.showShortCenter("onItemShowSpqDc" + position);
+                XuanZhuListBean.ListBean listBean = (XuanZhuListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                Bundle bundle = createBundleExtraInt1(AtyGoToWhere.ADD);
+                bundle.putString("Tertiary_id", listBean.getTertiary_id());
+                startAty(SPQActivity.class, bundle);
             }
         });
         mRecyclerView.setVisibility(View.GONE);//初始化 不显示
         return adapter;
     }
+
     @Override
     protected XuanZhuListPresenterImpl setupPresenter() {
         return new XuanZhuListPresenterImpl(this);
@@ -182,23 +195,23 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
 
     @Override
     public void showProgress() {
-            showSwipeRefreshLayout();
+        showSwipeRefreshLayout();
     }
 
     @Override
     public void hideProgress() {
-            hideSwipeRefreshLayout();
+        hideSwipeRefreshLayout();
     }
 
     @Override
     public void showMessage(String msg) {
-      //##  ToastTool.showShortCenter(msg);
-        DialogManager.showTipDialog(getActivity(),"提示",msg,null);
+        //##  ToastTool.showShortCenter(msg);
+        DialogManager.showTipDialog(getActivity(), "提示", msg, null);
     }
 
     @Override
-    public String setupGainDataSecondaryId(){
-        return  secondary_id;
+    public String setupGainDataSecondaryId() {
+        return secondary_id;
     }
 
     @Override
@@ -237,10 +250,11 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
     }
 
     private void toSearchData() {
-        mPresenter.gainCountData(mClassicRVHeaderFooterAdapter.getNowPageCount(),mQueryText);
+        mPresenter.gainCountData(mClassicRVHeaderFooterAdapter.getNowPageCount(), mQueryText);
     }
 
     private String mQueryText;
+
     private void initSearchView() {
         final SearchView searchView = findById(R.id.id_search_view);
         //设置搜索图标是否显示在搜索框内
@@ -293,13 +307,60 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
 
 
     public void goAddSelectBeads4Aty() {
+        Map<String, String> paramsMap = new HashMap<>();
+        paramsMap.put("id", secondary_id);
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.URL_GET_SELECT_BEADS_MAX_NUM,
+                HeadsParamsHelper.setupDefaultHeaders(),
+                paramsMap, new GsonHttpRequestCallback<BasicBean<AddBeansBean>>() {
+                    @Override
+                    public BasicBean<AddBeansBean> OnSuccess(String s) {
+                        return BasicBean.fromJson(s, AddBeansBean.class);
+                    }
+
+                    @Override
+                    public void OnSuccessOnUI(BasicBean<AddBeansBean> basicBean) {
+                        if (basicBean == null) {
+                            OnError(CommDatas.SERVER_ERROR);
+                            return;
+                        }
+                        if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                            if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+
+                                String maxNum = basicBean.getInfo().get(0).getShow_msg();
+                                goAddSelectBeads4AtyContinue(maxNum);
+
+                            } else {
+                                OnError(basicBean.getMessage());
+                            }
+                        } else {
+                            OnError(basicBean.getMessage());
+                        }
+
+
+                    }
+
+                    @Override
+                    public void OnError(final String s) {
+                        ThreadTool.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastTool.showShort(s);
+                            }
+                        });
+                    }
+                });
+
+
+    }
+
+    private void goAddSelectBeads4AtyContinue(String maxNum) {
         DialogManager.showClassicDialog(getActivity(), "选株新增",
-                "是否新增一个选株", new ClassicDialogFragment.OnBtnClickListener() {
+                "是否新增一个" + maxNum + "选株", new ClassicDialogFragment.OnBtnClickListener() {
                     @Override
                     public void onBtnClickOk(DialogInterface dialogInterface) {
                         super.onBtnClickOk(dialogInterface);
                         //###
-                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(),setupGainDataSecondaryId(),
+                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(), setupGainDataSecondaryId(),
                                 new BasicCallBack<InfoBean>() {
                                     @Override
                                     public void onSuccess(InfoBean infoBean) {

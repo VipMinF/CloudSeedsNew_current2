@@ -205,7 +205,7 @@
                 style="@style/ClassicButtonRound"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="选株列表" />

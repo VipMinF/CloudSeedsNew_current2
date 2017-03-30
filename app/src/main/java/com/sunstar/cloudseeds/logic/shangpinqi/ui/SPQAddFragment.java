@@ -11,6 +11,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.classichu.classichu.app.CLog;
+import com.classichu.classichu.basic.extend.DataHolderSingleton;
 import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
 import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
@@ -31,7 +32,7 @@ import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.imageupload.ImagePickUploadQueueManager;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
-import com.sunstar.cloudseeds.logic.shangpinqi.event.SPQEditSaveEvent;
+import com.sunstar.cloudseeds.logic.shangpinqi.event.SPQDetailRefreshEvent;
 import com.sunstar.cloudseeds.logic.shangpinqi.presenter.SPQDetailPresenterImpl;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,7 +50,9 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     public SPQAddFragment() {
         // Required empty public constructor
     }
-    private  String mNowTertiary_id;
+
+    private String mNowTertiary_id;
+
     @Override
     protected SPQDetailPresenterImpl setupPresenter() {
         return new SPQDetailPresenterImpl(this);
@@ -80,7 +83,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        mNowTertiary_id=mParam1;
+        mNowTertiary_id = mParam1;
     }
 
 
@@ -91,72 +94,73 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
 
     TableLayout id_tl_item_container;
     Button id_btn_submit;
+
     @Override
     protected void initView(View view) {
-        id_btn_submit= findById(R.id.id_btn_submit);
+        id_btn_submit = findById(R.id.id_btn_submit);
         id_tl_item_container = findById(R.id.id_tl_item_container);
-         toRefreshData();
+        toRefreshData();
     }
 
 
     @Override
     protected void initListener() {
-       setOnNotFastClickListener(id_btn_submit, new OnNotFastClickListener() {
-           @Override
-           protected void onNotFastClick(View view) {
-               submitData();
+        setOnNotFastClickListener(id_btn_submit, new OnNotFastClickListener() {
+            @Override
+            protected void onNotFastClick(View view) {
+                submitData();
 
-           }
-       });
+            }
+        });
     }
 
     private void submitData() {
 
-            String result = EditItemRuleHelper.generateViewBackString(id_tl_item_container);
-            //CLog.d("zzqqff:" + result);
-            Map<String, String> stringMap = new HashMap<>();
-            stringMap.put("id", mNowTertiary_id);
-            stringMap.put("itemvalue", result);
-            //
-            HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.TERTIARY_SAVE,
-                    HeadsParamsHelper.setupDefaultHeaders(), stringMap,
-                    new GsonHttpRequestCallback<BasicBean<InfoBean>>() {
+        String result = EditItemRuleHelper.generateViewBackString(id_tl_item_container);
+        //CLog.d("zzqqff:" + result);
+        Map<String, String> stringMap = new HashMap<>();
+        stringMap.put("id", mNowTertiary_id);
+        stringMap.put("itemvalue", result);
+        //
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.TERTIARY_SAVE,
+                HeadsParamsHelper.setupDefaultHeaders(), stringMap,
+                new GsonHttpRequestCallback<BasicBean<InfoBean>>() {
 
-                        @Override
-                        public BasicBean<InfoBean> OnSuccess(String s) {
-                            return BasicBean.fromJson(s, InfoBean.class);
+                    @Override
+                    public BasicBean<InfoBean> OnSuccess(String s) {
+                        return BasicBean.fromJson(s, InfoBean.class);
+                    }
+
+                    @Override
+                    public void OnSuccessOnUI(BasicBean<InfoBean> basicBean) {
+                        if (basicBean == null) {
+                            showMessage(CommDatas.SERVER_ERROR);
+                            return;
                         }
+                        if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                            if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+                                //
+                                ToastTool.showShort(basicBean.getInfo().get(0).getShow_msg());
+                                //
+                                EventBus.getDefault().post(new SPQDetailRefreshEvent());
+                                //
+                                getActivity().onBackPressed();
 
-                        @Override
-                        public void OnSuccessOnUI(BasicBean<InfoBean> basicBean) {
-                            if (basicBean == null) {
-                                showMessage(CommDatas.SERVER_ERROR);
-                                return;
-                            }
-                            if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
-                                if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
-                                    //
-                                    ToastTool.showShort(basicBean.getInfo().get(0).getShow_msg());
-                                    //
-                                    EventBus.getDefault().post(new SPQEditSaveEvent());
-                                    //
-                                    getActivity().onBackPressed();
-
-                                } else {
-                                    showMessage(basicBean.getMessage());
-                                }
                             } else {
                                 showMessage(basicBean.getMessage());
                             }
-                        }
-
-                        @Override
-                        public void OnError(String s) {
-                            showMessage(s);
+                        } else {
+                            showMessage(basicBean.getMessage());
                         }
                     }
 
-            );
+                    @Override
+                    public void OnError(String s) {
+                        showMessage(s);
+                    }
+                }
+
+        );
 
     }
 
@@ -197,8 +201,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
                 new ClassicPhotoUploaderDataHelper.PhotoSelectorBackData() {
                     @Override
                     public void backData(List<ImagePickBean> imagePickBeanList) {
-                        Log.d("DSAD", "backData: "+imagePickBeanList);
-
+                        Log.d("DSAD", "backData: " + imagePickBeanList);
 
 
                         uploadImages(imagePickBeanList);
@@ -210,15 +213,90 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     }
 
     private void uploadImages(List<ImagePickBean> imagePickBeanList) {
-        ImagePickUploadQueueManager imagePickUploadQueueManager=new ImagePickUploadQueueManager("sdas","",
-                imagePickBeanList, getChildFragmentManager(),"rewrwe",0,false) {
+        ImagePickUploadQueueManager imagePickUploadQueueManager
+                = new ImagePickUploadQueueManager("DASDAS", "",
+                imagePickBeanList, getChildFragmentManager(), "rewrwe", 0, false) {
             @Override
-            protected void uploadImageQueue_Complete(String thePreviousData, String webIDS) {
-                        CLog.d("thePreviousData:"+thePreviousData);
-                        CLog.d("webIDS:"+webIDS);
+            protected void uploadImageQueue_Complete(String thePreviousData, List<ImagePickBean> imgList) {
+                CLog.d("thePreviousData:" + thePreviousData);
+                // CLog.d("webIDS:"+webIDS);
+
+                checkHasDelete(imgList);
+
+                //// FIXME: 2017/3/30
+             /*   //刷新上页
+                EventBus.getDefault().post(new SPQDetailRefreshEvent());
+                //刷新本页
+                toRefreshData();*/
             }
         };
         imagePickUploadQueueManager.uploadImageQueue_Start();
+    }
+
+    private void checkHasDelete(List<ImagePickBean> imgNewList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        List<ImagePickBean> test_raw_imagePickBeanList =
+                (List<ImagePickBean>) DataHolderSingleton.getInstance().getData("test_raw_imagePickBeanList");
+        for (int i = 0; i < test_raw_imagePickBeanList.size(); i++) {
+            //
+            boolean hasIt = false;
+            for (ImagePickBean imagePickBean : imgNewList) {
+                if (imagePickBean.getImagePathOrUrl().equals(
+                        test_raw_imagePickBeanList.get(i).getImagePathOrUrl())) {
+                    hasIt = true;
+
+                    break;
+                }
+            }
+            if (!hasIt) {
+                HashMap holad_path_code_map= (HashMap) DataHolderSingleton.getInstance().getData("holad_path_code_map");
+                String imgCode= (String) holad_path_code_map.get(test_raw_imagePickBeanList.get(i).getImagePathOrUrl());
+                //
+                stringBuilder.append(imgCode);
+                stringBuilder.append(",");
+            }
+        }
+
+        String ps = stringBuilder.toString();
+        if (!ps.equals("")) {
+            ps = ps.substring(0, ps.length() - 1);
+        }
+        CLog.d("ps:" + ps);
+
+        if (!ps.equals("")) {
+            toDoDeleteImags(ps);
+        }
+    }
+
+    private void toDoDeleteImags(String codeid) {
+        HashMap<String, String> paramsMap = new HashMap<>();
+        paramsMap.put("id", mNowTertiary_id);
+        paramsMap.put("itemid", (String) DataHolderSingleton.getInstance().getData("spqedit_itemid"));
+        paramsMap.put("codeid", codeid);
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.URL_DELETE_IMAGE, HeadsParamsHelper.setupDefaultHeaders()
+                , paramsMap, new GsonHttpRequestCallback<BasicBean>() {
+                    @Override
+                    public BasicBean OnSuccess(String s) {
+                        CLog.d("S:SSSSSSSSS:"+s);
+                        return BasicBean.fromJson(s, BasicBean.class);
+                    }
+
+                    @Override
+                    public void OnSuccessOnUI(final BasicBean basicBean) {
+                      ThreadTool.runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                              ToastTool.showShort(basicBean.getMessage());
+                          }
+                      });
+                    }
+
+                    @Override
+                    public void OnError(String s) {
+                        CLog.e(s);
+                    }
+                }
+        );
     }
 
 

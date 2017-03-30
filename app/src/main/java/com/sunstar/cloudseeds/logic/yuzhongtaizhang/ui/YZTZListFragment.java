@@ -12,16 +12,25 @@ import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.BasicCallBack;
+import com.classichu.classichu.basic.factory.httprequest.HttpRequestManagerFactory;
+import com.classichu.classichu.basic.factory.httprequest.abstracts.GsonHttpRequestCallback;
+import com.classichu.classichu.basic.tool.ThreadTool;
+import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
 import com.classichu.dialogview.manager.DialogManager;
 import com.classichu.dialogview.ui.ClassicDialogFragment;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.bean.BasicBean;
 import com.sunstar.cloudseeds.bean.InfoBean;
+import com.sunstar.cloudseeds.data.CommDatas;
+import com.sunstar.cloudseeds.data.UrlDatas;
+import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
 import com.sunstar.cloudseeds.logic.search.SearchRecentHelper;
 import com.sunstar.cloudseeds.logic.xuanzhu.XuanZhuActivity;
+import com.sunstar.cloudseeds.logic.xuanzhu.bean.AddBeansBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.adapter.YZTZListAdapter;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZListBean;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.contract.YZTZListContract;
@@ -30,7 +39,9 @@ import com.sunstar.cloudseeds.logic.yuzhongtaizhang.presenter.YZTZListPresenterI
 import com.sunstar.cloudseeds.ui.SearchFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -49,7 +60,9 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     public YZTZListFragment() {
         // Required empty public constructor
     }
-    private  String primary_id;
+
+    private String primary_id;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -75,7 +88,8 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        primary_id=mParam1;
+        primary_id = mParam1;
+        mQueryText = mParam2;//// TODO: 2017/3/30
     }
 
     @Override
@@ -94,8 +108,13 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             from_searchFragment = true;
             SearchView searchV = findById(R.id.id_search_view);
             searchV.setVisibility(View.GONE);
+
         }
-        toRefreshData();
+        if (from_searchFragment) {
+            toSearchData();
+        } else {
+            toRefreshData();
+        }
     }
 
     @Override
@@ -215,7 +234,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
         //-- add by lzy -2017.3.20
         //如果是搜索界面进来->保存搜索关键词
         if (yztzBeanList != null && from_searchFragment) {
-            SearchRecentHelper.setRecentSearchkey(mContext, mParam2);
+            SearchRecentHelper.setRecentSearchkey(mContext, mQueryText);
         }
     }
 
@@ -272,8 +291,8 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             public void onItemShowDetail(int position) {
                 super.onItemShowDetail(position);
                 //
-                YZTZListBean.ListBean listBean= (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
-                startAty(XuanZhuActivity.class,createBundleExtraStr1(listBean.getSecondary_id()));
+                YZTZListBean.ListBean listBean = (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                startAty(XuanZhuActivity.class, createBundleExtraStr1(listBean.getSecondary_id()));
                 //2017年3月23日15:31:28 暂时不需要族群详细页 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
             }
 
@@ -281,7 +300,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             public void onItemShowXuanZhu(int position) {
                 super.onItemShowXuanZhu(position);
                 //##ToastTool.showShortCenter("选株"+position);
-                YZTZListBean.ListBean listBean= (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                YZTZListBean.ListBean listBean = (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
                 goAddSelectBeads(listBean.getSecondary_id());
             }
 
@@ -302,13 +321,59 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
 
 
     private void goAddSelectBeads(final String secondary_id) {
+        Map<String, String> paramsMap = new HashMap<>();
+        paramsMap.put("id", secondary_id);
+        HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.URL_GET_SELECT_BEADS_MAX_NUM,
+                HeadsParamsHelper.setupDefaultHeaders(),
+                paramsMap, new GsonHttpRequestCallback<BasicBean<AddBeansBean>>() {
+                    @Override
+                    public BasicBean<AddBeansBean> OnSuccess(String s) {
+                        return BasicBean.fromJson(s, AddBeansBean.class);
+                    }
+
+                    @Override
+                    public void OnSuccessOnUI(BasicBean<AddBeansBean> basicBean) {
+                        if (basicBean == null) {
+                            OnError(CommDatas.SERVER_ERROR);
+                            return;
+                        }
+                        if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                            if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+
+                                String maxNum = basicBean.getInfo().get(0).getShow_msg();
+                                goAddSelectBeads4AtyContinue(secondary_id, maxNum);
+
+                            } else {
+                                OnError(basicBean.getMessage());
+                            }
+                        } else {
+                            OnError(basicBean.getMessage());
+                        }
+
+
+                    }
+
+                    @Override
+                    public void OnError(final String s) {
+                        ThreadTool.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastTool.showShort(s);
+                            }
+                        });
+                    }
+                });
+
+    }
+
+    private void goAddSelectBeads4AtyContinue(final String secondary_id, String maxNum) {
         DialogManager.showClassicDialog(getActivity(), "选株新增",
-                "是否新增一个选株", new ClassicDialogFragment.OnBtnClickListener() {
+                "是否新增一个" + maxNum + "选株", new ClassicDialogFragment.OnBtnClickListener() {
                     @Override
                     public void onBtnClickOk(DialogInterface dialogInterface) {
                         super.onBtnClickOk(dialogInterface);
 
-                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(),secondary_id, new BasicCallBack<InfoBean>() {
+                        new AddSelectBeadsModel().goAddSelectBeads(getActivity(), secondary_id, new BasicCallBack<InfoBean>() {
                             @Override
                             public void onSuccess(InfoBean infoBean) {
                                 //选择新增成功
@@ -318,7 +383,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                                             @Override
                                             public void autoHide() {
                                                 //跳转
-                                                startAty(XuanZhuActivity.class,createBundleExtraStr1(secondary_id));
+                                                startAty(XuanZhuActivity.class, createBundleExtraStr1(secondary_id));
                                             }
                                         });
                             }

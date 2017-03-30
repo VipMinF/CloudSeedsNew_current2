@@ -79,6 +79,7 @@ public class YZTZListAdapter extends ClassicRVHeaderFooterAdapter<YZTZListBean.L
 
 
         Button id_btn_item_show_qrcode= classicRVHeaderFooterViewHolder.findBindItemView(R.id.id_btn_item_show_qrcode);
+        id_btn_item_show_qrcode.setVisibility(View.GONE);//2017年3月30日13:23:25
         if ("1".equals(mDataList.get(pos).getStatus())){
             //已绑定
             id_btn_item_show_qrcode.setText("已绑二维码");

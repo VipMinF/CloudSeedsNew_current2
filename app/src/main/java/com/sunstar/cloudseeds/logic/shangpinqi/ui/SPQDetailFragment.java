@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TableLayout;
 
 import com.classichu.classichu.app.CLog;
+import com.classichu.classichu.basic.extend.DataHolderSingleton;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.basic.tool.ThreadTool;
 import com.classichu.classichu.basic.tool.ToastTool;
@@ -15,10 +16,11 @@ import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
+import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.shangpinqi.SPQActivity;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
-import com.sunstar.cloudseeds.logic.shangpinqi.event.SPQEditSaveEvent;
+import com.sunstar.cloudseeds.logic.shangpinqi.event.SPQDetailRefreshEvent;
 import com.sunstar.cloudseeds.logic.shangpinqi.presenter.SPQDetailPresenterImpl;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +37,8 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         implements SPQDetailContract.View<SPQDetailBean> {
 
 
-    private  String mNowTertiary_id;
+    private String mNowTertiary_id;
+
     public SPQDetailFragment() {
         // Required empty public constructor
     }
@@ -70,17 +73,19 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        mNowTertiary_id=mParam1;
+        mNowTertiary_id = mParam1;
     }
 
     @Override
     protected int setupLayoutResId() {
         return R.layout.fragment_spq_detail;
     }
+
     TableLayout id_tl_item_container;
+
     @Override
     protected void initView(View view) {
-        id_tl_item_container=findById(R.id.id_tl_item_container);
+        id_tl_item_container = findById(R.id.id_tl_item_container);
 
         toRefreshData();
     }
@@ -91,9 +96,9 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         setOnNotFastClickListener(findById(R.id.id_btn_show_add), new OnNotFastClickListener() {
             @Override
             protected void onNotFastClick(View view) {
-                Bundle bundle=createBundleExtraInt1(AtyGoToWhere.ADD);
-                bundle.putString("Tertiary_id",mNowTertiary_id);
-                startAty(SPQActivity.class,bundle);
+                Bundle bundle = createBundleExtraInt1(AtyGoToWhere.ADD);
+                bundle.putString("Tertiary_id", mNowTertiary_id);
+                startAty(SPQActivity.class, bundle);
             }
         });
     }
@@ -103,10 +108,12 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         super.toRefreshData();
         mPresenter.gainData(UrlDatas.TERTIARY_DETAIL);
     }
+
     @Override
     protected int configSwipeRefreshLayoutResId() {
         return R.id.id_swipe_refresh_layout;
     }
+
     @Override
     public void showProgress() {
         showSwipeRefreshLayout();
@@ -129,10 +136,19 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
 
     @Override
     public void setupData(SPQDetailBean spqDetailBean) {
+
         //
         List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
-        //
-        EditItemRuleHelper.generateSPQChildView(getActivity(),id_tl_item_container,kvbList);
+
+        String spqedit_resultid = spqDetailBean.getRule_id();
+        DataHolderSingleton.getInstance().putData("spqedit_resultid",spqedit_resultid);
+        String spqedit_plant_number = spqDetailBean.getPlant_number();
+        DataHolderSingleton.getInstance().putData("spqedit_plant_number",spqedit_plant_number);
+        String spqedit_companyid = UserLoginHelper.userLoginBean().getCompany();
+        DataHolderSingleton.getInstance().putData("spqedit_companyid",spqedit_companyid);
+
+
+        EditItemRuleHelper.generateSPQChildView(getActivity(), id_tl_item_container, kvbList);
     }
 
     @Override
@@ -147,8 +163,8 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(SPQEditSaveEvent event) {
-        CLog.d("SPQEditSaveEvent");
+    public void onEventMainThread(SPQDetailRefreshEvent event) {
+        CLog.d("SPQDetailRefreshEvent");
         toRefreshData();
     }
 

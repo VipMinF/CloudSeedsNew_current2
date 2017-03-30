@@ -14,6 +14,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.classichu.classichu.basic.extend.DataHolderSingleton;
 import com.classichu.classichu.basic.helper.VectorOrImageResHelper;
 import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.basic.tool.SizeTool;
@@ -24,6 +25,7 @@ import com.classichu.itemselector.bean.ItemSelectBean;
 import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
 import com.classichu.lineseditview.LinesEditView;
 import com.classichu.photoselector.helper.ClassicPhotoUploaderDataHelper;
+import com.classichu.photoselector.imagespicker.ImagePickBean;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sunstar.cloudseeds.R;
@@ -35,7 +37,9 @@ import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by louisgeek on 2017/3/16.
@@ -130,16 +134,16 @@ public class EditItemRuleHelper {
 
 
     private static void generateChildView(String inputType, TableLayout tableLayout, final FragmentActivity fragmentActivity,
-                                          final String leftTitleStr, String rightValue, String rightKey, String rightCode,
+                                          final String leftTitleStr, final String rightValue, String rightKey, final String rightCode,
                                           List<KeyAndValueBean> options, List<KeyAndValueBean> configs,
                                           List<ImageCommBean> imageCommmBeanList,
                                           ImageUploadCommBean imageUploadCommBean
-                                          ) {
+    ) {
         WeakReference<FragmentActivity> weakReferenceAty = new WeakReference<>(fragmentActivity);
         Context context = weakReferenceAty.get();
 
         // tableLayout.setPadding(10,10,10,10);
-        //
+
         int padding = 10;
         //
         TextView leftTitle = new TextView(fragmentActivity);
@@ -156,36 +160,24 @@ public class EditItemRuleHelper {
                 SizeTool.dp2px(padding), 0);
 
         TextView rightImage = null;
+        final List<ImageShowBean> imageShowBeanList = new ArrayList<>();
+        Map<String, String> path_code_map = new HashMap<>();
         if (imageCommmBeanList != null && imageCommmBeanList.size() > 0) {
-            //
-            rightImage = new TextView(fragmentActivity);
-            //高 填充副本  宽永远都是MATCH_PARENT
-            rightImage.setLayoutParams(commTableRowLayoutParams4UI);
-            //rightImage.setGravity(Gravity.CENTER_VERTICAL);
-            rightImage.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
-              /*setBackgroundResource之前  有问题 */
-            rightImage.setPadding(SizeTool.dp2px(5), 0,
-                    SizeTool.dp2px(5), 0);
-            if (imageCommmBeanList.size() > 0) {
-                final List<ImageShowBean> imageShowBeanList = new ArrayList<>();
-                for (int i = 0; i < imageCommmBeanList.size(); i++) {
-                    ImageShowBean bean = new ImageShowBean();
-                    bean.setTitle(imageCommmBeanList.get(i).getImg_title());
-                    bean.setImageUrl(imageCommmBeanList.get(i).getImg_url());
-                    imageShowBeanList.add(bean);
-                }
-
-               rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                        VectorOrImageResHelper.getDrawable(R.drawable.ic_image_black_24dp), null);
-                rightImage.setOnClickListener(new OnNotFastClickListener() {
-                    @Override
-                    protected void onNotFastClick(View view) {
-                           ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
-                    }
-                });
-
+            for (int i = 0; i < imageCommmBeanList.size(); i++) {
+                ImageShowBean bean = new ImageShowBean();
+                bean.setTitle(imageCommmBeanList.get(i).getImg_title());
+                bean.setImageUrl(imageCommmBeanList.get(i).getImg_url().replace("\\", "/"));
+                imageShowBeanList.add(bean);
+                //
+                path_code_map.put(bean.getImageUrl(), imageCommmBeanList.get(i).getImg_CODE());
             }
-        } else if (imageUploadCommBean != null) {
+            DataHolderSingleton.getInstance().putData("holad_path_code_map", path_code_map);
+        }
+
+
+        if (imageUploadCommBean != null && !TextUtils.isEmpty(imageUploadCommBean.getImg_upload_title())) {
+            //有上传
+
             //
             rightImage = new TextView(fragmentActivity);
             //高 填充副本  宽永远都是MATCH_PARENT
@@ -195,17 +187,62 @@ public class EditItemRuleHelper {
               /*setBackgroundResource之前  有问题 */
             rightImage.setPadding(SizeTool.dp2px(5), 0,
                     SizeTool.dp2px(5), 0);
+            rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                    VectorOrImageResHelper.getDrawable(R.drawable.ic_add_box_black_24dp), null);
             rightImage.setOnClickListener(new OnNotFastClickListener() {
                 @Override
                 protected void onNotFastClick(View view) {
 
-                    ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(fragmentActivity, "ssss", 5);
+                    List<ImagePickBean> imagePickBeanList = new ArrayList<>();
+                    for (int i = 0; i < imageShowBeanList.size(); i++) {
+                        ImagePickBean ipb = new ImagePickBean();
+                        ipb.setImagePathOrUrl(imageShowBeanList.get(i).getImageUrl());
+                        ipb.setImageWebIdStr(imageShowBeanList.get(i).getImageUrl());//必须设置
+                        // ipb.setImageName(imageShowBeanList.get(i).get());///
+                        imagePickBeanList.add(ipb);
+                    }
+                    DataHolderSingleton.getInstance().putData("test_raw_imagePickBeanList", imagePickBeanList);
+                    ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(fragmentActivity, imagePickBeanList, 5);
+
+                    String spqedit_itemid = rightCode;
+                    DataHolderSingleton.getInstance().putData("spqedit_itemid", spqedit_itemid);
                     //fragmentActivity.startActivity(new Intent(fragmentActivity, ClassicPhotoSelectorActivity.class));
                     // ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
                 }
             });
-            rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                    VectorOrImageResHelper.getDrawable(R.drawable.ic_add_box_black_24dp), null);
+
+
+            if (imageShowBeanList.size() > 0) {
+                //有图
+
+            } else {
+                //无图
+            }
+
+        } else {
+            //无上传
+
+            if (imageShowBeanList.size() > 0) {
+                //有图
+
+                rightImage = new TextView(fragmentActivity);
+                //高 填充副本  宽永远都是MATCH_PARENT
+                rightImage.setLayoutParams(commTableRowLayoutParams4UI);
+                //rightImage.setGravity(Gravity.CENTER_VERTICAL);
+                rightImage.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
+              /*setBackgroundResource之前  有问题 */
+                rightImage.setPadding(SizeTool.dp2px(5), 0,
+                        SizeTool.dp2px(5), 0);
+                rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                        VectorOrImageResHelper.getDrawable(R.drawable.ic_image_black_24dp), null);
+                rightImage.setOnClickListener(new OnNotFastClickListener() {
+                    @Override
+                    protected void onNotFastClick(View view) {
+                        ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
+                    }
+                });
+            }
+
         }
 
 
@@ -502,6 +539,7 @@ public class EditItemRuleHelper {
                     bean.setImg_title("dadsa");
                     bean.setSmall_img_url(image.getWsmallImage250_250Name());
                     bean.setImg_url(image.getBigImageName());
+                    bean.setImg_CODE(image.getCode());
                     imageCommmBeanList.add(bean);
                 }
             }
