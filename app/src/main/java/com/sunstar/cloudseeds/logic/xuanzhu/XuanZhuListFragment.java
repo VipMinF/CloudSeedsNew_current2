@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
@@ -34,8 +35,12 @@ import com.sunstar.cloudseeds.logic.xuanzhu.adapter.XuanZhuListAdapter;
 import com.sunstar.cloudseeds.logic.xuanzhu.bean.AddBeansBean;
 import com.sunstar.cloudseeds.logic.xuanzhu.bean.XuanZhuListBean;
 import com.sunstar.cloudseeds.logic.xuanzhu.contract.XuanZhuListContract;
+import com.sunstar.cloudseeds.logic.xuanzhu.event.XuanZhuListRefreshEvent;
 import com.sunstar.cloudseeds.logic.xuanzhu.presenter.XuanZhuListPresenterImpl;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.model.AddSelectBeadsModel;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +67,12 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
         // Required empty public constructor
     }
 
+    private String taizhangName;
+    private String zuqunName;
+
+    protected String mParam4;
+    protected static final String ARG_PARAM4 = "param4";
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -71,11 +82,12 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
      * @return A new instance of fragment XuanZhuListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static XuanZhuListFragment newInstance(String param1, String param2) {
+    public static XuanZhuListFragment newInstance(String param1, String param2, String param4) {
         XuanZhuListFragment fragment = new XuanZhuListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM4, param4);
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,8 +98,11 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam4 = getArguments().getString(ARG_PARAM4);
         }
         secondary_id = mParam1;
+        taizhangName = mParam2;
+        zuqunName = mParam4;
     }
 
 
@@ -98,6 +113,12 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
 
     @Override
     protected void initView(View view) {
+
+        TextView id_tv_TaiZhangName = findById(R.id.id_tv_TaiZhangName);
+        id_tv_TaiZhangName.setText(taizhangName);
+        TextView id_tv_ZuQunName = findById(R.id.id_tv_ZuQunName);
+        id_tv_ZuQunName.setText(zuqunName);
+
         initSearchView();
         toRefreshData();
     }
@@ -352,7 +373,11 @@ public class XuanZhuListFragment extends ClassicMvpFragment<XuanZhuListPresenter
 
 
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(XuanZhuListRefreshEvent event) {
+        CLog.d("XuanZhuListRefreshEvent");
+        toRefreshData();
+    }
     private void goAddSelectBeads4AtyContinue(String maxNum) {
         DialogManager.showClassicDialog(getActivity(), "选株新增",
                 "是否新增一个" + maxNum + "选株", new ClassicDialogFragment.OnBtnClickListener() {

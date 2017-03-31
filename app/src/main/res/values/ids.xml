@@ -4,4 +4,5 @@
     <item name="hold_view_input_type_text" type="id"/>
     <item name="hold_view_code" type="id"/>
     <item name="hold_view_list" type="id"/>
+    <item name="hold_view_image_list" type="id"/>
 </resources>

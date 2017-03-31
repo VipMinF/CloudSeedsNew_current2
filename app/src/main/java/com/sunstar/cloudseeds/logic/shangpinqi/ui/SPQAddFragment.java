@@ -30,6 +30,7 @@ import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.imageupload.ImagePickUploadQueueManager;
+import com.sunstar.cloudseeds.logic.imageupload.bean.DeleteImageBackBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
 import com.sunstar.cloudseeds.logic.shangpinqi.event.SPQDetailRefreshEvent;
@@ -114,7 +115,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         });
     }
 
-    private void submitData() {
+    public void submitData() {
 
         String result = EditItemRuleHelper.generateViewBackString(id_tl_item_container);
         //CLog.d("zzqqff:" + result);
@@ -213,30 +214,28 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     }
 
     private void uploadImages(List<ImagePickBean> imagePickBeanList) {
+     String now_leftTitleStr= (String) DataHolderSingleton.getInstance().getData("now_leftTitleStr");
+
         ImagePickUploadQueueManager imagePickUploadQueueManager
-                = new ImagePickUploadQueueManager("DASDAS", "",
-                imagePickBeanList, getChildFragmentManager(), "rewrwe", 0, false) {
+                = new ImagePickUploadQueueManager("now_leftTitleStr", "",
+                imagePickBeanList, getChildFragmentManager(), now_leftTitleStr+"图片上传", 0, false) {
             @Override
             protected void uploadImageQueue_Complete(String thePreviousData, List<ImagePickBean> imgList) {
                 CLog.d("thePreviousData:" + thePreviousData);
                 // CLog.d("webIDS:"+webIDS);
+                String spqedit_itemid= (String) DataHolderSingleton.getInstance().getData("spqedit_itemid");
+                checkHasDelete(imgList,spqedit_itemid);
 
-                checkHasDelete(imgList);
 
-                //// FIXME: 2017/3/30
-             /*   //刷新上页
-                EventBus.getDefault().post(new SPQDetailRefreshEvent());
-                //刷新本页
-                toRefreshData();*/
             }
         };
         imagePickUploadQueueManager.uploadImageQueue_Start();
     }
 
-    private void checkHasDelete(List<ImagePickBean> imgNewList) {
+    private void checkHasDelete(List<ImagePickBean> imgNewList,String itemid) {
         StringBuilder stringBuilder = new StringBuilder();
         List<ImagePickBean> test_raw_imagePickBeanList =
-                (List<ImagePickBean>) DataHolderSingleton.getInstance().getData("test_raw_imagePickBeanList");
+                (List<ImagePickBean>) DataHolderSingleton.getInstance().getData(itemid+"test_raw_imagePickBeanList");
         for (int i = 0; i < test_raw_imagePickBeanList.size(); i++) {
             //
             boolean hasIt = false;
@@ -249,8 +248,8 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
                 }
             }
             if (!hasIt) {
-                HashMap holad_path_code_map= (HashMap) DataHolderSingleton.getInstance().getData("holad_path_code_map");
-                String imgCode= (String) holad_path_code_map.get(test_raw_imagePickBeanList.get(i).getImagePathOrUrl());
+                HashMap holad_path_code_map = (HashMap) DataHolderSingleton.getInstance().getData("holad_path_code_map");
+                String imgCode = (String) holad_path_code_map.get(test_raw_imagePickBeanList.get(i).getImagePathOrUrl());
                 //
                 stringBuilder.append(imgCode);
                 stringBuilder.append(",");
@@ -264,39 +263,74 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         CLog.d("ps:" + ps);
 
         if (!ps.equals("")) {
-            toDoDeleteImags(ps);
+            toDoDeleteImags(ps,imgNewList,itemid);
+        } else {
+            //刷新上页
+            EventBus.getDefault().post(new SPQDetailRefreshEvent());
+            toRefreshNowImageListDatas(imgNewList,itemid);
         }
     }
 
-    private void toDoDeleteImags(String codeid) {
+    private void toDoDeleteImags(String codeid, final List<ImagePickBean> imagePickBeanList, final String itemid) {
         HashMap<String, String> paramsMap = new HashMap<>();
         paramsMap.put("id", mNowTertiary_id);
         paramsMap.put("itemid", (String) DataHolderSingleton.getInstance().getData("spqedit_itemid"));
         paramsMap.put("codeid", codeid);
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.URL_DELETE_IMAGE, HeadsParamsHelper.setupDefaultHeaders()
-                , paramsMap, new GsonHttpRequestCallback<BasicBean>() {
+                , paramsMap, new GsonHttpRequestCallback<BasicBean<DeleteImageBackBean>>() {
                     @Override
-                    public BasicBean OnSuccess(String s) {
-                        CLog.d("S:SSSSSSSSS:"+s);
-                        return BasicBean.fromJson(s, BasicBean.class);
+                    public BasicBean<DeleteImageBackBean> OnSuccess(String s) {
+                        CLog.d("S:SSSSSSSSS:" + s);
+                        return BasicBean.fromJson(s, DeleteImageBackBean.class);
                     }
 
                     @Override
-                    public void OnSuccessOnUI(final BasicBean basicBean) {
-                      ThreadTool.runOnUiThread(new Runnable() {
-                          @Override
-                          public void run() {
-                              ToastTool.showShort(basicBean.getMessage());
-                          }
-                      });
+                    public void OnSuccessOnUI(final BasicBean<DeleteImageBackBean> basicBean) {
+                        if (basicBean == null) {
+                            showMessage(CommDatas.SERVER_ERROR);
+                            return;
+                        }
+                        if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
+                            if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
+
+                                //
+                                toRefreshNowImageListDatas(imagePickBeanList,itemid);
+
+                                //
+                                ThreadTool.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ToastTool.showShort(basicBean.getMessage());
+                                    }
+                                });
+
+                            } else {
+                                OnError(basicBean.getMessage());
+                            }
+                        } else {
+                            OnError(basicBean.getMessage());
+                        }
                     }
 
                     @Override
-                    public void OnError(String s) {
+                    public void OnError(final String s) {
                         CLog.e(s);
+                        ThreadTool.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastTool.showShort(s);
+                            }
+                        });
                     }
                 }
         );
+    }
+
+    private void toRefreshNowImageListDatas(List<ImagePickBean> imagePickBeanList,String itemid) {
+        //刷新上页
+        EventBus.getDefault().post(new SPQDetailRefreshEvent());
+        DataHolderSingleton.getInstance().putData(itemid+"test_raw_imagePickBeanList",imagePickBeanList);
+
     }
 
 

@@ -1,8 +1,13 @@
 package com.sunstar.cloudseeds.logic.shangpinqi;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import com.classichu.classichu.classic.ClassicActivity;
+import com.classichu.dialogview.manager.DialogManager;
+import com.classichu.dialogview.ui.ClassicDialogFragment;
+import com.classichu.titlebar.widget.ClassicTitleBar;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.data.AtyGoToWhere;
 import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment;
@@ -14,13 +19,15 @@ public class SPQActivity extends ClassicActivity {
     protected int setupLayoutResId() {
         return R.layout.activity_spq;
     }
-
+    private  int goToWhere;
+    private  SPQAddFragment sPQAddFragment;
     @Override
     protected void initView() {
-        int goToWhere=getBundleExtraInt1();
+         goToWhere=getBundleExtraInt1();
 
         Bundle bundle=getBundleExtra();
         mNowTertiary_id=bundle.getString("Tertiary_id");
+        sPQAddFragment=SPQAddFragment.newInstance(mNowTertiary_id,"");
         switch (goToWhere){
             case AtyGoToWhere.LIST:
          /*       setAppBarTitle("育种台账计划");
@@ -41,7 +48,7 @@ public class SPQActivity extends ClassicActivity {
             case AtyGoToWhere.ADD:
                 setAppBarTitle("商品期调查记录");
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.id_frame_layout_content, SPQAddFragment.newInstance(mNowTertiary_id,""))
+                        .replace(R.id.id_frame_layout_content, sPQAddFragment)
                         .commitAllowingStateLoss();
                 break;
         }
@@ -50,6 +57,29 @@ public class SPQActivity extends ClassicActivity {
     @Override
     protected void initListener() {
 
+        if (goToWhere==AtyGoToWhere.ADD) {
+            mClassicTitleBar.setOnTitleBarLeftItemClickListener(new ClassicTitleBar.OnTitleBarLeftItemClickListener() {
+                @Override
+                public void onLeftClick(View view) {
+                    DialogManager.showClassicDialog(SPQActivity.this, "提示", "数据未保存！是否保存？", new ClassicDialogFragment.OnBtnClickListener() {
+                        @Override
+                        public void onBtnClickOk(DialogInterface dialogInterface) {
+                            super.onBtnClickOk(dialogInterface);
+                            if (sPQAddFragment!=null){
+                                sPQAddFragment.submitData();
+                            }
+                        }
+
+                        @Override
+                        public void onBtnClickCancel(DialogInterface dialogInterface) {
+                            super.onBtnClickCancel(dialogInterface);
+                            //
+                            finish();
+                        }
+                    });
+                }
+            });
+        }
     }
 
 

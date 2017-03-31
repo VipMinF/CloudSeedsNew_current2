@@ -169,7 +169,7 @@ public class SearchFragment extends ClassicFragment implements OnRecentbuttonCli
         LinearLayout linearLayout_searchrecent=findById(R.id.id_linearlayout_searchrecent);
         linearLayout_searchrecent.setVisibility(View.GONE);
 
-        searchResultFragment=YZTZListFragment.newInstance(primary_id,search_keyword);
+        searchResultFragment=YZTZListFragment.newInstance(primary_id,search_keyword,"");
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.id_framlayout_searchrecent,searchResultFragment)
                 .commit();

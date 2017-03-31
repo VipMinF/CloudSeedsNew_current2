@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -56,10 +57,11 @@ public class EditItemRuleHelper {
 
 
     public static String generateViewBackString(TableLayout tableLayout) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tableLayout.getChildCount(); i++) {
             TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
             View view = tableRow.getChildAt(1);//第二个
+            TextView ss = (TextView) tableRow.getChildAt(0);//第二个
             String key = (String) view.getTag(R.id.hold_view_key);
             String code = "";
             if (view.getTag(R.id.hold_view_code) != null) {
@@ -79,17 +81,20 @@ public class EditItemRuleHelper {
                 TextView tv = (TextView) view;
                 value = tv.getText().toString();
             }
-            if (view.getTag(R.id.hold_view_input_type_text) != null && "true".equals(view.getTag(R.id.hold_view_input_type_text))) {//
+            if (view.getTag(R.id.hold_view_input_type_text) != null &&
+                    "true".equals(view.getTag(R.id.hold_view_input_type_text))) {//
                 //do nothing
+                Log.d("QQWQ", "generateViewBackString: ");
             } else {
-                sb.append(value);
+                Log.d("QQWQTTTTT", "SASA: ");
+                sb.append(value.equals("")?"empty":value);
                 sb.append(",");
             }
         }
         String result = sb.toString();
-        if (!"".equals(result)) {
-            result = result.substring(0, result.length() - 1);
-        }
+      /*  if (!"".equals(result)) {
+            result = result.substring(0, result.length());
+        }*/
         return result;
     }
 
@@ -146,7 +151,7 @@ public class EditItemRuleHelper {
 
         int padding = 10;
         //
-        TextView leftTitle = new TextView(fragmentActivity);
+        final TextView leftTitle = new TextView(fragmentActivity);
         //高 填充副本  宽永远都是MATCH_PARENT 作用在子控件
         TableRow.LayoutParams commTableRowLayoutParams4UI = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                 TableRow.LayoutParams.MATCH_PARENT);
@@ -178,6 +183,15 @@ public class EditItemRuleHelper {
         if (imageUploadCommBean != null && !TextUtils.isEmpty(imageUploadCommBean.getImg_upload_title())) {
             //有上传
 
+            List<ImagePickBean> imagePickBeanList = new ArrayList<>();
+            for (int i = 0; i < imageShowBeanList.size(); i++) {
+                ImagePickBean ipb = new ImagePickBean();
+                ipb.setImagePathOrUrl(imageShowBeanList.get(i).getImageUrl());
+                ipb.setImageWebIdStr(imageShowBeanList.get(i).getImageUrl());//必须设置
+                // ipb.setImageName(imageShowBeanList.get(i).get());///
+                imagePickBeanList.add(ipb);
+            }
+            DataHolderSingleton.getInstance().putData(rightCode+"test_raw_imagePickBeanList", imagePickBeanList);
             //
             rightImage = new TextView(fragmentActivity);
             //高 填充副本  宽永远都是MATCH_PARENT
@@ -187,36 +201,33 @@ public class EditItemRuleHelper {
               /*setBackgroundResource之前  有问题 */
             rightImage.setPadding(SizeTool.dp2px(5), 0,
                     SizeTool.dp2px(5), 0);
-            rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                    VectorOrImageResHelper.getDrawable(R.drawable.ic_add_box_black_24dp), null);
             rightImage.setOnClickListener(new OnNotFastClickListener() {
                 @Override
                 protected void onNotFastClick(View view) {
-
-                    List<ImagePickBean> imagePickBeanList = new ArrayList<>();
-                    for (int i = 0; i < imageShowBeanList.size(); i++) {
-                        ImagePickBean ipb = new ImagePickBean();
-                        ipb.setImagePathOrUrl(imageShowBeanList.get(i).getImageUrl());
-                        ipb.setImageWebIdStr(imageShowBeanList.get(i).getImageUrl());//必须设置
-                        // ipb.setImageName(imageShowBeanList.get(i).get());///
-                        imagePickBeanList.add(ipb);
-                    }
-                    DataHolderSingleton.getInstance().putData("test_raw_imagePickBeanList", imagePickBeanList);
+                    String spqedit_itemid = rightCode;
+                  List<ImagePickBean>  imagePickBeanList=
+                          (List<ImagePickBean>)
+                                  DataHolderSingleton.getInstance().getData(spqedit_itemid+"test_raw_imagePickBeanList");
+                    DataHolderSingleton.getInstance().putData("now_leftTitleStr", leftTitleStr);
                     ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(fragmentActivity, imagePickBeanList, 5);
 
-                    String spqedit_itemid = rightCode;
+
                     DataHolderSingleton.getInstance().putData("spqedit_itemid", spqedit_itemid);
                     //fragmentActivity.startActivity(new Intent(fragmentActivity, ClassicPhotoSelectorActivity.class));
                     // ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
+
+
                 }
             });
 
-
             if (imageShowBeanList.size() > 0) {
                 //有图
-
+                rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                        VectorOrImageResHelper.getDrawable(R.drawable.ic_add_box_black_24dp), null);
             } else {
                 //无图
+                rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                        VectorOrImageResHelper.getDrawable(R.drawable.ic_add_box_black_24dp), null);
             }
 
         } else {
@@ -224,6 +235,15 @@ public class EditItemRuleHelper {
 
             if (imageShowBeanList.size() > 0) {
                 //有图
+                List<ImagePickBean> imagePickBeanList = new ArrayList<>();
+                for (int i = 0; i < imageShowBeanList.size(); i++) {
+                    ImagePickBean ipb = new ImagePickBean();
+                    ipb.setImagePathOrUrl(imageShowBeanList.get(i).getImageUrl());
+                    ipb.setImageWebIdStr(imageShowBeanList.get(i).getImageUrl());//必须设置
+                    // ipb.setImageName(imageShowBeanList.get(i).get());///
+                    imagePickBeanList.add(ipb);
+                }
+               // DataHolderSingleton.getInstance().putData("show_raw_imagePickBeanList", imagePickBeanList);
 
                 rightImage = new TextView(fragmentActivity);
                 //高 填充副本  宽永远都是MATCH_PARENT

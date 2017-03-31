@@ -23,12 +23,17 @@ public class XuanZhuActivity extends ClassicActivity {
     @Override
     protected void initView() {
         String secondary_id=getBundleExtraStr1();
-        mXuanZhuListFragment = XuanZhuListFragment.newInstance(secondary_id, "");
+        String taizhangName=getBundleExtra().getString("taizhangName");
+        String zuqunName=getBundleExtra().getString("zuqunName");
+        mXuanZhuListFragment = XuanZhuListFragment.newInstance(secondary_id, taizhangName,zuqunName);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.id_frame_layout_content, mXuanZhuListFragment)
                 .commitAllowingStateLoss();
         // setAppBarTitle("选株列表");
-        mClassicTitleBar.setCenterText("选株列表").setRightText("新增选株").setOnTitleBarRightItemClickListener(new ClassicTitleBar.OnTitleBarRightItemClickListener() {
+        mClassicTitleBar
+                .setCenterText("选株列表")
+                .setRightText("新增选株")
+                .setOnTitleBarRightItemClickListener(new ClassicTitleBar.OnTitleBarRightItemClickListener() {
             @Override
             public void onRightClick(View view) {
                 mXuanZhuListFragment.goAddSelectBeads4Aty();

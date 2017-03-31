@@ -136,7 +136,7 @@ public class ChangePasswordActivity extends ClassicActivity {
 
         if (!checkPassWordInfo()) return;
 
-        DialogManager.showLoadingDialog(this);
+        DialogManager.showLoadingDialog(this,true);
         String old_paw =UserLoginHelper.entryptionPassword(old_password.getText().toString());
         String psw =UserLoginHelper.entryptionPassword(password.getText().toString());
         String psw_again =UserLoginHelper.entryptionPassword(password_again.getText().toString());

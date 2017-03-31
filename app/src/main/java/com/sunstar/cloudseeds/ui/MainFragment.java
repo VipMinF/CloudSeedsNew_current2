@@ -376,7 +376,9 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
                 super.onItemClick(itemView, position);
                 // ToastTool.showShortCenter("sda" + position);
                 TaiZhangBean.ListBean listBean= (TaiZhangBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
-                startAty(YZTZActivity.class, createBundleExtraStr1(listBean.getPrimary_id()));
+                Bundle bundle=createBundleExtraStr1(listBean.getPrimary_id());
+                bundle.putString("TaiZhangName",listBean.getName());
+                startAty(YZTZActivity.class,bundle );
             }
         });
         mRecyclerView.setVisibility(View.GONE);//初始化 不显示

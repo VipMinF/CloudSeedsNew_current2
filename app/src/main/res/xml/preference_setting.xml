@@ -50,7 +50,7 @@
             />-->
         <Preference
             android:key="preference_about"
-            android:title="关于云种"
+            android:title="关于云种·育种家"
             android:layout="@layout/layout_custom_preference"
             />
     <!--</PreferenceCategory>-->

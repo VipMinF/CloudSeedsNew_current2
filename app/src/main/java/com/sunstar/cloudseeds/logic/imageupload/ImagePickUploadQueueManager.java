@@ -209,14 +209,14 @@ public abstract class ImagePickUploadQueueManager {
                                 }
 
                                 @Override
-                                public void OnSuccessOnUI(BaseListBean<UploadImageBackBean> uploadImageBackBeanBaseListBean, int code) {
+                                public void OnSuccessOnUI(BaseListBean<UploadImageBackBean> listBean, int code) {
                                   //  String idStr = uploadImageBackBeanBaseListBean.getInfo().get(0).getAttachmentid() + "";
                                     //   String Attname=uploadImageBackModelBaseListBean.getInfo().get(0).getAttname();
                                     //  String path=uploadImageBackModelBaseListBean.getInfo().get(0).getPath()
                                     // String microimagefilename=uploadImageBackModelBaseListBean.getInfo().get(0).getMicroimagefilename();
                                     //  Log.d(TAG, "OnSuccessNotifyUI: id:" + idStr);
                                     //id_iprv_frsfzImagePickRecyclerView.updateDataList();
-                                    uploadImageQueue_FinishToUpdateData(imagePath);
+                                    uploadImageQueue_FinishToUpdateData(imagePath,listBean.getInfo().get(0));
                                 }
                                 @Override
                                     public void OnError(String msg, int code) {
@@ -261,7 +261,7 @@ public abstract class ImagePickUploadQueueManager {
     }
 
 
-    private void uploadImageQueue_FinishToUpdateData(String imageUrl) {
+    private void uploadImageQueue_FinishToUpdateData(String imagePath,UploadImageBackBean uploadImageBackBean) {
         int allCount = (int) DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_COUNT_ + mQueueNameNoSame);
         int leftCount = (int) DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_LEFT_COUNT_ + mQueueNameNoSame);
         int lefCountNew = leftCount - 1;
@@ -280,7 +280,7 @@ public abstract class ImagePickUploadQueueManager {
         DataHolderSingleton.getInstance().putData(KEY_IMAGES_QUEUE_LEFT_COUNT_ + mQueueNameNoSame, lefCountNew);
 
         List<ImagePickBean> imagePickBeanList = null;
-        if (imageUrl != null && !imageUrl.equals("")) {
+        if (imagePath != null && !imagePath.equals("")) {
             imagePickBeanList = (List<ImagePickBean>)
                     DataHolderSingleton.getInstance().getData(KEY_IMAGES_QUEUE_LIST_ + mQueueNameNoSame);
 
@@ -289,9 +289,10 @@ public abstract class ImagePickUploadQueueManager {
                 ImagePickBean imagePickBean = imagePickBeanList.get(i);
                /* if (imageName.equals(imagePickBean.getImageName()) &&
                         imagePickedTimeAndOrderTag.equals(imagePickBean.getImagePickedTimeAndOrderTag())) {*/
-                if (imageUrl.equals(imagePickBean.getImagePathOrUrl())) {
-                    imagePickBeanList.get(i).setImageWebIdStr(imageUrl);//imageUrl 标志上传成功
-                    //imagePickBeanList.get(i).setImagePathOrUrl(imageUrl);
+                if (imagePath.equals(imagePickBean.getImagePathOrUrl())) {
+                    imagePickBeanList.get(i).setImageWebIdStr(uploadImageBackBean.getBigImageName());//imageUrl 标志上传成功
+                    imagePickBeanList.get(i).setImagePathOrUrl(uploadImageBackBean.getBigImageName());
+                    imagePickBeanList.get(i).setImageName(uploadImageBackBean.getCode());//暂存Code
                     break;
                 }
             }
@@ -327,7 +328,7 @@ public abstract class ImagePickUploadQueueManager {
                             mMyDialogFragmentProgress.dismiss();
                         }
                         //
-                        uploadImageQueue_UpdatePicIntoInformation();
+                      uploadImageQueue_UpdatePicIntoInformation();
                     }
                 }, 2000);
 

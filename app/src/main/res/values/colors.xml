@@ -25,4 +25,7 @@
     <color name="ThemeOld">#45c01a</color>
     <color name="Theme">#2b9c14</color>
 
+
+    <color name="lineDark">#42000000</color>
+
 </resources>

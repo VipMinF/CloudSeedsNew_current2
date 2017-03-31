@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.classichu.adapter.recyclerview.ClassicRVHeaderFooterAdapter;
 import com.classichu.adapter.widget.ClassicEmptyView;
@@ -62,6 +63,10 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
     }
 
     private String primary_id;
+    private String TaiZhangName;
+
+    protected String mParam4;
+    protected static final String ARG_PARAM4 = "param4";
 
     /**
      * Use this factory method to create a new instance of
@@ -72,11 +77,12 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
      * @return A new instance of fragment YZTZListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static YZTZListFragment newInstance(String param1, String param2) {
+    public static YZTZListFragment newInstance(String param1, String param2, String param4) {
         YZTZListFragment fragment = new YZTZListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM4, param4);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,9 +93,11 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam4 = getArguments().getString(ARG_PARAM4);
         }
         primary_id = mParam1;
-        mQueryText = mParam2;//// TODO: 2017/3/30
+        mQueryText = mParam2;
+        TaiZhangName = mParam4;
     }
 
     @Override
@@ -99,6 +107,10 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
 
     @Override
     protected void initView(View view) {
+
+        TextView id_tv_TaiZhangName = findById(R.id.id_tv_TaiZhangName);
+        id_tv_TaiZhangName.setText(TaiZhangName);
+
         initSearchView();
         //-- add by lzy -2017.3.20
         //隐藏搜索框
@@ -292,7 +304,10 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 super.onItemShowDetail(position);
                 //
                 YZTZListBean.ListBean listBean = (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
-                startAty(XuanZhuActivity.class, createBundleExtraStr1(listBean.getSecondary_id()));
+                Bundle bundle=createBundleExtraStr1(listBean.getSecondary_id());
+                bundle.putString("taizhangName",TaiZhangName);
+                bundle.putString("zuqunName",listBean.getName());
+                startAty(XuanZhuActivity.class, bundle);
                 //2017年3月23日15:31:28 暂时不需要族群详细页 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
             }
 

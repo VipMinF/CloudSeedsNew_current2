@@ -22,7 +22,7 @@ import java.util.Map;
 public class AddSelectBeadsModel {
 
     public void goAddSelectBeads(FragmentActivity fragmentActivity,String id, final BasicCallBack<InfoBean> basicCallBack) {
-        DialogManager.showLoadingDialog(fragmentActivity, "请稍候...");
+        DialogManager.showLoadingDialog(fragmentActivity, "请稍候...",true);
         Map<String, String> paramsMap = new HashMap<>();
         paramsMap.put("id",id);
         HttpRequestManagerFactory.getRequestManager()

@@ -19,7 +19,10 @@ import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.scan.bean.QrcodeBean;
 import com.sunstar.cloudseeds.logic.scan.model.QrcodeModelImpl;
 import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQDetailFragment;
+import com.sunstar.cloudseeds.logic.xuanzhu.event.XuanZhuListRefreshEvent;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui.YZTZDetailFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zbar.ZBarView;
@@ -200,6 +203,7 @@ public class ScanQrcodeActivity extends ClassicActivity  {
                     bindError(qrcodeBean.getShow_msg().toString());
                     return;
                 }
+                EventBus.getDefault().post(new XuanZhuListRefreshEvent());
                 this.finish();
 
                 break;

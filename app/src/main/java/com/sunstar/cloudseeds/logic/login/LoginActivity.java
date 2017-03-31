@@ -136,7 +136,7 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
         //
         if (mClassicTitleBar!=null){
             mClassicTitleBar.setLeftImage(null);
-            mClassicTitleBar.setLeftText("登录云种")
+            mClassicTitleBar.setLeftText("登录云种·育种家")
                     .setLeftAndRightTextSize(SizeTool.dp2px(22))
                     .setLeftMaxWidth(SizeTool.dp2px(200));
         }

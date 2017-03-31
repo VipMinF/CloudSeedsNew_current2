@@ -57,7 +57,7 @@ public class MyDialogFragmentProgress extends DialogFragment {
 
         this.setCancelable(false);
         if (mCustomTitle!=null&&!mCustomTitle.equals("")){
-            mMyCustomTitleView.setText(mCustomTitle);
+            mMyCustomTitleView.setText(mCustomTitle+"中");
             this.getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         }else if (mTitle!=null&&!mTitle.equals("")){
             this.getDialog().setTitle(mTitle);
@@ -72,12 +72,12 @@ public class MyDialogFragmentProgress extends DialogFragment {
     public void updateProgress(int allCount,int progress){
         //if (mProgressBar!=null) {
             mProgressBar.setProgress(progress);
-            mMyCustomTitleView.setText(mCustomTitle+"("+allCount+":"+ String.valueOf(progress)+"%)");
+            mMyCustomTitleView.setText(mCustomTitle+"中("+allCount+":"+ String.valueOf(progress)+"%)");
        // }
     }
     public void updateAddFinshText(){
         //if (mProgressBar!=null) {
-        mMyCustomTitleView.setText(mCustomTitle+"上传已完成！");
+        mMyCustomTitleView.setText(mCustomTitle+"已完成！");
         // }
     }
 

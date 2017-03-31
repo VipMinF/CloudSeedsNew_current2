@@ -28,10 +28,12 @@ public class YZTZActivity extends ClassicActivity {
         int goToWhere=getBundleExtraInt1();
         switch (goToWhere){
             case AtyGoToWhere.LIST:
-                setAppBarTitle("育种台账计划");
                 String primary_id=getBundleExtraStr1();
+                String TaiZhangName=getBundleExtra().getString("TaiZhangName");
+                setAppBarTitle("育种台账计划");
+                // mClassicTitleBar.setCenterTextSize(SizeTool.dp2px(16)).setCenterText(TaiZhangName);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.id_frame_layout_content, YZTZListFragment.newInstance(primary_id,""))
+                        .replace(R.id.id_frame_layout_content, YZTZListFragment.newInstance(primary_id,"",TaiZhangName))
                         .commitAllowingStateLoss();
                 break;
             case AtyGoToWhere.DETAIL:
