@@ -6,8 +6,8 @@ package com.sunstar.cloudseeds.data;
 
 public class UrlDatas {
     private   static  final String
-                        BASE_URL="http://192.168.1.67:8085/";
-    // BASE_URL="http://192.168.1.80:8080/yunzhong/";
+            //                   BASE_URL="http://192.168.1.67:8085/";
+      BASE_URL="http://192.168.1.80:8080/yunzhong/";
 
     // //BASE_URL="https://115.236.5.187:8080/yunzhong/";
   /* private   static  final String

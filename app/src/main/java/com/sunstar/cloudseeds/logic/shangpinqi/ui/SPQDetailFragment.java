@@ -148,7 +148,7 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         DataHolderSingleton.getInstance().putData("spqedit_companyid",spqedit_companyid);
 
 
-        EditItemRuleHelper.generateSPQChildView(getActivity(), id_tl_item_container, kvbList);
+        EditItemRuleHelper.generateSPQChildView(getActivity(), id_tl_item_container, kvbList,false);
     }
 
     @Override

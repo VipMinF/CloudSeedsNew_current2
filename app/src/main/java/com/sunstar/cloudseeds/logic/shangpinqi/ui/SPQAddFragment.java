@@ -38,6 +38,7 @@ import com.sunstar.cloudseeds.logic.shangpinqi.presenter.SPQDetailPresenterImpl;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -214,17 +215,17 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     }
 
     private void uploadImages(List<ImagePickBean> imagePickBeanList) {
-     String now_leftTitleStr= (String) DataHolderSingleton.getInstance().getData("now_leftTitleStr");
+        String now_leftTitleStr = (String) DataHolderSingleton.getInstance().getData("now_leftTitleStr");
 
         ImagePickUploadQueueManager imagePickUploadQueueManager
                 = new ImagePickUploadQueueManager("now_leftTitleStr", "",
-                imagePickBeanList, getChildFragmentManager(), now_leftTitleStr+"图片上传", 0, false) {
+                imagePickBeanList, getChildFragmentManager(), now_leftTitleStr + "图片上传", 0, false) {
             @Override
             protected void uploadImageQueue_Complete(String thePreviousData, List<ImagePickBean> imgList) {
                 CLog.d("thePreviousData:" + thePreviousData);
                 // CLog.d("webIDS:"+webIDS);
-                String spqedit_itemid= (String) DataHolderSingleton.getInstance().getData("spqedit_itemid");
-                checkHasDelete(imgList,spqedit_itemid);
+                String spqedit_itemid = (String) DataHolderSingleton.getInstance().getData("spqedit_itemid");
+                checkHasDelete(imgList, spqedit_itemid);
 
 
             }
@@ -232,10 +233,10 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         imagePickUploadQueueManager.uploadImageQueue_Start();
     }
 
-    private void checkHasDelete(List<ImagePickBean> imgNewList,String itemid) {
+    private void checkHasDelete(List<ImagePickBean> imgNewList, String itemid) {
         StringBuilder stringBuilder = new StringBuilder();
         List<ImagePickBean> test_raw_imagePickBeanList =
-                (List<ImagePickBean>) DataHolderSingleton.getInstance().getData(itemid+"test_raw_imagePickBeanList");
+                (List<ImagePickBean>) DataHolderSingleton.getInstance().getData(itemid + "test_raw_imagePickBeanList");
         for (int i = 0; i < test_raw_imagePickBeanList.size(); i++) {
             //
             boolean hasIt = false;
@@ -263,11 +264,11 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         CLog.d("ps:" + ps);
 
         if (!ps.equals("")) {
-            toDoDeleteImags(ps,imgNewList,itemid);
+            toDoDeleteImags(ps, imgNewList, itemid);
         } else {
             //刷新上页
             EventBus.getDefault().post(new SPQDetailRefreshEvent());
-            toRefreshNowImageListDatas(imgNewList,itemid);
+            toRefreshNowImageListDatas(imgNewList, itemid);
         }
     }
 
@@ -294,7 +295,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
                             if (basicBean.getInfo() != null && basicBean.getInfo().size() > 0) {
 
                                 //
-                                toRefreshNowImageListDatas(imagePickBeanList,itemid);
+                                toRefreshNowImageListDatas(imagePickBeanList, itemid);
 
                                 //
                                 ThreadTool.runOnUiThread(new Runnable() {
@@ -326,10 +327,19 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         );
     }
 
-    private void toRefreshNowImageListDatas(List<ImagePickBean> imagePickBeanList,String itemid) {
+    private void toRefreshNowImageListDatas(List<ImagePickBean> imagePickBeanList, String itemid) {
         //刷新上页
         EventBus.getDefault().post(new SPQDetailRefreshEvent());
-        DataHolderSingleton.getInstance().putData(itemid+"test_raw_imagePickBeanList",imagePickBeanList);
+        List<ImagePickBean> imagePickBeanListClone=new ArrayList<>(imagePickBeanList);
+        imagePickBeanList.clear();
+        for (int i = 0; i <imagePickBeanListClone.size() ; i++) {
+            String newUrl = imagePickBeanListClone.get(i).getImagePathOrUrl().replace("\\","/");
+            ImagePickBean ipb=imagePickBeanListClone.get(i);
+            ipb.setImagePathOrUrl(newUrl);
+            ipb.setImageWebIdStr(newUrl);
+            imagePickBeanList.add(ipb);
+        }
+        DataHolderSingleton.getInstance().putData(itemid + "test_raw_imagePickBeanList", imagePickBeanList);
 
     }
 
@@ -359,7 +369,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         //
         List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
         //
-        EditItemRuleHelper.generateSPQChildView(getActivity(), id_tl_item_container, kvbList);
+        EditItemRuleHelper.generateSPQChildView(getActivity(), id_tl_item_container, kvbList,true);
     }
 
     @Override

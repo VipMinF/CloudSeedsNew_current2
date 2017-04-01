@@ -306,7 +306,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 YZTZListBean.ListBean listBean = (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
                 Bundle bundle=createBundleExtraStr1(listBean.getSecondary_id());
                 bundle.putString("taizhangName",TaiZhangName);
-                bundle.putString("zuqunName",listBean.getName());
+                bundle.putString("zuqunName",listBean.getPlant_code());
                 startAty(XuanZhuActivity.class, bundle);
                 //2017年3月23日15:31:28 暂时不需要族群详细页 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
             }

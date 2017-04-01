@@ -120,7 +120,7 @@ public class YZTZDetailFragment extends ClassicMvpFragment<YZTZDetailPresenterIm
     @Override
     public void setupData(YZTZDetailBean yztzDetailBean) {
         List<YZTZDetailBean.KeyValueBean> keyValueBeanList = yztzDetailBean.getKey_value();
-        EditItemRuleHelper.generateYZTZChildView(getActivity(), id_tl_item_container, keyValueBeanList);
+        EditItemRuleHelper.generateYZTZChildView(getActivity(), id_tl_item_container, keyValueBeanList,false);
     }
 
     @Override

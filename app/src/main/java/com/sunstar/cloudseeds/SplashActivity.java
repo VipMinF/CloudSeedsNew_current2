@@ -27,7 +27,7 @@ public class SplashActivity extends ClassicActivity {
     protected void initView() {
         ImageView id_iv_start_image = findById(R.id.id_iv_start_image);
         //  GlideHelper.displayImageRes(id_iv_start_image, R.drawable.img_welcome);
-        ImageLoaderFactory.getManager().displayImage(id_iv_start_image, R.drawable.img_welcome);
+        ImageLoaderFactory.getManager().displayImage(id_iv_start_image, R.drawable.img_start);
         delayJump(1000);
     }
 

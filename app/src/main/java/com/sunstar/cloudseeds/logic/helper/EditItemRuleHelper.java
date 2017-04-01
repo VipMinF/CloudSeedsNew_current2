@@ -142,7 +142,7 @@ public class EditItemRuleHelper {
                                           final String leftTitleStr, final String rightValue, String rightKey, final String rightCode,
                                           List<KeyAndValueBean> options, List<KeyAndValueBean> configs,
                                           List<ImageCommBean> imageCommmBeanList,
-                                          ImageUploadCommBean imageUploadCommBean
+                                          ImageUploadCommBean imageUploadCommBean,boolean isFromEdit
     ) {
         WeakReference<FragmentActivity> weakReferenceAty = new WeakReference<>(fragmentActivity);
         Context context = weakReferenceAty.get();
@@ -164,7 +164,15 @@ public class EditItemRuleHelper {
         leftTitle.setPadding(SizeTool.dp2px(padding), 0,
                 SizeTool.dp2px(padding), 0);
 
-        TextView rightImage = null;
+        TextView rightImage = new TextView(fragmentActivity);
+        //高 填充副本  宽永远都是MATCH_PARENT
+        rightImage.setLayoutParams(commTableRowLayoutParams4UI);
+        //rightImage.setGravity(Gravity.CENTER_VERTICAL);
+        rightImage.setBackgroundResource(isFromEdit?R.drawable.shape_form_frame_right_bottom:
+                R.drawable.shape_form_frame_bottom_text);
+              /*setBackgroundResource之前  有问题 */
+        rightImage.setPadding(SizeTool.dp2px(5), 0,
+                SizeTool.dp2px(5), 0);
         final List<ImageShowBean> imageShowBeanList = new ArrayList<>();
         Map<String, String> path_code_map = new HashMap<>();
         if (imageCommmBeanList != null && imageCommmBeanList.size() > 0) {
@@ -192,15 +200,7 @@ public class EditItemRuleHelper {
                 imagePickBeanList.add(ipb);
             }
             DataHolderSingleton.getInstance().putData(rightCode+"test_raw_imagePickBeanList", imagePickBeanList);
-            //
-            rightImage = new TextView(fragmentActivity);
-            //高 填充副本  宽永远都是MATCH_PARENT
-            rightImage.setLayoutParams(commTableRowLayoutParams4UI);
-            //rightImage.setGravity(Gravity.CENTER_VERTICAL);
-            rightImage.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
-              /*setBackgroundResource之前  有问题 */
-            rightImage.setPadding(SizeTool.dp2px(5), 0,
-                    SizeTool.dp2px(5), 0);
+
             rightImage.setOnClickListener(new OnNotFastClickListener() {
                 @Override
                 protected void onNotFastClick(View view) {
@@ -211,6 +211,12 @@ public class EditItemRuleHelper {
                     DataHolderSingleton.getInstance().putData("now_leftTitleStr", leftTitleStr);
                     ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(fragmentActivity, imagePickBeanList, 5);
 
+                    for (ImagePickBean imagePickBean:imagePickBeanList
+                         ) {
+                        Log.d("dsada","=====start=====");
+                        Log.d("dsada", "onNotFastClick: imagePickBean:"+imagePickBean.getImagePathOrUrl());
+                        Log.d("dsada","=====end=====");
+                    }
 
                     DataHolderSingleton.getInstance().putData("spqedit_itemid", spqedit_itemid);
                     //fragmentActivity.startActivity(new Intent(fragmentActivity, ClassicPhotoSelectorActivity.class));
@@ -219,7 +225,6 @@ public class EditItemRuleHelper {
 
                 }
             });
-
             if (imageShowBeanList.size() > 0) {
                 //有图
                 rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
@@ -244,15 +249,6 @@ public class EditItemRuleHelper {
                     imagePickBeanList.add(ipb);
                 }
                // DataHolderSingleton.getInstance().putData("show_raw_imagePickBeanList", imagePickBeanList);
-
-                rightImage = new TextView(fragmentActivity);
-                //高 填充副本  宽永远都是MATCH_PARENT
-                rightImage.setLayoutParams(commTableRowLayoutParams4UI);
-                //rightImage.setGravity(Gravity.CENTER_VERTICAL);
-                rightImage.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
-              /*setBackgroundResource之前  有问题 */
-                rightImage.setPadding(SizeTool.dp2px(5), 0,
-                        SizeTool.dp2px(5), 0);
                 rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
                         VectorOrImageResHelper.getDrawable(R.drawable.ic_image_black_24dp), null);
                 rightImage.setOnClickListener(new OnNotFastClickListener() {
@@ -286,6 +282,7 @@ public class EditItemRuleHelper {
                 tableRow.addView(rightTitle);
                 //
                 if (rightImage != null) {
+                    rightImage.setBackgroundResource(R.drawable.shape_form_frame_bottom_text);
                     tableRow.addView(rightImage);
                 }
                 tableLayout.addView(tableRow);
@@ -519,7 +516,7 @@ public class EditItemRuleHelper {
 
 
     public static void generateSPQChildView(final FragmentActivity fragmentActivity, TableLayout tableLayout,
-                                            List<SPQDetailBean.KeyValueBean> keyValueBeanList) {
+                                            List<SPQDetailBean.KeyValueBean> keyValueBeanList,boolean  isFromEdit) {
         tableLayout.removeAllViews();
         for (int i = 0; i < keyValueBeanList.size(); i++) {
             String inputType = keyValueBeanList.get(i).getInput_type();
@@ -570,13 +567,13 @@ public class EditItemRuleHelper {
             imageUploadCommBean.setImg_upload_title(img_upload_options.getImg_upload_title());
 
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
-                    kvList_options, kvList_configs, imageCommmBeanList, imageUploadCommBean);
+                    kvList_options, kvList_configs, imageCommmBeanList, imageUploadCommBean,isFromEdit);
         }
     }
 
 
     public static void generateYZTZChildView(final FragmentActivity fragmentActivity, TableLayout tableLayout,
-                                             List<YZTZDetailBean.KeyValueBean> keyValueBeanList) {
+                                             List<YZTZDetailBean.KeyValueBean> keyValueBeanList,boolean isFromEdit) {
         tableLayout.removeAllViews();
         for (int i = 0; i < keyValueBeanList.size(); i++) {
             String inputType = keyValueBeanList.get(i).getInput_type();
@@ -609,7 +606,7 @@ public class EditItemRuleHelper {
 
 
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
-                    kvList_options, kvList_configs, null, null);
+                    kvList_options, kvList_configs, null, null,isFromEdit);
         }
     }
 }

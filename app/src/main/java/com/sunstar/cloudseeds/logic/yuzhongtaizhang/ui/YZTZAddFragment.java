@@ -206,7 +206,7 @@ public class YZTZAddFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
         //
         List<YZTZDetailBean.KeyValueBean> kvbList = yztzBean.getKey_value();
         //
-        EditItemRuleHelper.generateYZTZChildView(getActivity(), id_tl_item_container, kvbList);
+        EditItemRuleHelper.generateYZTZChildView(getActivity(), id_tl_item_container, kvbList,true);
     }
 
     @Override
