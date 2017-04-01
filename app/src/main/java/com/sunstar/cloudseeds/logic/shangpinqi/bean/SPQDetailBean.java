@@ -99,6 +99,16 @@ public class SPQDetailBean {
             private String title;
             private String value;
             private String code;
+
+            public String getIntro() {
+                return intro;
+            }
+
+            public void setIntro(String intro) {
+                this.intro = intro;
+            }
+
+            private String intro;
             private String input_type;
             private ImgUploadOptionsBean img_upload_options;
             private List<InputOptionsBean> input_options;

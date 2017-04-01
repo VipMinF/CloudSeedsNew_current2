@@ -139,7 +139,7 @@ public class EditItemRuleHelper {
 
 
     private static void generateChildView(String inputType, TableLayout tableLayout, final FragmentActivity fragmentActivity,
-                                          final String leftTitleStr, final String rightValue, String rightKey, final String rightCode,
+                                          final String leftTitleStr, final String rightValue, String rightKey, final String rightCode,String rightHint,
                                           List<KeyAndValueBean> options, List<KeyAndValueBean> configs,
                                           List<ImageCommBean> imageCommmBeanList,
                                           ImageUploadCommBean imageUploadCommBean,boolean isFromEdit
@@ -292,11 +292,12 @@ public class EditItemRuleHelper {
                 tableRow2.addView(leftTitle);
                 //
                 EditText rightEdit = new EditText(context);
-                rightEdit.setHint("请输入" + leftTitleStr);
-                rightEdit.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+                rightEdit.setHint(rightHint);
+                rightEdit.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
                 rightEdit.setText(rightValue);
                 rightEdit.setSelectAllOnFocus(true);
                 rightEdit.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+                rightEdit.setHintTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
                 rightEdit.setLines(1);
                 rightEdit.setGravity(Gravity.CENTER_VERTICAL);
                 rightEdit.setLayoutParams(commTableRowLayoutParams4UI);
@@ -317,12 +318,13 @@ public class EditItemRuleHelper {
                 tableRow6.addView(leftTitle);
                 //
                 EditText rightEditInteger = new EditText(context);
-                rightEditInteger.setHint("请输入" + leftTitleStr);
-                rightEditInteger.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+                rightEditInteger.setHint(rightHint);
+                rightEditInteger.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
                 rightEditInteger.setText(rightValue);
                 rightEditInteger.setSelectAllOnFocus(true);
                 rightEditInteger.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 rightEditInteger.setLines(1);
+                rightEditInteger.setHintTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
                 rightEditInteger.setInputType(InputType.TYPE_CLASS_NUMBER);
                 rightEditInteger.setGravity(Gravity.CENTER_VERTICAL);
                 rightEditInteger.setLayoutParams(commTableRowLayoutParams4UI);
@@ -345,12 +347,14 @@ public class EditItemRuleHelper {
                 tableRow7.addView(leftTitle);
                 //
                 EditText rightEditDouble = new EditText(context);
-                rightEditDouble.setHint("请输入" + leftTitleStr);
-                rightEditDouble.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+                rightEditDouble.setHint(rightHint);
+                rightEditDouble.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
                 rightEditDouble.setText(rightValue);
                 rightEditDouble.setSelectAllOnFocus(true);
                 rightEditDouble.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 rightEditDouble.setLines(1);
+                rightEditDouble.setHintTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+
                 //##  rightEditDouble.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 rightEditDouble.setInputType(8194);//http://www.cnblogs.com/janehlp/p/6129053.html
                 rightEditDouble.setGravity(Gravity.CENTER_VERTICAL);
@@ -374,7 +378,7 @@ public class EditItemRuleHelper {
                 //
                 DateSelectView rightDate = new DateSelectView(context);
                 //rightDate.setupDateText(kvbList.get(i).getKey());
-                rightDate.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+                rightDate.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
                 rightDate.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
                 //rightDate.setText(rightValue);
                 /**=====================================*/
@@ -447,7 +451,7 @@ public class EditItemRuleHelper {
                 }
                 /**=====================================*/
 
-                rightLines.setHintText("请输入" + leftTitleStr);
+                rightLines.setHintText(rightHint);
                 rightLines.setContentText(rightValue);
                 rightLines.setTag(R.id.hold_view_key, rightKey);
                 rightLines.setBackgroundResource(R.drawable.selector_classic_form_bottom_item_bg);
@@ -477,7 +481,7 @@ public class EditItemRuleHelper {
                 }
                 /**=====================================*/
                 rightSelect.setText(TextUtils.isEmpty(rightValue) ? "请选择" : rightValue);
-                rightSelect.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+                rightSelect.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
                 rightSelect.setLines(1);
                 rightSelect.setGravity(Gravity.CENTER_VERTICAL);
                 rightSelect.setLayoutParams(commTableRowLayoutParams4UI);
@@ -524,6 +528,7 @@ public class EditItemRuleHelper {
             String rightValue = keyValueBeanList.get(i).getValue();
             String rightKey = keyValueBeanList.get(i).getKey();
             String rightCode = keyValueBeanList.get(i).getCode();
+            String rightHint = keyValueBeanList.get(i).getIntro();
             List<SPQDetailBean.KeyValueBean.InputOptionsBean> options = keyValueBeanList.get(i).getInput_options();
             List<SPQDetailBean.KeyValueBean.InputConfigsBean> configs = keyValueBeanList.get(i).getInput_configs();
             List<SPQDetailBean.KeyValueBean.ImagesBean> images = keyValueBeanList.get(i).getImages();
@@ -566,7 +571,7 @@ public class EditItemRuleHelper {
             imageUploadCommBean.setImg_upload_max_count(img_upload_options.getImg_upload_max_count());
             imageUploadCommBean.setImg_upload_title(img_upload_options.getImg_upload_title());
 
-            generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
+            generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,rightHint,
                     kvList_options, kvList_configs, imageCommmBeanList, imageUploadCommBean,isFromEdit);
         }
     }
@@ -581,6 +586,7 @@ public class EditItemRuleHelper {
             String rightValue = keyValueBeanList.get(i).getValue();
             String rightKey = keyValueBeanList.get(i).getKey();
             String rightCode = keyValueBeanList.get(i).getCode();
+            String rightHint = "";
 
             List<YZTZDetailBean.KeyValueBean.InputOptionsBean> options = keyValueBeanList.get(i).getInput_options();
             List<YZTZDetailBean.KeyValueBean.InputConfigsBean> configs = keyValueBeanList.get(i).getInput_configs();
@@ -606,7 +612,7 @@ public class EditItemRuleHelper {
 
 
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
-                    kvList_options, kvList_configs, null, null,isFromEdit);
+                    rightHint,kvList_options, kvList_configs, null, null,isFromEdit);
         }
     }
 }
