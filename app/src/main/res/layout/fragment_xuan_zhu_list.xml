@@ -42,7 +42,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="族群："
+            android:text="栽培编号:"
             android:textSize="@dimen/classic_text_size_primary" />
 
         <TextView
@@ -53,6 +53,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/id_xuanzhu_view"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="10dp"
@@ -64,14 +65,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:id="@+id/id_record_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <net.lucode.hackware.magicindicator.MagicIndicator
+            android:id="@+id/magic_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/id_xuanzhu_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/id_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/id_recycler_view"
-            style="@style/ClassicRecyclerViewStyle" />
+            style="@style/ClassicRecyclerViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

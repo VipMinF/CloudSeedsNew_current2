@@ -5,6 +5,15 @@
             android:key="preference_user"
             android:title="我的用户"
             />-->
+    <!--<-->
+        <!--android:key="preference_onwifiupload"-->
+        <!--android:title="只在WiFi下上传图片"-->
+        <!--android:layout="@layout/layout_checkbox_preference"/>-->
+<com.sunstar.cloudseeds.widget.MyCheckBoxPreference
+    android:key="preference_onwifiupload"
+    android:title="只在WiFi下上传图片"
+    />
+
         <Preference
             android:key="preference_password"
             android:title="密码修改"

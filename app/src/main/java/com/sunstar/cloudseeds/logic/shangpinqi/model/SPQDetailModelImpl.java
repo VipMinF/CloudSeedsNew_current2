@@ -40,12 +40,11 @@ public class SPQDetailModelImpl implements SPQDetailContract.Model<SPQDetailBean
                         BasicBean<SPQDetailBean> bb= BasicBean.fromJson(result,SPQDetailBean.class);
                         return bb;
                     }
-
                     @Override
                     public void OnSuccessOnUI(BasicBean<SPQDetailBean> basicBean) {
 
                         if (basicBean == null) {
-                            basicCallBack.onError(CommDatas.SERVER_ERROR);
+                                basicCallBack.onError(CommDatas.SERVER_ERROR);
                             return;
                         }
                         if (CommDatas.SUCCESS_FLAG.equals(basicBean.getCode())) {
@@ -57,7 +56,7 @@ public class SPQDetailModelImpl implements SPQDetailContract.Model<SPQDetailBean
                                 basicCallBack.onError(basicBean.getMessage());
                             }
                         } else {
-                            basicCallBack.onError(basicBean.getMessage());
+                                basicCallBack.onError(basicBean.getMessage());
                         }
 
                     }

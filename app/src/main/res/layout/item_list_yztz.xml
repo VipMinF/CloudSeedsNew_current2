@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
+    android:descendantFocusability="afterDescendants"
     android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
@@ -21,6 +22,7 @@
             android:layout_weight="1">
 
             <TableRow
+                android:id="@+id/id_yztz_tab_zpbh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
@@ -46,11 +48,13 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/id_yztz_tab_xtbh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
                 <TextView
+                    android:id="@+id/id_yztz_number"
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,36 +75,13 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/id_yztz_tab_zzph"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    style="@style/ClassicTextPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:lines="1"
-                    android:text="播种日期:"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/id_tv_item_title_bzsj"
-                    style="@style/ClassicTextPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:text="16YB128"
-                    android:textSize="14dp" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
+                    android:id="@+id/id_yztz_pihao"
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -109,23 +90,52 @@
                     android:textSize="14dp" />
 
                 <TextView
-                    android:id="@+id/id_tv_item_title_zzph"
+                    android:id="@+id/id_tv_item_title_bzsj"
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:lines="1"
                     android:ellipsize="end"
+                    android:lines="1"
                     android:text="16YB128"
                     android:textSize="14dp" />
 
             </TableRow>
 
             <TableRow
+                android:id="@+id/id_yztz_tab_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
                 <TextView
+                    android:id="@+id/textView3"
+                    style="@style/ClassicTextPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="播种日期:"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/id_tv_item_title_zzph"
+                    style="@style/ClassicTextPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="16YB128"
+                    android:textSize="14dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/id_yztz_tab_bzsl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView5"
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -138,19 +148,21 @@
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:lines="1"
                     android:ellipsize="end"
+                    android:lines="1"
                     android:text="16YB128"
                     android:textSize="14dp" />
 
             </TableRow>
 
             <TableRow
+                android:id="@+id/id_yztz_tab_zzsl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
                 <TextView
+                    android:id="@+id/textView4"
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -163,8 +175,8 @@
                     style="@style/ClassicTextPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:lines="1"
                     android:ellipsize="end"
+                    android:lines="1"
                     android:text="16YB128"
                     android:textSize="14dp" />
 
@@ -196,6 +208,9 @@
                 style="@style/ClassicButtonRound"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="新增选株" />
@@ -205,18 +220,24 @@
                 style="@style/ClassicButtonRound"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="选株列表" />
+                android:text="品系记录" />
 
             <Button
                 android:id="@+id/id_btn_item_show_qrcode"
                 style="@style/ClassicButtonRound"
-                android:background="@drawable/selector_btn_status"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/selector_btn_status"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="绑定二维码" />

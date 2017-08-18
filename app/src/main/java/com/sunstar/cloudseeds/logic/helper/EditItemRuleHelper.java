@@ -2,13 +2,17 @@ package com.sunstar.cloudseeds.logic.helper;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -30,10 +34,15 @@ import com.classichu.photoselector.imagespicker.ImagePickBean;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sunstar.cloudseeds.R;
+import com.sunstar.cloudseeds.Util.DensityUtil;
 import com.sunstar.cloudseeds.bean.ImageCommBean;
 import com.sunstar.cloudseeds.bean.ImageUploadCommBean;
 import com.sunstar.cloudseeds.bean.KeyAndValueBean;
+import com.sunstar.cloudseeds.cache.ACache;
+import com.sunstar.cloudseeds.logic.shangpinqi.SPQActivity;
+import com.sunstar.cloudseeds.logic.shangpinqi.bean.OnWifiUpLoadImageBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
+import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 
 import java.lang.ref.WeakReference;
@@ -71,6 +80,9 @@ public class EditItemRuleHelper {
             if (view instanceof DateSelectView) {
                 DateSelectView dsv = (DateSelectView) view;
                 value = dsv.getNowSelectData();
+                if (value.equals("1970-01-01")){
+                    value = "";
+                }
             } else if (view instanceof LinesEditView) {
                 LinesEditView lev = (LinesEditView) view;
                 value = lev.getContentText();
@@ -138,14 +150,18 @@ public class EditItemRuleHelper {
     }
 
 
-    private static void generateChildView(String inputType, TableLayout tableLayout, final FragmentActivity fragmentActivity,
-                                          final String leftTitleStr, final String rightValue, String rightKey, final String rightCode,String rightHint,
+    public EditItemRuleHelper() {
+    }
+
+    private static void generateChildView(String inputType, final TableLayout tableLayout, final FragmentActivity fragmentActivity,
+                                          final String leftTitleStr, final String rightValue, String rightKey, final String rightCode, String rightHint,
                                           List<KeyAndValueBean> options, List<KeyAndValueBean> configs,
                                           List<ImageCommBean> imageCommmBeanList,
-                                          ImageUploadCommBean imageUploadCommBean,boolean isFromEdit
+                                          ImageUploadCommBean imageUploadCommBean, boolean isFromEdit
     ) {
         WeakReference<FragmentActivity> weakReferenceAty = new WeakReference<>(fragmentActivity);
-        Context context = weakReferenceAty.get();
+
+        final Context context = weakReferenceAty.get();
 
         // tableLayout.setPadding(10,10,10,10);
 
@@ -161,6 +177,7 @@ public class EditItemRuleHelper {
         leftTitle.setText(leftTitleStr);
         leftTitle.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
         /*setBackgroundResource之前  有问题 */
+
         leftTitle.setPadding(SizeTool.dp2px(padding), 0,
                 SizeTool.dp2px(padding), 0);
 
@@ -184,14 +201,28 @@ public class EditItemRuleHelper {
                 //
                 path_code_map.put(bean.getImageUrl(), imageCommmBeanList.get(i).getImg_CODE());
             }
-            DataHolderSingleton.getInstance().putData("holad_path_code_map", path_code_map);
+            DataHolderSingleton.getInstance().putData(rightCode+"holad_path_code_map", path_code_map);
         }
 
+        //在图片没有上传的时候取缓存
+        ArrayList tempUploadArr = new ArrayList();
+        synchronized (fragmentActivity) {
+            ACache aCache = ACache.get(fragmentActivity);
+            ArrayList imageArr = (ArrayList) aCache.getAsObject("imageCache");
+            for (int i = 0; i <imageArr.size() ; i++) {
+                OnWifiUpLoadImageBean bean = (OnWifiUpLoadImageBean) imageArr.get(i);
+                if (rightCode != null && bean.getItemid().equals(rightCode) && bean.getImagePickBean() != null) {
+                    ImagePickBean imagePickBean = bean.getImagePickBean();
+                    imagePickBean.setImageWebIdStr(imagePickBean.getImagePathOrUrl());
+                    tempUploadArr.add(imagePickBean);
+                }
+            }
+        }
 
         if (imageUploadCommBean != null && !TextUtils.isEmpty(imageUploadCommBean.getImg_upload_title())) {
             //有上传
 
-            List<ImagePickBean> imagePickBeanList = new ArrayList<>();
+            final List<ImagePickBean> imagePickBeanList = new ArrayList<>();
             for (int i = 0; i < imageShowBeanList.size(); i++) {
                 ImagePickBean ipb = new ImagePickBean();
                 ipb.setImagePathOrUrl(imageShowBeanList.get(i).getImageUrl());
@@ -199,17 +230,21 @@ public class EditItemRuleHelper {
                 // ipb.setImageName(imageShowBeanList.get(i).get());///
                 imagePickBeanList.add(ipb);
             }
+
+            imagePickBeanList.addAll(tempUploadArr);
             DataHolderSingleton.getInstance().putData(rightCode+"test_raw_imagePickBeanList", imagePickBeanList);
 
             rightImage.setOnClickListener(new OnNotFastClickListener() {
                 @Override
                 protected void onNotFastClick(View view) {
+
                     String spqedit_itemid = rightCode;
-                  List<ImagePickBean>  imagePickBeanList=
+                    List<ImagePickBean>  imagePickBeanList =
                           (List<ImagePickBean>)
                                   DataHolderSingleton.getInstance().getData(spqedit_itemid+"test_raw_imagePickBeanList");
                     DataHolderSingleton.getInstance().putData("now_leftTitleStr", leftTitleStr);
-                    ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(fragmentActivity, imagePickBeanList, 5);
+                    ClassicPhotoUploaderDataHelper.setDataAndToPhotoSelector(fragmentActivity,imagePickBeanList, 5);
+
 
                     for (ImagePickBean imagePickBean:imagePickBeanList
                          ) {
@@ -217,11 +252,9 @@ public class EditItemRuleHelper {
                         Log.d("dsada", "onNotFastClick: imagePickBean:"+imagePickBean.getImagePathOrUrl());
                         Log.d("dsada","=====end=====");
                     }
-
                     DataHolderSingleton.getInstance().putData("spqedit_itemid", spqedit_itemid);
                     //fragmentActivity.startActivity(new Intent(fragmentActivity, ClassicPhotoSelectorActivity.class));
                     // ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, 0, true);
-
 
                 }
             });
@@ -238,7 +271,27 @@ public class EditItemRuleHelper {
         } else {
             //无上传
 
-            if (imageShowBeanList.size() > 0) {
+            //在图片没有上传的时候取缓存
+            ArrayList tempNoUploadArr =new ArrayList();
+            synchronized (fragmentActivity) {
+                ACache aCache = ACache.get(fragmentActivity);
+                ArrayList imageArr = (ArrayList) aCache.getAsObject("imageCache");
+                for (int i = 0; i <imageArr.size() ; i++) {
+                    OnWifiUpLoadImageBean bean = (OnWifiUpLoadImageBean) imageArr.get(i);
+                    if (rightCode != null && bean.getItemid().equals(rightCode) && bean.getImagePickBean() != null) {
+                        ImagePickBean imagePickBean = bean.getImagePickBean();
+                        imagePickBean.setImageWebIdStr(imagePickBean.getImageWebIdStr());
+
+                        ImageShowBean imageShowBean = new ImageShowBean();
+                        imageShowBean.setTitle("   ");
+                        imageShowBean.setImageUrl(imagePickBean.getImagePathOrUrl());
+                        tempNoUploadArr.add(imageShowBean);
+                    }
+                }
+            }
+            imageShowBeanList.addAll(tempNoUploadArr);
+
+            if (imageShowBeanList.size()  > 0) {
                 //有图
                 List<ImagePickBean> imagePickBeanList = new ArrayList<>();
                 for (int i = 0; i < imageShowBeanList.size(); i++) {
@@ -248,9 +301,10 @@ public class EditItemRuleHelper {
                     // ipb.setImageName(imageShowBeanList.get(i).get());///
                     imagePickBeanList.add(ipb);
                 }
+
                // DataHolderSingleton.getInstance().putData("show_raw_imagePickBeanList", imagePickBeanList);
                 rightImage.setCompoundDrawablesWithIntrinsicBounds(null, null,
-                        VectorOrImageResHelper.getDrawable(R.drawable.ic_image_black_24dp), null);
+                        VectorOrImageResHelper.getDrawable(R.drawable.image_display), null);
                 rightImage.setOnClickListener(new OnNotFastClickListener() {
                     @Override
                     protected void onNotFastClick(View view) {
@@ -261,7 +315,7 @@ public class EditItemRuleHelper {
 
         }
 
-
+        if(inputType == null || inputType.equals("") || inputType.equals(" ")) return;
         switch (inputType) {
             case ITEM_TYPE_TEXT:
                 TableRow tableRow = new TableRow(context);
@@ -288,7 +342,7 @@ public class EditItemRuleHelper {
                 tableLayout.addView(tableRow);
                 break;
             case ITEM_TYPE_EDIT:
-                TableRow tableRow2 = new TableRow(context);
+                final TableRow tableRow2 = new TableRow(context);
                 tableRow2.addView(leftTitle);
                 //
                 EditText rightEdit = new EditText(context);
@@ -310,11 +364,10 @@ public class EditItemRuleHelper {
                 if (rightImage != null) {
                     tableRow2.addView(rightImage);
                 }
-
                 tableLayout.addView(tableRow2);
                 break;
             case ITEM_TYPE_INTEGER:
-                TableRow tableRow6 = new TableRow(context);
+             final TableRow tableRow6 = new TableRow(context);
                 tableRow6.addView(leftTitle);
                 //
                 EditText rightEditInteger = new EditText(context);
@@ -342,7 +395,7 @@ public class EditItemRuleHelper {
                 tableLayout.addView(tableRow6);
                 break;
             case ITEM_TYPE_DOUBLE:
-                TableRow tableRow7 = new TableRow(context);
+                final  TableRow tableRow7 = new TableRow(context);
 
                 tableRow7.addView(leftTitle);
                 //
@@ -355,7 +408,7 @@ public class EditItemRuleHelper {
                 rightEditDouble.setLines(1);
                 rightEditDouble.setHintTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
 
-                //##  rightEditDouble.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                //rightEditDouble.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 rightEditDouble.setInputType(8194);//http://www.cnblogs.com/janehlp/p/6129053.html
                 rightEditDouble.setGravity(Gravity.CENTER_VERTICAL);
                 rightEditDouble.setLayoutParams(commTableRowLayoutParams4UI);
@@ -364,12 +417,9 @@ public class EditItemRuleHelper {
                   /* 输入框 padding */
                 rightEditDouble.setPadding(SizeTool.dp2px(padding), SizeTool.dp2px(padding), 0, SizeTool.dp2px(padding));
                 tableRow7.addView(rightEditDouble);
-                //
-
                 if (rightImage != null) {
                     tableRow7.addView(rightImage);
                 }
-
                 tableLayout.addView(tableRow7);
                 break;
             case ITEM_TYPE_TIME:
@@ -497,6 +547,7 @@ public class EditItemRuleHelper {
                             list = (List<ItemSelectBean>) view.getTag(R.id.hold_view_list);
                         }
                         ClassicItemSelectorDataHelper.setDataAndToItemSelect(leftTitleStr, view, fragmentActivity, list);
+
                     }
                 });
                 rightSelect.setCompoundDrawablesWithIntrinsicBounds(null, null,
@@ -610,9 +661,10 @@ public class EditItemRuleHelper {
                 }
             }
 
-
             generateChildView(inputType, tableLayout, fragmentActivity, leftTitleStr, rightValue, rightKey, rightCode,
                     rightHint,kvList_options, kvList_configs, null, null,isFromEdit);
         }
     }
+
+
 }

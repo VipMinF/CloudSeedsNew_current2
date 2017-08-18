@@ -102,6 +102,8 @@ public class YZTZListBean {
             private String status;
             private String sow_num;
             private String confirm_num;
+            private String species_name;
+            private String species_type;
 
             public String getName() {
                 return name;
@@ -165,6 +167,22 @@ public class YZTZListBean {
 
             public void setConfirm_num(String confirm_num) {
                 this.confirm_num = confirm_num;
+            }
+
+            public void setSpecies_name(String species_name) {
+                this.species_name = species_name;
+            }
+
+            public void setSpecies_type(String species_type) {
+                this.species_type = species_type;
+            }
+
+            public String getSpecies_name() {
+                return species_name;
+            }
+
+            public String getSpecies_type() {
+                return species_type;
             }
         }
 }

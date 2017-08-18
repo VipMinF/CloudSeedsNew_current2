@@ -25,13 +25,15 @@ public class XuanZhuActivity extends ClassicActivity {
         String secondary_id=getBundleExtraStr1();
         String taizhangName=getBundleExtra().getString("taizhangName");
         String zuqunName=getBundleExtra().getString("zuqunName");
+        String primary_id = getBundleExtra().getString("primary_id");
         mXuanZhuListFragment = XuanZhuListFragment.newInstance(secondary_id, taizhangName,zuqunName);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.id_frame_layout_content, mXuanZhuListFragment)
                 .commitAllowingStateLoss();
+        mXuanZhuListFragment.primary_id = primary_id;
         // setAppBarTitle("选株列表");
         mClassicTitleBar
-                .setCenterText("选株列表")
+                .setCenterText("品系详情")
                 .setRightText("新增选株")
                 .setOnTitleBarRightItemClickListener(new ClassicTitleBar.OnTitleBarRightItemClickListener() {
             @Override

@@ -30,7 +30,7 @@ public class YZTZActivity extends ClassicActivity {
             case AtyGoToWhere.LIST:
                 String primary_id=getBundleExtraStr1();
                 String TaiZhangName=getBundleExtra().getString("TaiZhangName");
-                setAppBarTitle("育种台账计划");
+                setAppBarTitle("计划详情");
                 // mClassicTitleBar.setCenterTextSize(SizeTool.dp2px(16)).setCenterText(TaiZhangName);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.id_frame_layout_content, YZTZListFragment.newInstance(primary_id,"",TaiZhangName))

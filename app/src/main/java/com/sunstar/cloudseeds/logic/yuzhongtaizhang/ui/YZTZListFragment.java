@@ -2,6 +2,7 @@ package com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.sunstar.cloudseeds.bean.InfoBean;
 import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
+import com.sunstar.cloudseeds.logic.normalrecord.NormalRecordActivity;
 import com.sunstar.cloudseeds.logic.scan.ScanQrCodeType;
 import com.sunstar.cloudseeds.logic.scan.ScanQrcodeActivity;
 import com.sunstar.cloudseeds.logic.search.SearchRecentHelper;
@@ -64,7 +66,7 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
 
     private String primary_id;
     private String TaiZhangName;
-
+    private String zuQunName;
     protected String mParam4;
     protected static final String ARG_PARAM4 = "param4";
 
@@ -294,8 +296,12 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             @Override
             public void onItemClick(View itemView, int position) {
                 super.onItemClick(itemView, position);
-                //
-
+                YZTZListBean.ListBean listBean = (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                Bundle bundle=createBundleExtraStr1(listBean.getSecondary_id());
+                bundle.putString("taizhangName",TaiZhangName);
+                bundle.putString("zuqunName",listBean.getPlant_code());
+                bundle.putString("primary_id",primary_id);
+                startAty(XuanZhuActivity.class, bundle);
             }
         });
         adapter.setOnItemOperationListener(new YZTZListAdapter.OnItemOperationListener() {
@@ -307,7 +313,10 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 Bundle bundle=createBundleExtraStr1(listBean.getSecondary_id());
                 bundle.putString("taizhangName",TaiZhangName);
                 bundle.putString("zuqunName",listBean.getPlant_code());
-                startAty(XuanZhuActivity.class, bundle);
+                bundle.putString("primary_id",listBean.getSecondary_id());
+                //startAty(XuanZhuActivity.class, bundle);
+                //changed by zy 2017.4.2
+                  startAty(NormalRecordActivity.class,bundle);
                 //2017年3月23日15:31:28 暂时不需要族群详细页 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
             }
 
@@ -316,7 +325,8 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 super.onItemShowXuanZhu(position);
                 //##ToastTool.showShortCenter("选株"+position);
                 YZTZListBean.ListBean listBean = (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
-                goAddSelectBeads(listBean.getSecondary_id());
+                zuQunName = listBean.getPlant_code();
+                goAddSelectBeads(listBean.getSecondary_id(),TaiZhangName,listBean.getPlant_code());
             }
 
             @Override
@@ -329,13 +339,24 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 bundle.putString(getResources().getString(R.string.scanqrcode_bundleextrakey_bindId), listBean.getSecondary_id());
                 startAty(ScanQrcodeActivity.class, bundle);
             }
+
+            @Override
+            public void onClickItemView(int position) {
+                super.onClickItemView(position);
+                YZTZListBean.ListBean listBean = (YZTZListBean.ListBean) mClassicRVHeaderFooterAdapter.getData(position);
+                Bundle bundle=createBundleExtraStr1(listBean.getSecondary_id());
+                bundle.putString("taizhangName",TaiZhangName);
+                bundle.putString("zuqunName",listBean.getPlant_code());
+                bundle.putString("primary_id",primary_id);
+                startAty(XuanZhuActivity.class, bundle);
+            }
         });
         mRecyclerView.setVisibility(View.GONE);//初始化 不显示
         return adapter;
     }
 
 
-    private void goAddSelectBeads(final String secondary_id) {
+    private void goAddSelectBeads(final String secondary_id,final String taiZhangName, String zuqunName ) {
         Map<String, String> paramsMap = new HashMap<>();
         paramsMap.put("id", secondary_id);
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.URL_GET_SELECT_BEADS_MAX_NUM,
@@ -398,7 +419,10 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                                             @Override
                                             public void autoHide() {
                                                 //跳转
-                                                startAty(XuanZhuActivity.class, createBundleExtraStr1(secondary_id));
+                                              Bundle bundle =  createBundleExtraStr1(secondary_id);
+                                                bundle.putString("taizhangName",TaiZhangName);
+                                                bundle.putString("zuqunName",zuQunName);
+                                                startAty(XuanZhuActivity.class,bundle);
                                             }
                                         });
                             }

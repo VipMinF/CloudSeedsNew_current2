@@ -4,22 +4,21 @@
              android:layout_height="match_parent"
     >
 
-    <ImageView
-        android:id="@+id/id_tv_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"
-        />
-
     <Button
         android:id="@+id/id_btn_jump_in"
         style="@style/ClassicButtonRound"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="80dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginBottom="80dp"
-        android:text="跳过"/>
+        android:text="跳过" />
+
+    <ImageView
+        android:id="@+id/id_tv_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher" />
 </FrameLayout>

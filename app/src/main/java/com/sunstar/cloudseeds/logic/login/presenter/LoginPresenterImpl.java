@@ -43,3 +43,4 @@ public class LoginPresenterImpl extends ClassicPresenter<LoginContract.View, Log
     }
 
 }
+

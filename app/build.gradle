@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.sunstar.cloudseeds"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -30,16 +30,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta1'
     compile 'com.android.support:preference-v7:25.2.0'
-
     compile 'com.github.classichu:ClassicPercentLayout:1.0.0'
     compile 'com.github.classichu:ClassicVectorTextView:1.0.3'
     compile 'com.github.classichu:ClassicDropSelectView:1.0.5'
     compile 'com.github.classichu:ClassicLinesEditView:1.0.4'
     compile 'com.github.classichu:ClassicDateSelectView:1.0.4'
     compile 'com.github.classichu:ClassicItemSelector:1.0.9'
-    compile 'com.github.classichu:ClassicPhotoSelector:1.1.0'
     compile 'com.github.classichu:Classichu:1.2.2'
-
     compile 'com.makeramen:roundedimageview:2.3.0'
     compile 'com.tencent.bugly:crashreport_upgrade:1.2.3'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
@@ -54,5 +51,10 @@ dependencies {
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     testCompile 'junit:junit:4.12'
     compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'commons-codec:commons-codec:1.10'
+    //add by zy 4.21 图片加载缓存框架
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.hackware1993:MagicIndicator:1.5.0'
+    compile project(':library')
 }

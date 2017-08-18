@@ -118,7 +118,6 @@ public class YZTZAddFragment extends ClassicMvpFragment<YZTZDetailPresenterImpl>
         Map<String, String> stringMap = new HashMap<>();
         //stringMap.put("id", "f275ce6d5ed343449d65fe2d9f3ad313");
         stringMap.put("itemvalue", result);
-
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.SECONDARY_SAVE,
                 HeadsParamsHelper.setupDefaultHeaders(), stringMap, new GsonHttpRequestCallback<BasicBean<InfoBean>>() {
 

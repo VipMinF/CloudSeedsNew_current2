@@ -2,8 +2,11 @@ package com.sunstar.cloudseeds.logic.shangpinqi.ui;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.TableLayout;
 
 import com.classichu.classichu.app.CLog;
@@ -38,7 +41,8 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
 
 
     private String mNowTertiary_id;
-
+    private View rootView;
+    private RootViewHelper rootViewHelper;
     public SPQDetailFragment() {
         // Required empty public constructor
     }
@@ -66,6 +70,16 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         return fragment;
     }
 
+    public   void addParam(String param1, String param2,RootViewHelper rootViewHelper1) {
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        setArguments(args);
+        rootViewHelper = rootViewHelper1;
+    }
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +100,7 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
     @Override
     protected void initView(View view) {
         id_tl_item_container = findById(R.id.id_tl_item_container);
-
+        rootView = view;
         toRefreshData();
     }
 
@@ -168,5 +182,15 @@ public class SPQDetailFragment extends ClassicMvpFragment<SPQDetailPresenterImpl
         toRefreshData();
     }
 
+    public  interface RootViewHelper {
+       void getRootView(ViewGroup rootView ,View childView);
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (rootViewHelper != null){
+            rootViewHelper.getRootView((ViewGroup)rootView, findById(R.id.id_spq_layout));
+        }
+    }
 }

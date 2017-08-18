@@ -6,12 +6,14 @@ package com.sunstar.cloudseeds.data;
 
 public class UrlDatas {
     private   static  final String
-                             BASE_URL="http://192.168.1.67:8085/";
-    //   BASE_URL="http://192.168.1.80:8080/yunzhong/";
+          //  BASE_URL="http://192.168.1.70:8085/";
+      //BASE_URL="http://192.168.1.80:8080/yunzhong/";
+        BASE_URL= "http://yunzhong.vegnet.cn:8080/";
 
-    // // BASE_URL="https://115.236.5.187:8080/yunzhong/";
-  /* private   static  final String
+     // BASE_URL="https://115.236.5.187:8080/yunzhong/";
+  /* private  static  final String
             BASE_URL_Local="http://192.168.1.67:8086/";*/
+    //BASE_URL= "http://yunzhongtest.vegnet.cn:8080/";
 
 
     /**
@@ -86,6 +88,16 @@ public class UrlDatas {
     public  static  final String
             URL_DELETE_IMAGE=String.format("%s%s",BASE_URL,"api/project/tertiary/deleteimage");
 
+    /**
+     * 日常记录
+     */
 
-
+    public static  final String
+    URL_GET_FARMTYPE = String.format("%s%s",BASE_URL,"api/dailyrecord/farm_type"); //农事类型
+    public static  final String
+            URL_GET_FARMLIST = String.format("%s%s",BASE_URL,"api/dailyrecord/farmlist");//日常列表
+    public static  final String
+    NormalRecord_SAVE = String.format("%s%s",BASE_URL,"api/dailyrecord/save");//保存
+    public static final String
+    URL_NORMALERECORD_IMAGE_UPLOAD = String.format("%s%s",BASE_URL,"api/dailyrecord/imagesave");
 }

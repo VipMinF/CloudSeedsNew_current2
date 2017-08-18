@@ -1,32 +1,34 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
+<com.sunstar.cloudseeds.logic.shangpinqi.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/id_sqp_add_rootView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/id_swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-                <TableLayout
-                    android:id="@+id/id_tl_item_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:stretchColumns="1">
+            <TableLayout
+                android:id="@+id/id_tl_item_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1">
 
-                   <!--add in code-->
+                <!--add in code-->
 
 
-                </TableLayout>
+            </TableLayout>
 
 
         </ScrollView>
@@ -35,11 +37,10 @@
 
     <Button
         android:id="@+id/id_btn_submit"
+        style="@style/ClassicButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/ClassicButton"
-        android:background="@drawable/selector_classic_btn_item_bg"
-        android:text="保存"
         android:layout_gravity="bottom"
-        />
-</LinearLayout>
+        android:background="@drawable/selector_classic_btn_item_bg"
+        android:text="保存" />
+</com.sunstar.cloudseeds.logic.shangpinqi.MyLinearLayout>

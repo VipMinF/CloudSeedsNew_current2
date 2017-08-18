@@ -2,9 +2,13 @@ package com.sunstar.cloudseeds.widget;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.content.Context;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.util.Log;
+
 
 import com.classichu.classichu.basic.extend.ACache;
 import com.classichu.classichu.basic.tool.AppTool;
@@ -29,6 +33,22 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preference_setting);
+
+        MyCheckBoxPreference preference_onWifiUpLoadImage = (MyCheckBoxPreference) findPreference("preference_onwifiupload");
+        final SharedPreferences sharedPreferences = getContext().getSharedPreferences("onwifiupload",Context.MODE_PRIVATE);
+        boolean isTrue = sharedPreferences.getBoolean("onwifiupload",false);
+        preference_onWifiUpLoadImage.setChecked(isTrue);
+        preference_onWifiUpLoadImage.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Log.v("preference",newValue.toString());
+                boolean isTrue = newValue.toString().equals("true");
+                SharedPreferences.Editor editor =  sharedPreferences.edit();
+                editor.putBoolean("onwifiupload",isTrue);
+                editor.commit();
+                return true;
+            }
+        });
 
         //#### Preference preference_user = findPreference("preference_user");
         Preference preference_password = findPreference("preference_password");
@@ -63,6 +83,7 @@ public class SettingPreferenceFragmentCompat extends PreferenceFragmentCompat
 
         preference_exit.setOnPreferenceClickListener(this);
 
+        preference_onWifiUpLoadImage.setOnPreferenceClickListener(this);
 
         /* #####!!!    boolean isNoPic = PreferenceManagerHelper.isNoPic(getActivity());
             checkbox_preference_nopic.setChecked(isNoPic);*/

@@ -1,0 +1,627 @@
+package com.classichu.photoselector.customselector;
+
+import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.classichu.imageshow.bean.ImageShowBean;
+import com.classichu.imageshow.helper.ImageShowDataHelper;
+import com.classichu.photoselector.R;
+import com.classichu.photoselector.customselector.adapter.ImagePickerDirListAdapter;
+import com.classichu.photoselector.customselector.adapter.ImagePickerListAdapter;
+import com.classichu.photoselector.customselector.bean.ImagePickerBean;
+import com.classichu.photoselector.customselector.bean.ImagePickerDataWrapper;
+import com.classichu.photoselector.customselector.bean.ImagePickerDirBean;
+import com.classichu.photoselector.customselector.bean.ImagePickerDirDataWrapper;
+import com.classichu.photoselector.customselector.helper.ImagePickerHelper;
+import com.classichu.photoselector.helper.ClassicPhotoHelper;
+import com.classichu.photoselector.tool.SdcardTool;
+import com.classichu.photoselector.tool.ViewTool;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public class CustomPhotoSelectorActivity extends AppCompatActivity {
+    public static final int CAMERA_REQUEST = 200;
+
+    private static  String mCameraSaveImageTempPath = null ;
+    private static final int MY_PERMISSIONS_REQUEST_READ_AND_WRITE_EXTERNAL_STORAGE = 2;
+
+    /**
+     * 图片适配器
+     */
+    private ImagePickerListAdapter mImagePickerListAdapter;
+
+    private int mRecyclerviewDirHeight;
+
+    /**
+     * 当前文件夹下的的图片  adapter主用数据源
+     */
+    private List<ImagePickerBean> mNowDirImageList = new ArrayList<>();
+    /**
+     * 所有的图片
+     */
+    private List<ImagePickerBean> mAllImageList = new ArrayList<>();
+    /**
+     * 所有的文件夹
+     */
+    private List<ImagePickerDirBean> mImageDirBeanList = new ArrayList<>();
+    /**
+     * 虚拟的存放所有图片的文件夹
+     */
+    private final String ALL_IMAGES_DIR_PATH_KEY = "所有图片";
+    /**
+     * 当前
+     */
+    private String mNowDirPathKey = ALL_IMAGES_DIR_PATH_KEY;//默认是所有图片
+
+    /**
+     * 已选择的图片
+     */
+    ///private List<String> mSelectedPhotoList = new ArrayList<>();
+
+    /**
+     * raw  data
+     */
+    private Map<String, List<String>> mGroupMap = new LinkedHashMap<>();
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerViewDir;
+    private ImagePickerDirListAdapter mImagePickerDirListAdapter;
+
+    private int mMaxSelectCount;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_custom_photoselector);
+
+        Bundle bundle = null;
+        if (this.getIntent() != null) {
+            bundle = this.getIntent().getExtras();
+        }
+        if (bundle != null) {
+            mIsToolbarTitleCenter = bundle.getBoolean("isToolbarTitleCenter");
+            mMaxSelectCount = bundle.getInt("maxSelectCount");
+        }
+
+        initToolbar();
+
+        setToolbarTitle("图片选择");
+
+        iniRecyclerView();
+        iniRecyclerViewDir();
+        gainData();
+
+    }
+
+    private void iniRecyclerView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.id_recycler_view);
+        /**
+         * 覆盖baseAty的LinearLayoutManager
+         */
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        /**
+         * 因为NestedScrollView
+         * 初始化时候防止测量   回调ALL 卡死和OOM
+         */
+        //### mRecyclerView.getLayoutManager().setAutoMeasureEnabled(false);
+        /**
+         *
+         */
+
+        mImagePickerListAdapter = new ImagePickerListAdapter(mNowDirImageList, mMaxSelectCount);
+        mImagePickerListAdapter.setOnItemClickListener(new ImagePickerListAdapter.OnItemClickListener() {
+            @Override
+            public void onPhotoCameraBtnClick() {
+                super.onPhotoCameraBtnClick();
+                //
+                ClassicPhotoHelper.getPhotoFromCamera(CustomPhotoSelectorActivity.this);
+            }
+
+            @Override
+            public void onItemSelected(int selectedCount) {
+                super.onItemSelected(selectedCount);
+
+                //更新标题栏
+                setToolbarTitle(selectedCount + "/" + mMaxSelectCount);
+            }
+
+            @Override
+            public void onItemClick(View view, int position, ImagePickerBean imagePickerBean) {
+                super.onItemClick(view, position, imagePickerBean);
+
+                String pathNow = imagePickerBean.getPath();
+                int nowSelectedPos = 0;
+                List<ImageShowBean> imageShowBeanList = new ArrayList<>();
+                for (int i = 0; i < mNowDirImageList.size(); i++) {
+                    ImageShowBean isb = new ImageShowBean();
+                    String imagePath = mNowDirImageList.get(i).getPath();
+                    isb.setImageUrl(imagePath);
+                    isb.setTitle("图片" + (i + 1));
+                    if (pathNow.equals(imagePath)) {
+                        nowSelectedPos = i;
+                    }
+                    imageShowBeanList.add(isb);
+                }
+                ImageShowDataHelper.setDataAndToImageShow(view.getContext(), imageShowBeanList, nowSelectedPos, false);
+
+            }
+        });
+
+        mRecyclerView.setAdapter(mImagePickerListAdapter);
+    }
+
+    private void gainDataBack(ImagePickerDirDataWrapper imagePickerDataWrapper) {
+        mGroupMap = imagePickerDataWrapper.getGroupMap();
+        /**
+         * 刷新文件夹数据
+         */
+        mImageDirBeanList.clear();
+        mAllImageList.clear();
+
+        List<String> timeList = mGroupMap.get("timeList");
+        if (timeList != null){
+            for (int i = 0; i < timeList.size(); i++) {
+                String path = timeList.get(i);
+                ImagePickerBean imagePickerBean = new ImagePickerBean();
+                imagePickerBean.setPath(path);
+                mAllImageList.add(imagePickerBean);
+            }
+        }
+        Collections.reverse(mAllImageList);
+
+        ImagePickerDirBean showAllImageItemBean = null;//虚拟一个存放所有图片的文件夹
+        for (String dirPathKey : mGroupMap.keySet()) {
+        if(!dirPathKey.equals("timeList")) {
+            /**
+             * 存放所有图片
+             */
+            List<String> nowDirImageList = mGroupMap.get(dirPathKey);
+
+
+            //把list倒序排一下  新的显示在上面  每个实际的文件夹
+            Collections.reverse(nowDirImageList);
+            /**
+             * 单独存放图片
+             */
+            ImagePickerDirBean imageDirBean = new ImagePickerDirBean();
+            imageDirBean.setDirPath(dirPathKey);
+            // KLog.d("dir path" + dirPathKey);
+            String first = nowDirImageList.get(0);
+            // KLog.d("first Image" + first);
+            imageDirBean.setDirImageIconPath(dirPathKey + File.separator + first);
+            imageDirBean.setImageCount(nowDirImageList.size());
+            mImageDirBeanList.add(imageDirBean);
+
+            if (showAllImageItemBean == null) {
+                //所有图片的文件夹
+                showAllImageItemBean = new ImagePickerDirBean();
+                showAllImageItemBean.setDirImageIconPath(dirPathKey + File.separator + first);
+        }
+        }
+            // KLog.d("ASD 222");
+
+        }
+/**
+ * 添加到mImageDirBeanList的最前面
+ */
+        //add by zy 5.31 修复没有照片时崩溃问题
+        if(showAllImageItemBean != null) {
+            showAllImageItemBean.setDirPath(ALL_IMAGES_DIR_PATH_KEY);
+            showAllImageItemBean.setImageCount(mAllImageList.size());
+            mImageDirBeanList.add(0, showAllImageItemBean);
+        }
+
+
+        /**
+         * 刷新文件夹List
+         */
+        mImagePickerDirListAdapter.notifyDataSetChanged();
+
+        /**
+         * 数据初始化完后 测量高度   当然 mRecyclerViewDir 是 wrap-content
+         */
+        mRecyclerviewDirHeight = ViewTool.getMeasuredHeightMy(mRecyclerViewDir);
+
+        /**
+         * 偏移 到看不见的顶部
+         */
+        mRecyclerViewDir.setTranslationY(-mRecyclerviewDirHeight);
+
+
+        /**
+         * 刷新图片数据
+         */
+
+        refreshImageData();
+    }
+
+    private void gainData() {
+        //请求读文件权限
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_AND_WRITE_EXTERNAL_STORAGE);
+            return;
+        }
+
+        scanLocalImage();
+    }
+
+    private void scanLocalImage() {
+        ImagePickerHelper.scanLocalImage(this, new ImagePickerHelper.ScanLocalImagesCallBack() {
+            @Override
+            public void onSuccess(Map<String, List<String>> groupMap) {
+                ImagePickerDirDataWrapper imagePickerDataWrapper = new ImagePickerDirDataWrapper();
+                imagePickerDataWrapper.setGroupMap(groupMap);
+                gainDataBack(imagePickerDataWrapper);
+            }
+
+            @Override
+            public void onError(String message) {
+                // baseCallBack.onError(message);
+            }
+        });
+    }
+
+    private void iniRecyclerViewDir() {
+        mRecyclerViewDir = (RecyclerView) findViewById(R.id.id_recycler_view_dir);
+        /**
+         *
+         */
+        mRecyclerViewDir.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerViewDir.setHasFixedSize(true);
+        mRecyclerViewDir.setItemAnimator(new DefaultItemAnimator());
+        //###mRecyclerViewDir.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
+        //初始化
+        // mRecyclerViewDir.setNestedScrollingEnabled(false);
+
+        mImagePickerDirListAdapter = new ImagePickerDirListAdapter(mImageDirBeanList);
+
+        mImagePickerDirListAdapter.setOnItemClickListener(new ImagePickerDirListAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(View view, int position, ImagePickerDirBean imagePickerDirBean) {
+
+
+                if (mImagePickerDirListAdapter.getLastClickDirItemChildView() != null) {
+                    mImagePickerDirListAdapter.getLastClickDirItemChildView().setVisibility(View.GONE);
+                }
+                View imv = view.findViewById(R.id.id_tv_item_image_more);
+                imv.setVisibility(View.VISIBLE);
+                mImagePickerDirListAdapter.setLastClickDirItemChildView(imv);
+
+                /**
+                 *
+                 */
+                imageDirOperator();
+                if (mNowDirPathKey.equals(imagePickerDirBean.getDirPath())) {
+                    return;
+                }
+                mNowDirPathKey = imagePickerDirBean.getDirPath();
+                /**
+                 *
+                 */
+                refreshImageData();
+
+
+            }
+        });
+
+
+        mRecyclerViewDir.setAdapter(mImagePickerDirListAdapter);
+
+    }
+
+
+    private void refreshImageData() {
+
+        mNowDirImageList.clear();
+        if (mNowDirPathKey.equals(ALL_IMAGES_DIR_PATH_KEY)) {
+            mImagePickerListAdapter.setShowCamera(true);
+            //
+            mNowDirImageList.addAll(mAllImageList);
+        } else {
+            mImagePickerListAdapter.setShowCamera(false);
+            //
+            List<String> stringList = mGroupMap.get(mNowDirPathKey);
+            if (stringList != null && stringList.size() > 0) {
+                for (int i = 0; i < stringList.size(); i++) {
+                    String pathTemp = mNowDirPathKey + File.separator + stringList.get(i);
+                    ImagePickerBean imagePickerBean = new ImagePickerBean();
+                    imagePickerBean.setPath(pathTemp);
+                    mNowDirImageList.add(imagePickerBean);
+                }
+            }
+        }
+
+
+        //KLog.d("ASD 333");
+        mImagePickerListAdapter.notifyDataSetChanged();
+
+    }
+
+    private TextView mToolbarTitleView;
+    private Toolbar mToolbar;
+    private boolean mIsToolbarTitleCenter = true;
+
+    protected void setToolbarTitle(String string) {
+        if (mIsToolbarTitleCenter) {
+            if (mToolbarTitleView != null) {
+                mToolbarTitleView.setText(string);
+                mToolbar.setTitle("");
+                mToolbarTitleView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mToolbarTitleView != null) {
+                mToolbarTitleView.setText("");
+                mToolbar.setTitle(string);
+                mToolbarTitleView.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    /**
+     * 是否正在显示
+     */
+    private boolean isAnimationIng;
+    private boolean isDirShow;
+
+    private void hideImageDir() {
+        isAnimationIng = true;
+        //-mRecyclerviewDirHeight
+        mRecyclerViewDir.animate().translationY(-mRecyclerviewDirHeight).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                isAnimationIng = false;
+                isDirShow = false;
+            }
+        });
+    }
+
+    private void showImageDir() {
+
+        isAnimationIng = true;
+        /**
+         * 坐标0
+         */
+        mRecyclerViewDir.animate().translationY(0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                isAnimationIng = false;
+                isDirShow = true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_photo, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == R.id.id_menu_dir) {
+            imageDirOperator();
+        } else if (i == R.id.id_menu_finish) {
+            imagePickFinishOperator();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void imageDirOperator() {
+        if (isAnimationIng) {
+            return;
+        }
+        if (isDirShow) {
+            hideImageDir();
+        } else {
+            showImageDir();
+        }
+    }
+
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.id_toolbar);
+        if (mToolbar == null) {
+            return;
+        }
+        mToolbarTitleView = (TextView) mToolbar.findViewById(R.id.id_toolbar_title);
+
+        /**
+         * setToolbarTitle
+         */
+        this.setToolbarTitle(mToolbar.getTitle() != null ? mToolbar.getTitle().toString() : "");
+
+        mToolbar.setVisibility(View.VISIBLE);
+        //替换ActionBar
+        setSupportActionBar(mToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        //必须设置在setSupportActionBar(mToolbar);后才有效
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //结束当前aty
+                finish();
+            }
+        });
+    }
+
+
+    private void imagePickFinishOperator() {
+        List<String> selectedImageList = mImagePickerListAdapter.getSelectedImageList();
+        ImagePickerDataWrapper imagePickerDataWrapper = new ImagePickerDataWrapper();
+        imagePickerDataWrapper.setSelectedImageList(selectedImageList);
+        Intent intent = new Intent();
+        intent.putExtra("imagePickerDataWrapper", imagePickerDataWrapper);
+        //
+        setResult(RESULT_OK, intent);
+        finish();
+
+    }
+
+    private String imagePath = "";
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ClassicPhotoHelper.CAMERA_REQUEST && resultCode == RESULT_OK) {
+
+            ClassicPhotoHelper.getPhotoFromCameraBackCallAtOnActivityResult(this, requestCode, resultCode, true,mCameraSaveImageTempPath, new ClassicPhotoHelper.OnBackImageCallback() {
+                @Override
+                public void onBackImage(String path) {
+                    imagePath = path;
+                }
+            });
+            if (imagePath != null && !imagePath.equals("")) {
+             /*   ImagePickerBean imagePickerBean = new ImagePickerBean();
+                imagePickerBean.setPath(imagePath);*/
+                //### mNowDirImageList.add(0,imagePickerBean);
+                //### mImagePickerListAdapter.notifyDataSetChanged();
+                //
+              /*  mAllImageList.add(0, imagePickerBean);
+                mNowDirPathKey = ALL_IMAGES_DIR_PATH_KEY;
+                refreshImageData();*/
+
+               /* for (int i = 0; i < mImageDirBeanList.size(); i++) {
+                    mImageDirBeanList.get(i);
+                }*/
+                gainData();
+
+            }
+        }
+    }
+
+    //提示信息
+    private void showMessageDiolg(String message) {
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(this);
+        normalDialog.setMessage(message);
+        normalDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        normalDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        normalDialog.setCancelable(false);
+        // 显示
+        normalDialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 1:{
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    callCamer(this);
+                }else {
+                    showMessageDiolg("云种需要拍照权限,才能拍照,请去设置里面设置相应权限");
+                }
+                break;
+            }
+
+            case 2: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    scanLocalImage();
+                }else {
+                    showMessageDiolg("云种需要读写入权限,才能读取保存照片,请去设置里面设置相应权限");
+                }
+                break;
+            }
+//            case 3: {
+//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                }else {
+//                    showMessageDiolg("云种需要读入权限,才能读取照片,请去设置里面设置相应权限");
+//                }
+//                break;
+//            }
+            default:break;
+        }
+    }
+
+    public static void callCamer(Activity activity) {
+        mCameraSaveImageTempPath = Environment.getExternalStorageDirectory() + File.separator+"DCIM"+File.separator+"Photo"+File.separator+"IMG_"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".jpg";
+        if (SdcardTool.hasSDCardMounted()) {
+            File saveTempFile = new File(mCameraSaveImageTempPath);
+            if(!saveTempFile.getParentFile().exists()) {
+                saveTempFile.getParentFile().mkdirs();
+            }
+//5.0以上
+            Uri saveUri = null;
+            if (Build.VERSION.SDK_INT >= 21) {
+                saveUri = FileProvider.getUriForFile(activity,activity.getPackageName()+".fileprovider",saveTempFile);
+            }
+
+            //4.0 -5.0
+            if(Build.VERSION.SDK_INT<=19){
+                saveUri = Uri.fromFile(new File(mCameraSaveImageTempPath));
+            }
+
+            Intent intent = new Intent();
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            //  getPhotoFromCamera//设置了MediaStore.EXTRA_OUTPUT，所以data为null，数据直接就在uri中
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
+            try{
+
+            }catch (Exception e){
+                Log.e("open camera error",e.getMessage());
+            }finally {
+                activity.startActivityForResult(intent, CAMERA_REQUEST);
+
+            }
+
+        } else {
+            Log.i("aaa", "SD not exist");
+        }
+    }
+
+}

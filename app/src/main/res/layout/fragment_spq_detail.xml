@@ -3,44 +3,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQDetailFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/id_swipe_refresh_layout"
+    <LinearLayout
+        android:id="@+id/id_spq_layout"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/id_swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
 
-        <TableLayout
-            android:id="@+id/id_tl_item_container"
+                <TableLayout
+                    android:id="@+id/id_tl_item_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="1">
+
+                    <!--add in code -->
+
+
+                </TableLayout>
+
+            </ScrollView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <Button
+            android:id="@+id/id_btn_show_add"
+            style="@style/ClassicButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:stretchColumns="1"
-            >
-
-            <!--add in code -->
-
-
-        </TableLayout>
-
-    </ScrollView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    <Button
-        android:id="@+id/id_btn_show_add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/ClassicButton"
-        android:background="@drawable/selector_classic_btn_item_bg"
-        android:text="记录数据"
-        android:layout_gravity="bottom"
-        />
+            android:layout_gravity="bottom"
+            android:background="@drawable/selector_classic_btn_item_bg"
+            android:text="记录数据" />
+    </LinearLayout>
 </LinearLayout>

@@ -16,7 +16,9 @@ public class SPQDetailPresenterImpl extends ClassicPresenter<SPQDetailContract.V
         super(view, new SPQDetailModelImpl());
     }
 
-
+ public  interface UpdateImageCode <D>{
+     void  updateImageCode(D var);
+ }
     @Override
     public void gainData(String url) {
         if (CommPresenterHelper.judgeCanNotContinue(mModel)) {
@@ -38,4 +40,23 @@ public class SPQDetailPresenterImpl extends ClassicPresenter<SPQDetailContract.V
             }
         });
     }
+
+
+    public void updateImageCode(String url, final UpdateImageCode<SPQDetailBean> updateImageCode){
+        mModel.loadData(url,mView.setupGainDataTertiaryId(), new BasicCallBack<SPQDetailBean>() {
+            @Override
+            public void onSuccess(SPQDetailBean bean) {
+                if (mView != null && updateImageCode != null) {
+                    updateImageCode.updateImageCode(bean);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                CommPresenterHelper.doErrorThing(mView,msg);
+            }
+        });
+    }
+
+
 }

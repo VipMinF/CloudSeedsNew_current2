@@ -1,14 +1,22 @@
 package com.sunstar.cloudseeds.logic.shangpinqi.ui;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
+
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
 
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.extend.DataHolderSingleton;
@@ -18,30 +26,47 @@ import com.classichu.classichu.basic.listener.OnNotFastClickListener;
 import com.classichu.classichu.basic.tool.ThreadTool;
 import com.classichu.classichu.basic.tool.ToastTool;
 import com.classichu.classichu.classic.ClassicMvpFragment;
+import com.classichu.imageshow.bean.ImageShowBean;
 import com.classichu.itemselector.bean.ItemSelectBean;
 import com.classichu.itemselector.helper.ClassicItemSelectorDataHelper;
 import com.classichu.photoselector.helper.ClassicPhotoUploaderDataHelper;
 import com.classichu.photoselector.imagespicker.ImagePickBean;
 import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.bean.BasicBean;
+import com.sunstar.cloudseeds.bean.ImageCommBean;
+import com.sunstar.cloudseeds.bean.ImageUploadCommBean;
 import com.sunstar.cloudseeds.bean.InfoBean;
+import com.sunstar.cloudseeds.bean.KeyAndValueBean;
+import com.sunstar.cloudseeds.cache.ACache;
 import com.sunstar.cloudseeds.data.CommDatas;
 import com.sunstar.cloudseeds.data.UrlDatas;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.helper.HeadsParamsHelper;
 import com.sunstar.cloudseeds.logic.imageupload.ImagePickUploadQueueManager;
 import com.sunstar.cloudseeds.logic.imageupload.bean.DeleteImageBackBean;
+import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
+import com.sunstar.cloudseeds.logic.shangpinqi.bean.OnWifiUpLoadImageBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.contract.SPQDetailContract;
 import com.sunstar.cloudseeds.logic.shangpinqi.event.SPQDetailRefreshEvent;
 import com.sunstar.cloudseeds.logic.shangpinqi.presenter.SPQDetailPresenterImpl;
+import com.sunstar.cloudseeds.service.OnWifiUpLoadService;
+
+import android.view.ViewTreeObserver;
+import android.graphics.Rect;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.Thread.sleep;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +79,8 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     }
 
     private String mNowTertiary_id;
+    private LinearLayout rootView;
+    public  String beforeResult;
 
     @Override
     protected SPQDetailPresenterImpl setupPresenter() {
@@ -94,15 +121,18 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         return R.layout.fragment_spq_add;
     }
 
-    TableLayout id_tl_item_container;
+   public TableLayout id_tl_item_container;
     Button id_btn_submit;
 
     @Override
     protected void initView(View view) {
         id_btn_submit = findById(R.id.id_btn_submit);
         id_tl_item_container = findById(R.id.id_tl_item_container);
+        rootView = findById(R.id.id_sqp_add_rootView) ;
+
         toRefreshData();
     }
+
 
 
     @Override
@@ -163,13 +193,13 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
                 }
 
         );
-
     }
 
     @Override
     protected void toRefreshData() {
         super.toRefreshData();
         mPresenter.gainData(UrlDatas.TERTIARY_EDIT);
+        beforeResult = EditItemRuleHelper.generateViewBackString(id_tl_item_container);
     }
 
     @Override
@@ -201,18 +231,184 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         //图片选择返回
         ClassicPhotoUploaderDataHelper.callAtOnActivityResult(requestCode, resultCode, data,
                 new ClassicPhotoUploaderDataHelper.PhotoSelectorBackData() {
+
                     @Override
                     public void backData(List<ImagePickBean> imagePickBeanList) {
+
                         Log.d("DSAD", "backData: " + imagePickBeanList);
+                        OnWifiUpLoadService.NetWorkStatesMonitor netWorkStatesMonitor = new OnWifiUpLoadService().getNetWorkMonitor(getContext());
+                        //4g下
+                        if (netWorkStatesMonitor.isMobileAndAviable()) {
+                            SharedPreferences sharedPreferences = getContext().getSharedPreferences("onwifiupload", Context.MODE_PRIVATE);
+                            boolean isTrue = sharedPreferences.getBoolean("onwifiupload",false);
+                            if (isTrue) {
+                                //是新增还是删除了
+                                ArrayList<ImagePickBean> imagesArr = new ArrayList();//用来储存新增照片
+                                String item_id = (String) DataHolderSingleton.getInstance().getData("spqedit_itemid");
+                                ArrayList<ImagePickBean>  imagePickBeanListSec = new ArrayList( (List<ImagePickBean>)
+                                        DataHolderSingleton.getInstance().getData(item_id+"test_raw_imagePickBeanList"));
+                                ACache aCache = ACache.get(getContext());
+                                ArrayList imageCacheArr = (ArrayList) aCache.getAsObject("imageCache");
 
+                                //全部删除了
+                                if(imagePickBeanList.size() == 0) {
+                                    imagesArr.removeAll(imagesArr);
+                                    //缓存有，则删除缓存
+                                    synchronized (this) {
+                                        for (int i = 0; i <imagePickBeanListSec.size() ; i++) {
+                                            ImagePickBean imagePickBean = imagePickBeanListSec.get(i);
+                                            for (int j = 0; j <imageCacheArr.size() ; j++) {
+                                                OnWifiUpLoadImageBean onWifiUpLoadImageBean = (OnWifiUpLoadImageBean) imageCacheArr.get(j);
+                                                ImagePickBean imagePickBeanSec = onWifiUpLoadImageBean.getImagePickBean();
+                                                if (imagePickBean != null && imagePickBeanSec != null) {
+                                                    if (imagePickBean.getImagePathOrUrl().equals(imagePickBeanSec.getImagePathOrUrl())) {
+                                                        imageCacheArr.remove(onWifiUpLoadImageBean);
+                                                        File file = new File(imagePickBeanSec.getImagePathOrUrl());
+                                                        if(file.exists()) {
+                                                            file.delete();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        aCache.put("imageCache",imageCacheArr);
+                                        //删除线上的
+                                        checkHasDelete(new ArrayList<ImagePickBean>(),item_id);
+                                    }
+                                }
 
-                        uploadImages(imagePickBeanList);
+                                //全部是新增的
+                                if(imagePickBeanListSec.size() == 0) {
+                                    imagesArr.addAll(imagePickBeanList);
+                                    //可能部分新增部分删除
+                                }else {
+                                    imagesArr.removeAll(imagesArr);
+                                    imagesArr.addAll(imagePickBeanList);
+                                    ArrayList<ImagePickBean>deleteImagesArr = new ArrayList<ImagePickBean>(imagePickBeanListSec);
+                                    //过滤删除的
+                                    for (int i = 0; i <imagePickBeanList.size() ; i++) {
+                                        ImagePickBean imagePickBean = imagePickBeanList.get(i);
+                                        for (int j = 0; j < imagePickBeanListSec.size(); j++) {
+                                            ImagePickBean imagePickBeanSec = imagePickBeanListSec.get(j);
+                                            if (imagePickBean.getImagePathOrUrl().equals(imagePickBeanSec.getImagePathOrUrl())) {
+                                                deleteImagesArr.remove(imagePickBeanSec);
+                                            }
+                                        }
+                                    }
+                                    //处理删除的图片
+                                    synchronized (this) {
+                                        if (deleteImagesArr.size() > 0) {
+                                            for (int i = 0; i <deleteImagesArr.size() ; i++) {
+                                                ImagePickBean imagePickBean = deleteImagesArr.get(i);
+                                                for (int j = 0; j <imageCacheArr.size() ; j++) {
+                                                    OnWifiUpLoadImageBean onWifiUpLoadImageBean = (OnWifiUpLoadImageBean) imageCacheArr.get(j);
+                                                    ImagePickBean imagePickBeanSec = onWifiUpLoadImageBean.getImagePickBean();
+                                                    if (imagePickBean != null && imagePickBeanSec != null) {
+                                                        if (imagePickBean.getImagePathOrUrl().equals(imagePickBeanSec.getImagePathOrUrl())) {
+                                                            File file = new File(imagePickBeanSec.getImagePathOrUrl());
+                                                            if(file.exists()) {
+                                                                file.delete();
+                                                            }
+                                                            imageCacheArr.remove(onWifiUpLoadImageBean);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            aCache.put("imageCache",imageCacheArr);
+                                            //删除线上的
+                                            checkHasDelete(imagePickBeanList,item_id);
+                                        }
+                                    }
 
+                                        deleteImagesArr.removeAll(deleteImagesArr);
+
+                                    //过滤新增
+                                    for (int i = 0; i <imagePickBeanListSec.size() ; i++) {
+                                        ImagePickBean imagePickBean = imagePickBeanListSec.get(i);
+                                        for (int j = 0; j <imagePickBeanList.size() ; j++) {
+                                            ImagePickBean imagePickBeanSec = imagePickBeanList.get(j);
+                                            if (imagePickBeanSec.getImagePathOrUrl().equals(imagePickBean.getImagePathOrUrl())) {
+                                                imagesArr.remove(imagePickBeanSec);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                //added by zy 2017.6.13 缓存商品期图片
+                                if (imageCacheArr != null ) {
+                                    if (imagesArr.size() > 0) {
+                                        //拷贝图片
+                                        for (int i = 0; i <imagesArr.size() ; i++) {
+                                            ImagePickBean bean = imagesArr.get(i);
+                                            if(bean.getImageWebIdStr() == null || bean.getImageWebIdStr().equals("")) {
+                                                String copyImagePath = copyImage(bean);
+                                                if (copyImagePath != null ) {
+                                                    bean.setImagePathOrUrl(copyImagePath);
+                                                }
+                                                OnWifiUpLoadImageBean imageBean = new OnWifiUpLoadImageBean();
+                                                imageBean.setItemid(item_id);
+                                                imageBean.setCompanyid(UserLoginHelper.userLoginBean().getCompany());
+                                                imageBean.setResultid((String) DataHolderSingleton.getInstance().getData("spqedit_resultid"));
+                                                imageBean.setPlant_number((String) DataHolderSingleton.getInstance().getData("spqedit_plant_number"));
+                                                imageBean.setUserID(0);
+                                                imageBean.setImagePickBean(bean);
+                                                imageBean.setUploadUrl(UrlDatas.URL_UPLOAD_IMAGES);
+                                                imageCacheArr.add(imageBean);
+                                            }
+
+                                        }
+                                    }
+                                    synchronized (this) {
+                                        aCache.put("imageCache",imageCacheArr);
+                                    }
+                                    //保存数据
+                                    DataHolderSingleton.getInstance().putData(item_id+"test_raw_imagePickBeanList",imagePickBeanList);
+                                }
+                                //只要有网络就上传
+                            }else {
+                                uploadImages(imagePickBeanList);
+                            }
+                            //wifi下
+                        }else if (netWorkStatesMonitor.isWifiAndAvaiable()){
+                            uploadImages(imagePickBeanList);
+                        }
                     }
-
-
                 });
     }
+
+    /**
+     *拷贝图片
+     * @param bean
+     * @return
+     */
+    private String copyImage(ImagePickBean bean) {
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            File oldfile = new File(bean.getImagePathOrUrl());
+            File sdCard = Environment.getExternalStorageDirectory();
+            String newPath = sdCard.getAbsolutePath() +File.separator+"wifiuplaodimagetemp"+File.separator+oldfile.getName();
+            File newFile = new File(newPath);
+            if(!newFile.getParentFile().exists()) {
+                newFile.getParentFile().mkdirs();
+            }
+            if(!oldfile.isFile()) return null;
+            try {
+                InputStream inputStream = new FileInputStream(oldfile);
+                FileOutputStream outputStream = new FileOutputStream(newFile);
+                byte[] buf = new  byte[1024];
+                int byteRead ;
+                while ((byteRead = inputStream.read(buf)) != -1) {
+                   outputStream.write(buf, 0, byteRead);
+                }
+                outputStream.close();
+                inputStream.close();
+                return newPath;
+            }catch (Exception e){
+                return  null;
+            }
+        }
+        return null;
+    }
+
 
     private void uploadImages(List<ImagePickBean> imagePickBeanList) {
         String now_leftTitleStr = (String) DataHolderSingleton.getInstance().getData("now_leftTitleStr");
@@ -221,13 +417,11 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
                 = new ImagePickUploadQueueManager("now_leftTitleStr", "",
                 imagePickBeanList, getChildFragmentManager(), now_leftTitleStr + "图片上传", 0, false) {
             @Override
-            protected void uploadImageQueue_Complete(String thePreviousData, List<ImagePickBean> imgList) {
+            protected void uploadImageQueue_Complete(String thePreviousData, List<ImagePickBean> imgList,ArrayList jasonArr) {
                 CLog.d("thePreviousData:" + thePreviousData);
                 // CLog.d("webIDS:"+webIDS);
                 String spqedit_itemid = (String) DataHolderSingleton.getInstance().getData("spqedit_itemid");
                 checkHasDelete(imgList, spqedit_itemid);
-
-
             }
         };
         imagePickUploadQueueManager.uploadImageQueue_Start();
@@ -244,16 +438,17 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
                 if (imagePickBean.getImagePathOrUrl().equals(
                         test_raw_imagePickBeanList.get(i).getImagePathOrUrl())) {
                     hasIt = true;
-
                     break;
                 }
             }
             if (!hasIt) {
-                HashMap holad_path_code_map = (HashMap) DataHolderSingleton.getInstance().getData("holad_path_code_map");
+                HashMap holad_path_code_map = (HashMap) DataHolderSingleton.getInstance().getData(itemid+"holad_path_code_map");
                 String imgCode = (String) holad_path_code_map.get(test_raw_imagePickBeanList.get(i).getImagePathOrUrl());
                 //
-                stringBuilder.append(imgCode);
-                stringBuilder.append(",");
+                if (imgCode != null) {
+                    stringBuilder.append(imgCode);
+                    stringBuilder.append(",");
+                }
             }
         }
 
@@ -274,7 +469,7 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
 
     private void toDoDeleteImags(String codeid, final List<ImagePickBean> imagePickBeanList, final String itemid) {
         HashMap<String, String> paramsMap = new HashMap<>();
-        paramsMap.put("id", mNowTertiary_id);
+        paramsMap.put("id",mNowTertiary_id);
         paramsMap.put("itemid", (String) DataHolderSingleton.getInstance().getData("spqedit_itemid"));
         paramsMap.put("codeid", codeid);
         HttpRequestManagerFactory.getRequestManager().postUrlBackStr(UrlDatas.URL_DELETE_IMAGE, HeadsParamsHelper.setupDefaultHeaders()
@@ -330,7 +525,44 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     private void toRefreshNowImageListDatas(List<ImagePickBean> imagePickBeanList, String itemid) {
         //刷新上页
         EventBus.getDefault().post(new SPQDetailRefreshEvent());
-        List<ImagePickBean> imagePickBeanListClone=new ArrayList<>(imagePickBeanList);
+        mPresenter.updateImageCode(UrlDatas.TERTIARY_EDIT, new SPQDetailPresenterImpl.UpdateImageCode<SPQDetailBean>() {
+            @Override
+            public void updateImageCode(SPQDetailBean spqDetailBean) {
+                List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
+                for (int i = 0; i < kvbList.size(); i++) {
+                    List<SPQDetailBean.KeyValueBean.ImagesBean> images = kvbList.get(i).getImages();
+                    String rightCode = kvbList.get(i).getCode();
+                    List<ImageCommBean> imageCommmBeanList = new ArrayList<>();
+                    if (images != null && images.size() > 0) {
+                        for (SPQDetailBean.KeyValueBean.ImagesBean image : images) {
+                            ImageCommBean bean = new ImageCommBean();
+                            bean.setImg_title("dadsa");
+                            bean.setSmall_img_url(image.getWsmallImage250_250Name());
+                            bean.setImg_url(image.getBigImageName());
+                            bean.setImg_CODE(image.getCode());
+                            imageCommmBeanList.add(bean);
+                        }
+                    }
+                    final List<ImageShowBean> imageShowBeanList = new ArrayList<>();
+                    Map<String, String> path_code_map = new HashMap<>();
+                    if (imageCommmBeanList != null && imageCommmBeanList.size() > 0) {
+                        for (int j = 0; j < imageCommmBeanList.size(); j++) {
+                            ImageShowBean bean = new ImageShowBean();
+                            bean.setTitle(imageCommmBeanList.get(j).getImg_title());
+                            bean.setImageUrl(imageCommmBeanList.get(j).getImg_url().replace("\\", "/"));
+                            imageShowBeanList.add(bean);
+                            //
+                            path_code_map.put(bean.getImageUrl(), imageCommmBeanList.get(j).getImg_CODE());
+                        }
+                        DataHolderSingleton.getInstance().putData(rightCode+"holad_path_code_map", path_code_map);
+                    }
+                }
+            }
+        });
+
+
+
+        List<ImagePickBean> imagePickBeanListClone = new ArrayList<>(imagePickBeanList);
         imagePickBeanList.clear();
         for (int i = 0; i <imagePickBeanListClone.size() ; i++) {
             String newUrl = imagePickBeanListClone.get(i).getImagePathOrUrl().replace("\\","/");
@@ -339,6 +571,22 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
             ipb.setImageWebIdStr(newUrl);
             imagePickBeanList.add(ipb);
         }
+
+        //本地缓存的图片
+//        ArrayList tempUploadArr = new ArrayList();
+//        synchronized (this) {
+//            ACache aCache = ACache.get(getContext());
+//            ArrayList imageArr = (ArrayList) aCache.getAsObject("imageCache");
+//            for (int i = 0; i <imageArr.size() ; i++) {
+//                OnWifiUpLoadImageBean bean = (OnWifiUpLoadImageBean) imageArr.get(i);
+//                if (itemid != null && bean.getItemid().equals(itemid) && bean.getImagePickBean() != null) {
+//                    ImagePickBean imagePickBean = bean.getImagePickBean();
+//                    imagePickBean.setImageWebIdStr(imagePickBean.getImagePathOrUrl());
+//                    tempUploadArr.add(imagePickBean);
+//                }
+//            }
+//        }
+//        imagePickBeanList.addAll(tempUploadArr);
         DataHolderSingleton.getInstance().putData(itemid + "test_raw_imagePickBeanList", imagePickBeanList);
 
     }
@@ -368,8 +616,19 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
     public void setupData(SPQDetailBean spqDetailBean) {
         //
         List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
-        //
+        //开始自动生成界面
         EditItemRuleHelper.generateSPQChildView(getActivity(), id_tl_item_container, kvbList,true);
+        //List<SPQDetailBean.KeyValueBean> kvbList = spqDetailBean.getKey_value();
+
+        String spqedit_resultid = spqDetailBean.getRule_id();
+        DataHolderSingleton.getInstance().putData("spqedit_resultid",spqedit_resultid);
+        String spqedit_plant_number = spqDetailBean.getPlant_number();
+        DataHolderSingleton.getInstance().putData("spqedit_plant_number",spqedit_plant_number);
+        String spqedit_companyid = UserLoginHelper.userLoginBean().getCompany();
+        DataHolderSingleton.getInstance().putData("spqedit_companyid",spqedit_companyid);
+
+
+        beforeResult = EditItemRuleHelper.generateViewBackString(id_tl_item_container);
     }
 
     @Override
@@ -382,5 +641,39 @@ public class SPQAddFragment extends ClassicMvpFragment<SPQDetailPresenterImpl> i
         return mNowTertiary_id;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                id_btn_submit.setVisibility(View.VISIBLE);
+            }
+        };
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                rootView.getWindowVisibleDisplayFrame(r);
+                int screenHeight = rootView.getRootView().getHeight();
+                if(screenHeight != r.bottom) {
+                    id_btn_submit.setVisibility(View.GONE);
+                }else  {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            sleep(80);
+                            handler.sendEmptyMessage(1);
+                        }catch (Exception e) {
+
+                        }
+                    }
+                }).start();
+                }
+
+            }
+        });
+    }
 
 }
