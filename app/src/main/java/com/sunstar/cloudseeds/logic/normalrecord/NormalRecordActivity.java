@@ -183,7 +183,7 @@ public class NormalRecordActivity extends AppCompatActivity {
 
                 simplePagerTitleView.setText(titles[index]);
                 simplePagerTitleView.setNormalColor(Color.parseColor("#333333"));
-                simplePagerTitleView.setSelectedColor(Color.parseColor("#e94220"));
+                simplePagerTitleView.setSelectedColor(Color.parseColor("#58A758"));
 
                 simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -198,7 +198,7 @@ public class NormalRecordActivity extends AppCompatActivity {
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator indicator = new LinePagerIndicator(context);
-                indicator.setColors(Color.parseColor("#e94220"));
+                indicator.setColors(Color.parseColor("#007700"));
                 return indicator;
             }
         });

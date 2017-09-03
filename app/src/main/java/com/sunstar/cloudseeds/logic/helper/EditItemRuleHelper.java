@@ -175,6 +175,7 @@ public class EditItemRuleHelper {
         leftTitle.setLayoutParams(commTableRowLayoutParams4UI);
         leftTitle.setGravity(Gravity.CENTER_VERTICAL);
         leftTitle.setText(leftTitleStr);
+        leftTitle.setTextColor(Color.parseColor("#333333"));
         leftTitle.setBackgroundResource(R.drawable.shape_form_frame_right_bottom);
         /*setBackgroundResource之前  有问题 */
 
@@ -187,6 +188,7 @@ public class EditItemRuleHelper {
         //rightImage.setGravity(Gravity.CENTER_VERTICAL);
         rightImage.setBackgroundResource(isFromEdit?R.drawable.shape_form_frame_right_bottom:
                 R.drawable.shape_form_frame_bottom_text);
+        rightImage.setTextColor(isFromEdit? Color.parseColor("#333333") : Color.parseColor("#666666"));
               /*setBackgroundResource之前  有问题 */
         rightImage.setPadding(SizeTool.dp2px(5), 0,
                 SizeTool.dp2px(5), 0);

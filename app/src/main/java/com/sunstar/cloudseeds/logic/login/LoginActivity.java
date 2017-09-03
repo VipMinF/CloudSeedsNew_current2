@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.classichu.classichu.basic.tool.SizeTool;
@@ -33,7 +34,7 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
     public static final int LOGIN_V = 2;
     public static final String FILENAME_USERLOGIN = "userlogin"+ LOGIN_V+".dat";
     public Context mcontext;
-    private AutoCompleteTextView mUsernameView;
+    private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -55,7 +56,7 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
 
         initAppBar();
         //账号输入框
-        mUsernameView = (AutoCompleteTextView) findViewById(email);
+        mUsernameView = (EditText) findViewById(email);
         //populateAutoComplete();
         //密码输入框
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -87,6 +88,21 @@ public class LoginActivity extends ClassicActivity implements LoginContract.View
                 return true;
             }
         });
+        ImageView clearImageView_u = (ImageView) findViewById(R.id.login_clear_u);
+         clearImageView_u.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 mUsernameView.setText("");
+             }
+         });
+        ImageView clearImageView_p = (ImageView) findViewById(R.id.login_clear_p);
+        clearImageView_p.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 mPasswordView.setText("");
+            }
+        });
+
     }
 
     @Override

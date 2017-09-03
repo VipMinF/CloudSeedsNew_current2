@@ -9,15 +9,17 @@
         <!--android:key="preference_onwifiupload"-->
         <!--android:title="只在WiFi下上传图片"-->
         <!--android:layout="@layout/layout_checkbox_preference"/>-->
-<com.sunstar.cloudseeds.widget.MyCheckBoxPreference
-    android:key="preference_onwifiupload"
+<com.sunstar.cloudseeds.widget.SwitchPreference
+    android:key = "preference_onwifiupload"
     android:title="只在WiFi下上传图片"
+    android:layout="@layout/layout_custom_preference_wifi"
     />
 
         <Preference
             android:key="preference_password"
             android:title="密码修改"
-            android:layout="@layout/layout_custom_preference"
+            android:layout="@layout/layout_custom_preference_item"
+
             />
     <!--</PreferenceCategory>-->
     <!--<PreferenceCategory  android:title="常规">-->
@@ -29,7 +31,7 @@
         <Preference
             android:key="preference_clear"
             android:title="清除缓存"
-            android:layout="@layout/layout_custom_preference"
+            android:layout="@layout/layout_custom_preference_item"
             />
         <!--<Preference-->
             <!--android:layout="@layout/layout_custom_preference"-->
@@ -60,7 +62,7 @@
         <Preference
             android:key="preference_about"
             android:title="关于云种·育种家"
-            android:layout="@layout/layout_custom_preference"
+            android:layout="@layout/layout_custom_preference_item"
             />
     <!--</PreferenceCategory>-->
     <!--   <PreferenceCategory android:title="Launch preferences" >

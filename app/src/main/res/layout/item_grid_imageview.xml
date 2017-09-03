@@ -25,7 +25,7 @@
         android:layout_alignEnd="@+id/id_normal_record_imageview"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/id_normal_record_imageview"
-        android:background="@drawable/btn_shape"
+        android:background="@drawable/btnshape"
         app:srcCompat="@drawable/ic_cancel_black_24dp" />
 
 </RelativeLayout>

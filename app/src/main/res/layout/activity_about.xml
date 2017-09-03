@@ -11,7 +11,7 @@
         android:layout_width="150dp"
         android:layout_marginTop="96dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/img_user_big"
+        android:src="@drawable/colorlogo"
 		/>
 
     <LinearLayout 
@@ -23,29 +23,29 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         >
-        <TextView 
-	        android:layout_height="wrap_content"
-	        android:layout_width="wrap_content"
-	        android:text="@string/app_name"
-	        android:textColor="@color/text_black_first"
-	        android:textSize="18dp"
-	        />
-        <TextView 
-	        android:layout_height="wrap_content"
-	        android:layout_width="wrap_content"
-	        android:text="V"
-	        android:layout_marginLeft="5dp"
-	        android:textColor="@color/text_black_first"
-	        android:textSize="18dp"
-	        />
-	    <TextView 
-	        android:id="@+id/tv_versionname"
-	        android:layout_height="wrap_content"
-	        android:layout_width="wrap_content"
-	        android:text="@string/versionName"
-	        android:textColor="@color/text_black_first"
-	        android:textSize="18dp"
-	        />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/app_name"
+			android:textColor="#666666"
+			android:textSize="18dp" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="5dp"
+			android:text="V"
+			android:textColor="#666666"
+			android:textSize="18dp" />
+
+		<TextView
+			android:id="@+id/tv_versionname"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/versionName"
+			android:textColor="#666666"
+			android:textSize="18dp" />
     </LinearLayout>
     
     <LinearLayout
@@ -59,18 +59,19 @@
 			    android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 			    >
+
 			<TextView
 				android:id="@+id/btn_select"
 				android:layout_width="match_parent"
 				android:layout_height="50dp"
 				android:background="@drawable/selector_btn_click_bg"
+				android:drawableRight="@drawable/goo"
 				android:gravity="left|center_vertical"
-				android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
 				android:paddingLeft="@dimen/activity_horizontal_margin"
 				android:paddingRight="@dimen/activity_horizontal_margin"
 				android:text="@string/jianchaxinbanben"
-				android:textColor="@color/text_black_first"
-				android:textSize="14dp" />
+				android:textColor="#666666"
+				android:textSize="15sp" />
            </RelativeLayout>
            
 	</LinearLayout>

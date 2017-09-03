@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="2dp"
+    android:layout_marginBottom="10dp"
     android:descendantFocusability="afterDescendants"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/windowBackground"
+    app:cardCornerRadius="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="190dp"
+        android:background="@drawable/lmbgb"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="10dp">
@@ -193,7 +196,8 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/id_table_layout"
-            android:background="@color/lineDark" />
+            android:background="@color/lineDark"
+            android:visibility="gone" />
 
 
         <LinearLayout

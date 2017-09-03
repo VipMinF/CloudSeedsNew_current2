@@ -289,4 +289,10 @@ public class MainActivity extends ClassicActivity {
 //        //unregisterReceiver(delegateBroadcastReceiver);
 //    }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mServiceConnection);
+    }
 }

@@ -25,7 +25,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
-                            android:background="@drawable/btn_click_theme"
+                            android:background="@drawable/btnclicktheme"
                             android:text="记录数据"
                             android:textColor="@color/white"
                             android:textSize="16sp"

@@ -4,23 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="2dp"
-    android:foreground="?attr/selectableItemBackground">
+    android:layout_marginTop="10dp"
+    app:cardBackgroundColor="@color/windowBackground"
+    app:cardCornerRadius="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="130dp"
+        android:background="@drawable/lmbgb"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="10dp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
-            android:padding="20dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            >
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/id_tv_item_title"
@@ -35,26 +36,15 @@
             <Button
                 android:id="@+id/id_btn_item_show_qrcode"
                 style="@style/ClassicButtonRound"
-                android:background="@drawable/selector_btn_status"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/selector_btn_status"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="绑定二维码" />
 
         </LinearLayout>
-
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_below="@id/id_tv_item_title"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/lineDark" />
 
 
         <LinearLayout

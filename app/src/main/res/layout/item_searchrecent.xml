@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:id="@+id/id_linearlayout_recent_btn"
-    android:background="@color/classicGray"
+
     android:layout_gravity="center"
     android:layout_height="match_parent">
 
@@ -10,9 +10,10 @@
         android:id="@+id/id_searchrecent_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textAlignment="center"
-        android:textSize="@dimen/classic_text_size_tertiary"
         android:gravity="center"
-         />
+        android:textAlignment="center"
+        android:textColor="#666666"
+        android:background="@drawable/shape_clearboder"
+        android:textSize="@dimen/classic_text_size_tertiary" />
 
 </LinearLayout>

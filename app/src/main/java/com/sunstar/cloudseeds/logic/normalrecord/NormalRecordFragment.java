@@ -226,10 +226,15 @@ public class NormalRecordFragment extends Fragment {
     //检查输入信息
     private boolean checkInformaton() {
         boolean success = true;
+        if(recordModel.farmType == null) {
+            return false;
+        }
+
         if(recordModel.farmType.isEmpty() || recordModel.farmType.equals(DEFALUT_FARM_PLACEHOLDER)) {
             showMessageDiolg("请选择农事类型");
             return false;
         }
+
 
         if(recordText.getText().toString().isEmpty() && recordText.getText().toString().equals("") ) {
             showMessageDiolg("请输入农事记录详情");
