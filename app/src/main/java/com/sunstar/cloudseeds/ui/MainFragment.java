@@ -370,6 +370,9 @@ public class MainFragment extends ClassicMvpFragment<MainPresenterImpl>
             }
         });
         adapter.setEmptyView(classicEmptyView);
+        /**
+         * recyclerView的item设置点击事件
+         */
         adapter.setOnItemClickListener(new ClassicRVHeaderFooterAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {

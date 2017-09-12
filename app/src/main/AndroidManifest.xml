@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许程序录制音频 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
-
     <!-- 可选 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
 
@@ -24,11 +23,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-
-
-
     <application
-
         android:name=".app.AppApplication"
         android:allowBackup="true"
         android:icon="@drawable/img_logo"
@@ -36,10 +31,8 @@
         android:roundIcon="@drawable/img_logo"
         android:supportsRtl="true"
         android:theme="@style/ClassicThemeTransparentMy">
+        <service android:name=".service.OnWifiUpLoadService" />
 
-        <service android:name=".service.OnWifiUpLoadService">
-
-            </service>
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -60,6 +53,7 @@
             android:theme="@style/ClassicThemeSplashFullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -70,8 +64,8 @@
         <activity
             android:name=".logic.yuzhongtaizhang.YZTZActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
-            android:launchMode="standard"/>
+            android:launchMode="standard"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".logic.xuanzhu.XuanZhuActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -80,23 +74,21 @@
             android:name=".logic.shangpinqi.SPQActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="standard"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
-        </activity>
-        <!--<activity-->
-        <!--android:name=".LoginActivity"-->
-        <!--android:label="@string/title_activity_login"-->
-        <!--android:windowSoftInputMode="stateHidden|adjustResize" />-->
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <!-- <activity -->
+        <!-- android:name=".LoginActivity" -->
+        <!-- android:label="@string/title_activity_login" -->
+        <!-- android:windowSoftInputMode="stateHidden|adjustResize" /> -->
         <activity
             android:name=".logic.login.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".logic.normalrecord.NormalRecordActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:launchMode="standard"
-            />
-
-
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity android:name=".activity.ShowFailUpImgsActivity" />
+        <activity android:name=".activity.ShowUpFailImgInViewPagerActivity"></activity>
     </application>
 
 </manifest>

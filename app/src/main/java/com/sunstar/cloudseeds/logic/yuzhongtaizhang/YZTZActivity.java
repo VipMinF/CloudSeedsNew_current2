@@ -24,7 +24,10 @@ public class YZTZActivity extends ClassicActivity {
     @Override
     protected void initView() {
 
-
+        /**
+         * 计划详情
+         *
+         */
         int goToWhere=getBundleExtraInt1();
         switch (goToWhere){
             case AtyGoToWhere.LIST:

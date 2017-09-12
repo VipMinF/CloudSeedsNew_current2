@@ -2,17 +2,13 @@ package com.sunstar.cloudseeds.logic.helper;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -34,15 +30,12 @@ import com.classichu.photoselector.imagespicker.ImagePickBean;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sunstar.cloudseeds.R;
-import com.sunstar.cloudseeds.Util.DensityUtil;
 import com.sunstar.cloudseeds.bean.ImageCommBean;
 import com.sunstar.cloudseeds.bean.ImageUploadCommBean;
 import com.sunstar.cloudseeds.bean.KeyAndValueBean;
 import com.sunstar.cloudseeds.cache.ACache;
-import com.sunstar.cloudseeds.logic.shangpinqi.SPQActivity;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.OnWifiUpLoadImageBean;
 import com.sunstar.cloudseeds.logic.shangpinqi.bean.SPQDetailBean;
-import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment;
 import com.sunstar.cloudseeds.logic.yuzhongtaizhang.bean.YZTZDetailBean;
 
 import java.lang.ref.WeakReference;
@@ -211,14 +204,17 @@ public class EditItemRuleHelper {
         synchronized (fragmentActivity) {
             ACache aCache = ACache.get(fragmentActivity);
             ArrayList imageArr = (ArrayList) aCache.getAsObject("imageCache");
-            for (int i = 0; i <imageArr.size() ; i++) {
-                OnWifiUpLoadImageBean bean = (OnWifiUpLoadImageBean) imageArr.get(i);
-                if (rightCode != null && bean.getItemid().equals(rightCode) && bean.getImagePickBean() != null) {
-                    ImagePickBean imagePickBean = bean.getImagePickBean();
-                    imagePickBean.setImageWebIdStr(imagePickBean.getImagePathOrUrl());
-                    tempUploadArr.add(imagePickBean);
+            if (imageArr!=null){
+                for (int i = 0; i <imageArr.size() ; i++) {
+                    OnWifiUpLoadImageBean bean = (OnWifiUpLoadImageBean) imageArr.get(i);
+                    if (rightCode != null && bean.getItemid().equals(rightCode) && bean.getImagePickBean() != null) {
+                        ImagePickBean imagePickBean = bean.getImagePickBean();
+                        imagePickBean.setImageWebIdStr(imagePickBean.getImagePathOrUrl());
+                        tempUploadArr.add(imagePickBean);
+                    }
                 }
             }
+
         }
 
         if (imageUploadCommBean != null && !TextUtils.isEmpty(imageUploadCommBean.getImg_upload_title())) {
@@ -278,16 +274,18 @@ public class EditItemRuleHelper {
             synchronized (fragmentActivity) {
                 ACache aCache = ACache.get(fragmentActivity);
                 ArrayList imageArr = (ArrayList) aCache.getAsObject("imageCache");
-                for (int i = 0; i <imageArr.size() ; i++) {
-                    OnWifiUpLoadImageBean bean = (OnWifiUpLoadImageBean) imageArr.get(i);
-                    if (rightCode != null && bean.getItemid().equals(rightCode) && bean.getImagePickBean() != null) {
-                        ImagePickBean imagePickBean = bean.getImagePickBean();
-                        imagePickBean.setImageWebIdStr(imagePickBean.getImageWebIdStr());
+                if (imageArr!=null){
+                    for (int i = 0; i <imageArr.size() ; i++) {
+                        OnWifiUpLoadImageBean bean = (OnWifiUpLoadImageBean) imageArr.get(i);
+                        if (rightCode != null && bean.getItemid().equals(rightCode) && bean.getImagePickBean() != null) {
+                            ImagePickBean imagePickBean = bean.getImagePickBean();
+                            imagePickBean.setImageWebIdStr(imagePickBean.getImageWebIdStr());
 
-                        ImageShowBean imageShowBean = new ImageShowBean();
-                        imageShowBean.setTitle("   ");
-                        imageShowBean.setImageUrl(imagePickBean.getImagePathOrUrl());
-                        tempNoUploadArr.add(imageShowBean);
+                            ImageShowBean imageShowBean = new ImageShowBean();
+                            imageShowBean.setTitle("   ");
+                            imageShowBean.setImageUrl(imagePickBean.getImagePathOrUrl());
+                            tempNoUploadArr.add(imageShowBean);
+                        }
                     }
                 }
             }

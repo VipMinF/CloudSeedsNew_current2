@@ -1,69 +1,67 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!--<PreferenceCategory android:title="用户">-->
-        <!--<Preference
-            android:key="preference_user"
-            android:title="我的用户"
-            />-->
+    <!--<Preference
+        android:key="preference_user"
+        android:title="我的用户"
+        />-->
     <!--<-->
-        <!--android:key="preference_onwifiupload"-->
-        <!--android:title="只在WiFi下上传图片"-->
-        <!--android:layout="@layout/layout_checkbox_preference"/>-->
-<com.sunstar.cloudseeds.widget.SwitchPreference
-    android:key = "preference_onwifiupload"
-    android:title="只在WiFi下上传图片"
-    android:layout="@layout/layout_custom_preference_wifi"
-    />
+    <!--android:key="preference_onwifiupload"-->
+    <!--android:title="只在WiFi下上传图片"-->
+    <!--android:layout="@layout/layout_checkbox_preference"/>-->
+    <com.sunstar.cloudseeds.widget.SwitchPreference
+        android:key="preference_onwifiupload"
+        android:layout="@layout/layout_custom_preference_wifi"
+        android:title="仅在WiFi下上传图片"
+        android:summary="小标题"/>
 
-        <Preference
-            android:key="preference_password"
-            android:title="密码修改"
-            android:layout="@layout/layout_custom_preference_item"
+    <Preference
+        android:key="preference_password"
+        android:layout="@layout/layout_custom_preference_item"
+        android:title="密码修改"
 
-            />
+        />
     <!--</PreferenceCategory>-->
     <!--<PreferenceCategory  android:title="常规">-->
-      <!--  <CheckBoxPreference
-            android:key="checkbox_preference_nopic"
-            android:summary="移动网络下不加载图片"
-            android:title="无图模式"
-            />-->
-        <Preference
-            android:key="preference_clear"
-            android:title="清除缓存"
-            android:layout="@layout/layout_custom_preference_item"
-            />
-        <!--<Preference-->
-            <!--android:layout="@layout/layout_custom_preference"-->
-            <!--android:key="preference_update"-->
-            <!--android:title="检查更新"-->
-            <!--android:summary="版本:2.6.0(744)"-->
-            <!--/>-->
+    <!--  <CheckBoxPreference
+          android:key="checkbox_preference_nopic"
+          android:summary="移动网络下不加载图片"
+          android:title="无图模式"
+          />-->
+    <Preference
+        android:key="preference_clear"
+        android:layout="@layout/layout_custom_preference_item"
+        android:title="清除缓存" />
+    <!--<Preference-->
+    <!--android:layout="@layout/layout_custom_preference"-->
+    <!--android:key="preference_update"-->
+    <!--android:title="检查更新"-->
+    <!--android:summary="版本:2.6.0(744)"-->
+    <!--/>-->
 
-        <!--   <EditTextPreference
-               android:dialogTitle="请输入你最喜欢的种族"
-               android:key="edittext_preference"
-               android:summary="一个使用了编辑文本对话框的例子"
-               android:title="请输入你最喜欢的种族" />
+    <!--   <EditTextPreference
+           android:dialogTitle="请输入你最喜欢的种族"
+           android:key="edittext_preference"
+           android:summary="一个使用了编辑文本对话框的例子"
+           android:title="请输入你最喜欢的种族" />
 
-           <ListPreference
-               android:dialogTitle="请选择一项"
-               android:entries="@array/entries_list_preference"
-               android:entryValues="@array/entryvalues_list_preference"
-               android:key="list_preferenc"
-               android:summary="一个使用了列表对话框的例子"
-               android:title="请选择一项" />-->
+       <ListPreference
+           android:dialogTitle="请选择一项"
+           android:entries="@array/entries_list_preference"
+           android:entryValues="@array/entryvalues_list_preference"
+           android:key="list_preferenc"
+           android:summary="一个使用了列表对话框的例子"
+           android:title="请选择一项" />-->
     <!--</PreferenceCategory>-->
     <!--<PreferenceCategory android:title="其他">-->
-     <!--   <Preference
-            android:key="preference_feedback"
-            android:title="意见反馈"
-            />-->
-        <Preference
-            android:key="preference_about"
-            android:title="关于云种·育种家"
-            android:layout="@layout/layout_custom_preference_item"
-            />
+    <!--   <Preference
+           android:key="preference_feedback"
+           android:title="意见反馈"
+           />-->
+    <Preference
+        android:key="preference_about"
+        android:layout="@layout/layout_custom_preference_item"
+        android:title="关于云种·育种家" />
     <!--</PreferenceCategory>-->
     <!--   <PreferenceCategory android:title="Launch preferences" >
            &lt;!&ndash; This PreferenceScreen tag serves as a screen break (similar to page break in word processing). Like for other preference types, we assign a key here so it is able to save and restore its instance state. &ndash;&gt;
@@ -100,16 +98,14 @@
        </PreferenceCategory>-->
 
     <Preference
-        android:key="preference_space"
-        android:title=""
         android:enabled="false"
+        android:key="preference_space"
         android:layout="@layout/layout_custom_preference"
-        />
+        android:title="" />
 
     <Preference
         android:key="preference_exit"
         android:layout="@layout/layout_custom_preference_exitlogin"
-        android:title="注销登录"
-        />
+        android:title="注销登录" />
 
 </PreferenceScreen>

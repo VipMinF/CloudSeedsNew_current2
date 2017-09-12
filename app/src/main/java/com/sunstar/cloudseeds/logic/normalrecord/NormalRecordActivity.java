@@ -1,15 +1,13 @@
 package com.sunstar.cloudseeds.logic.normalrecord;
 
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,16 +18,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.sunstar.cloudseeds.R;
 import com.sunstar.cloudseeds.logic.helper.EditItemRuleHelper;
 import com.sunstar.cloudseeds.logic.shangpinqi.ui.SPQAddFragment;
-import com.sunstar.cloudseeds.R;
-
-
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
@@ -39,34 +30,36 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTit
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
+import java.util.ArrayList;
+
 
 //CloudSeedsNew1.3
+
 /**
+ * 品系记录详情页面的activity
+ * <p>
  * Created by xiaoxian on 2017/4/7.
  */
 
 public class NormalRecordActivity extends AppCompatActivity {
 
-
-
-    private Toolbar toolBar ;
+    private Toolbar toolBar;
     private NormalRecordFragment normalRecordFragment;
     private SPQAddFragment spqAddFragment;
     private MagicIndicator magicIndicator;
     private ViewPager viewPager;
 
     public void initToolbar() {
-     setSupportActionBar(getToolbar());
+        setSupportActionBar(getToolbar());
         toolBar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-        toolBar.setPadding(0,getStatusBarHeight(this),0,0);
+        toolBar.setPadding(0, getStatusBarHeight(this), 0, 0);
         toolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String result =   EditItemRuleHelper.generateViewBackString(spqAddFragment.id_tl_item_container);
+                String result = EditItemRuleHelper.generateViewBackString(spqAddFragment.id_tl_item_container);
                 if (result.equals(spqAddFragment.beforeResult)) {
                     finish();
                 }
-
                 AlertDialog.Builder dialog = new AlertDialog.Builder(NormalRecordActivity.this);
                 dialog.setTitle("提示");
                 dialog.setMessage("数据未保存！是否保存");
@@ -117,16 +110,16 @@ public class NormalRecordActivity extends AppCompatActivity {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.parseColor("#259b24"));
-       }
+        }
 //
         //4.0 -5.0
-        if(Build.VERSION.SDK_INT<=19){
-            WindowManager.LayoutParams  myLayoutParams = getWindow().getAttributes();
-            myLayoutParams.flags =(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS|myLayoutParams.flags);
+        if (Build.VERSION.SDK_INT <= 19) {
+            WindowManager.LayoutParams myLayoutParams = getWindow().getAttributes();
+            myLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | myLayoutParams.flags);
         }
 
 
-        viewPager = (ViewPager)findViewById(R.id.id_record_viewpager);
+        viewPager = (ViewPager) findViewById(R.id.id_record_viewpager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -144,12 +137,16 @@ public class NormalRecordActivity extends AppCompatActivity {
                 magicIndicator.onPageScrollStateChanged(state);
             }
         });
+        //日常记录的fragment
         normalRecordFragment = new NormalRecordFragment();
         Bundle bundle = getIntent().getExtras();
         String record = bundle.getString("record");
-
-         spqAddFragment =  SPQAddFragment.newInstance(bundle.getString("primary_id"),"");
-        final ArrayList<Fragment>viewArrayList = new ArrayList<Fragment>();
+        //商品期记录的fragment
+        spqAddFragment = SPQAddFragment.newInstance(bundle.getString("primary_id"), "");
+        /**
+         * 商品期记录和日常记录的fragment的集合
+         */
+        final ArrayList<Fragment> viewArrayList = new ArrayList<Fragment>();
         viewArrayList.add(spqAddFragment);
         viewArrayList.add(normalRecordFragment);
         FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -166,14 +163,17 @@ public class NormalRecordActivity extends AppCompatActivity {
         viewPager.setAdapter(fragmentPagerAdapter);
 
 
-        final String[] titles = new String[]{"商品期记录","日常记录"};
-        magicIndicator = (MagicIndicator)findViewById(R.id.magic_indicator);
+        final String[] titles = new String[]{"商品期记录", "日常记录"};
+        magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator);
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setAdjustMode(true);
+        /**
+         * 给导航栏Navigator设置Adapter
+         */
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {
             @Override
             public int getCount() {
-                return 2;
+                return titles.length;
             }
 
             @Override
@@ -204,12 +204,12 @@ public class NormalRecordActivity extends AppCompatActivity {
         });
         magicIndicator.setNavigator(commonNavigator);
 
-        if(record != null) viewPager.setCurrentItem(1,true);
+        if (record != null) viewPager.setCurrentItem(1, true);
     }
 
 
-    protected  Toolbar getToolbar() {
-        return  toolBar = (Toolbar) findViewById(R.id.id_activity_normal_toolbar);
+    protected Toolbar getToolbar() {
+        return toolBar = (Toolbar) findViewById(R.id.id_activity_normal_toolbar);
     }
 
 
@@ -217,11 +217,11 @@ public class NormalRecordActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //
-       int index = viewPager.getCurrentItem();
-        if(index == 0) {
-            spqAddFragment.onActivityResult(requestCode,resultCode,data);
-        }else if (index == 1){
-            normalRecordFragment.onActivityResult(requestCode,resultCode,data);
+        int index = viewPager.getCurrentItem();
+        if (index == 0) {
+            spqAddFragment.onActivityResult(requestCode, resultCode, data);
+        } else if (index == 1) {
+            normalRecordFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -237,12 +237,13 @@ public class NormalRecordActivity extends AppCompatActivity {
         win.setAttributes(winParams);
     }
 
-    public static int getStatusBarHeight(Context context)
-    {
+
+
+    public static int getStatusBarHeight(Context context) {
+
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0)
-        {
+        if (resourceId > 0) {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
         return result;

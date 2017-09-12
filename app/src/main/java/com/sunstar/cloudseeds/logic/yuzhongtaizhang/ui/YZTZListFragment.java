@@ -2,7 +2,6 @@ package com.sunstar.cloudseeds.logic.yuzhongtaizhang.ui;
 
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -56,7 +55,8 @@ import io.reactivex.functions.Consumer;
  * Use the {@link YZTZListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> implements YZTZListContract.View<List<YZTZListBean.ListBean>> {
+public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl>
+        implements YZTZListContract.View<List<YZTZListBean.ListBean>> {
 
     public Boolean from_searchFragment;
 
@@ -292,6 +292,9 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
             }
         });
         adapter.setEmptyView(classicEmptyView);
+        /**
+         * 计划详情页面的recyclerView的item设置点击事件
+         */
         adapter.setOnItemClickListener(new ClassicRVHeaderFooterAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
@@ -304,7 +307,14 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 startAty(XuanZhuActivity.class, bundle);
             }
         });
+        /**
+         * 给recyclerView的item的控件设置点击事件
+         */
         adapter.setOnItemOperationListener(new YZTZListAdapter.OnItemOperationListener() {
+            /**
+             *  品系详情记录的跳转
+             * @param position
+             */
             @Override
             public void onItemShowDetail(int position) {
                 super.onItemShowDetail(position);
@@ -320,6 +330,10 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 //2017年3月23日15:31:28 暂时不需要族群详细页 startAty(YZTZActivity.class,createBundleExtraInt1(AtyGoToWhere.DETAIL));
             }
 
+            /**
+             * 新增选株按钮点击的跳转
+             * @param position
+             */
             @Override
             public void onItemShowXuanZhu(int position) {
                 super.onItemShowXuanZhu(position);
@@ -329,6 +343,10 @@ public class YZTZListFragment extends ClassicMvpFragment<YZTZListPresenterImpl> 
                 goAddSelectBeads(listBean.getSecondary_id(),TaiZhangName,listBean.getPlant_code());
             }
 
+            /**
+             * 绑定二维码按钮点击的跳转
+             * @param position
+             */
             @Override
             public void onItemShowQrcode(int position) {
                 super.onItemShowQrcode(position);

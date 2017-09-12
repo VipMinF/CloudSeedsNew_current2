@@ -1,11 +1,9 @@
 package com.sunstar.cloudseeds;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,18 +12,14 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.classichu.classichu.app.CLog;
 import com.classichu.classichu.basic.tool.SizeTool;
 import com.classichu.classichu.classic.ClassicActivity;
-import com.classichu.photoselector.imagespicker.ImagePickBean;
 import com.sunstar.cloudseeds.cache.ACache;
 import com.sunstar.cloudseeds.logic.login.UserLoginHelper;
 import com.sunstar.cloudseeds.logic.login.bean.UserLoginBean;
-import com.sunstar.cloudseeds.logic.shangpinqi.SPQActivity;
-import com.sunstar.cloudseeds.logic.shangpinqi.bean.OnWifiUpLoadImageBean;
 import com.sunstar.cloudseeds.service.OnWifiUpLoadService;
 import com.sunstar.cloudseeds.ui.MainFragment;
 import com.sunstar.cloudseeds.ui.ScanFragment;
@@ -33,8 +27,6 @@ import com.sunstar.cloudseeds.ui.SearchFragment;
 import com.sunstar.cloudseeds.ui.UserCenterFragment;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainActivity extends ClassicActivity {
 
@@ -43,6 +35,7 @@ public class MainActivity extends ClassicActivity {
     private Fragment mScanFragment;
     private Fragment mUserCenterFragment;
     private  BroadcastReceiver delegateBroadcastReceiver;
+    public static ArrayList imageArr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +53,9 @@ public class MainActivity extends ClassicActivity {
         initNavigationView();
 
         initFragmentList();
+        ACache aCache = ACache.get(mContext);
+        imageArr = (ArrayList) aCache.getAsObject("imageCache");
+//        SettingPreferenceFragmentCompat.getImageArrSize(imageArr);
         //
         showMainFragment();
     }

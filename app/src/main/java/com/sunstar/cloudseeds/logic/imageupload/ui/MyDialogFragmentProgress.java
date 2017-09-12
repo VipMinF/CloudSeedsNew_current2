@@ -69,6 +69,12 @@ public class MyDialogFragmentProgress extends DialogFragment {
         return  view;
     }
 
+    /**
+     * 更新对话框图片上传进度
+     *
+     * @param allCount
+     * @param progress
+     */
     public void updateProgress(int allCount,int progress){
         //if (mProgressBar!=null) {
             mProgressBar.setProgress(progress);
